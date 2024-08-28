@@ -1,0 +1,117 @@
+{
+  "id": "pf1e-caravans",
+  "title": "Pathfinder 1e - Caravans",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11",
+    "maximum": "11"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf1",
+        "type": "system",
+        "compatibility": {}
+      }
+    ]
+  },
+  "requires": [
+    {
+      "id": "lib-wrapper",
+      "type": "module"
+    }
+  ],
+  "description": "Add a caravan sheet and caravan item types to the Pathfinder 1e system.",
+  "authors": [
+    {
+      "name": "KitCat",
+      "discord": "kitcat",
+      "email": "katsulynx@gmail.com",
+      "flags": {}
+    }
+  ],
+  "esmodules": [
+    "modules/pf1e-caravans.mjs"
+  ],
+  "styles": [
+    "styles/pf1e-caravans.css"
+  ],
+  "packs": [
+    {
+      "name": "caravan-content",
+      "label": "Caravan Content",
+      "path": "packs/caravan-content",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "system": "pf1",
+      "flags": {}
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "caravan": {
+        "htmlFields": [
+          "details.notes.value"
+        ],
+        "filePathFields": {
+          "img": [
+            "IMAGE"
+          ]
+        }
+      }
+    },
+    "Item": {
+      "equipment": {
+        "htmlFields": [
+          "details.description.value"
+        ],
+        "filePathFields": {
+          "img": [
+            "IMAGE"
+          ]
+        }
+      },
+      "wagon": {
+        "htmlFields": [
+          "details.description.value"
+        ],
+        "filePathFields": {
+          "img": [
+            "IMAGE"
+          ]
+        }
+      },
+      "traveler": {
+        "htmlFields": [
+          "details.description.value"
+        ],
+        "filePathFields": {
+          "img": [
+            "IMAGE"
+          ]
+        }
+      },
+      "feat": {
+        "htmlFields": [
+          "details.description.value"
+        ],
+        "filePathFields": {
+          "img": [
+            "IMAGE"
+          ]
+        }
+      }
+    }
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

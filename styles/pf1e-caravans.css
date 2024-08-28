@@ -1,0 +1,22 @@
+.pf1.sheet.caravan.actor .tab.summary .attributes .unrest-details {
+    flex: 4;
+}
+
+.pf1.actor.caravan.sheet .tab:is(.travelers, .wagons, .cargo, .feats) footer :is(.feat-counts, .wagon-counts, .traveler-counts, .cargo-counts) {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 3px;
+}
+
+.pf1.actor.caravan.sheet .tab:is(.travelers, .wagons, .cargo, .feats) footer :is(.feat-counts, .wagon-counts, .traveler-counts, .cargo-counts) .stats {
+    flex: 4;
+}
+
+.pf1.actor.caravan.sheet .tab:is(.travelers, .wagons) .item-notifications {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 3px;
+    flex: 0;
+    margin: 2px;
+}

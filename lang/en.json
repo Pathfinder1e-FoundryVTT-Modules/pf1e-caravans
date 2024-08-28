@@ -1,0 +1,221 @@
+{
+  "TYPES": {
+    "Actor": {
+      "pf1e-caravans": {
+        "caravan": "Caravan"
+      }
+    },
+    "Item": {
+      "pf1e-caravans": {
+        "equipment": "Caravan Equipment",
+        "wagon": "Caravan Wagon",
+        "traveler": "Caravan Traveler",
+        "feat": "Caravan Feat"
+      }
+    }
+  },
+  "PF1": {
+    "Subtypes": {
+      "Item": {
+        "pf1e-caravans": {
+          "wagon": {
+            "armoredWagon": {
+              "Single": "Armored Wagon",
+              "Plural": "Armored Wagons"
+            },
+            "coveredWagon": {
+              "Single": "Covered Wagon",
+              "Plural": "Covered Wagons"
+            },
+            "fortuneTellerWagon": {
+              "Single": "Fortune Teller Wagon",
+              "Plural": "Fortune Teller Wagons"
+            },
+            "horseTrain": {
+              "Single": "Horse Train",
+              "Plural": "Horse Trains"
+            },
+            "prisonerWagon": {
+              "Single": "Prisoner Wagon",
+              "Plural": "Prisoner Wagons"
+            },
+            "royalCarriage": {
+              "Single": "Royal Carriage",
+              "Plural": "Royal Carriages"
+            },
+            "supplyWagon": {
+              "Single": "Supply Wagon",
+              "Plural": "Supply Wagons"
+            },
+            "custom": {
+              "Single": "Wagon",
+              "Plural": "Other"
+            }
+          },
+          "traveler": {
+            "cook": {
+              "Single": "Cook",
+              "Plural": "Cooks"
+            },
+            "driver": {
+              "Single": "Driver",
+              "Plural": "Drivers"
+            },
+            "entertainer": {
+              "Single": "Entertainer",
+              "Plural": "Entertainers"
+            },
+            "fortuneTeller": {
+              "Single": "Fortune Teller",
+              "Plural": "Fortune Tellers"
+            },
+            "guard": {
+              "Single": "Guard",
+              "Plural": "Guards"
+            },
+            "guide": {
+              "Single": "Guide",
+              "Plural": "Guides"
+            },
+            "healer": {
+              "Single": "Healer",
+              "Plural": "Healers"
+            },
+            "passenger": {
+              "Single": "Passenger",
+              "Plural": "Passengers"
+            },
+            "scout": {
+              "Single": "Scout",
+              "Plural": "Scouts"
+            },
+            "spellCaster": {
+              "Single": "Spellcaster",
+              "Plural": "Spellcasters"
+            },
+            "trader": {
+              "Single": "Trader",
+              "Plural": "Traders"
+            },
+            "wainwright": {
+              "Single": "Wainwright",
+              "Plural": "Wainwrights"
+            },
+            "custom": {
+              "Single": "Traveler",
+              "Plural": "Other"
+            }
+          }
+        }
+      }
+    }
+  },
+  "PF1ECaravans": {
+    "Max": "Max.",
+    "Travelers": "Travelers",
+    "ByWagon": "By Wagon",
+    "Cargo": "Cargo",
+    "Free": "Free",
+    "Task": "Task",
+    "Heroes": "Heroes",
+    "Wagons": "Wagons",
+    "Threshold": "Threshold",
+    "NoFortuneTeller": "No Fortune Teller",
+    "PrimaryStatistics": "Primary Statistics",
+    "DerivedStatistics": "Derived Statistics",
+    "Condition": "Condition",
+    "Conditions": {
+      "Normal": "Normal",
+      "Fatigued": "Fatigued",
+      "Exhausted": "Exhausted"
+    },
+    "BuffTargets": {
+      "HP": "Hit Points",
+      "Speed": "Speed",
+      "Consumption": "Consumption",
+      "Offense": "Offense",
+      "Defense": "Defense",
+      "Mobility": "Mobility",
+      "Morale": "Morale",
+      "Attack": "Attack",
+      "Damage": "Damage",
+      "ArmorClass": "Armor Class",
+      "Security": "Security",
+      "Resolve": "Resolve",
+      "Feats": "Feats",
+      "Cargo": "Cargo Capacity",
+      "Travelers": "Max. Travelers",
+      "Wagons": "Max. Wagons",
+      "Unrest": "Unrest Threshold",
+      "TravelerRoleLimit": {
+        "cook": "Max. Cooks",
+        "fortuneTeller": "Max. Fortune Tellers"
+      },
+      "WagonLimit": {
+        "armoredWagon": "Max. Armored Wagons",
+        "fortuneTellerWagon": "Max. Fortune Teller Wagons",
+        "horseTrain": "Max. Horse Trains",
+        "prisonerWagon": "Max. Prisoner Wagons",
+        "royalCarriage": "Max. Royal Carriages"
+      }
+    },
+    "BuffTargetCategories": {
+      "Caravan": "Caravan"
+    },
+    "Statistics": {
+      "Offense": "Offense",
+      "Defense": "Defense",
+      "Mobility": "Mobility",
+      "Morale": "Morale",
+      "Unrest": "Unrest",
+      "Attack": "Attack",
+      "ArmorClass": "Armor Class",
+      "Security": "Security",
+      "Resolve": "Resolve",
+      "Consumption": "Consumption",
+      "Provisions": "Provisions",
+      "Cargo": "Cargo"
+    },
+    "TravelerRole": {
+      "Custom": "Custom",
+      "Cook": "Cook",
+      "Driver": "Driver",
+      "Entertainer": "Entertainer",
+      "FortuneTeller": "Fortune Teller",
+      "Guard": "Guard",
+      "Guide": "Guide",
+      "Healer": "Healer",
+      "Passenger": {
+        "Base": "Passenger",
+        "Passenger": "Passenger",
+        "Prisoner": "Prisoner"
+      },
+      "Scout": {
+        "Base": "Scout",
+        "Food": "Food",
+        "Security": "Security"
+      },
+      "SpellCaster": {
+        "Base": "Spellcaster",
+        "Entertainer": "Entertainer",
+        "Guard": "Guard",
+        "Guide": "Guide",
+        "Healer": "Healer",
+        "ScoutFood": "Scout (Food)",
+        "ScoutSecurity": "Scout (Security)"
+      },
+      "Trader": "Trader",
+      "Wainwright": "Wainwright"
+    },
+    "WagonType": {
+      "Custom": "Custom",
+      "ArmoredWagon": "Armored Wagon",
+      "CoveredWagon": "Covered Wagon",
+      "FortuneTellerWagon": "Fortune Teller Wagon",
+      "HorseTrain": "Horse Train",
+      "PrisonerWagon": "Prisoner Wagon",
+      "RoyalCarriage": "Royal Carriage",
+      "SupplyWagon": "Supply Wagon"
+    }
+  }
+}

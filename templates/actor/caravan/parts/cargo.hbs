@@ -1,0 +1,51 @@
+<div class="inventory-filters flexrow">
+    {{~> "systems/pf1/templates/internal/item-search.hbs" category="features"}}
+</div>
+
+<hr>
+
+<footer data-tooltip-direction="UP" data-tooltip-extended="cargo">
+    <div class="cargo-counts">
+        <div class="info-box-joined stats">
+            <div class="info-box owned">
+                <h5>{{localize "PF1ECaravans.Cargo"}}</h5>
+                <span class="value">{{cargoCount.count}}</span>
+            </div>
+            <div class="info-box by-wagons">
+                <h5>{{localize "PF1ECaravans.ByWagon"}}</h5>
+                <span class="value">{{cargoCount.wagons}}</span>
+            </div>
+            <div class="info-box by-extra">
+                <h5>{{localize "PF1.ByBonus"}}</h5>
+                <span class="value">{{cargoCount.bonus}}</span>
+            </div>
+            <div class="info-box total">
+                <h5>{{localize "PF1.Total"}}</h5>
+                <span class="value">{{cargoCount.max}}</span>
+            </div>
+        </div>
+
+        {{#if cargoCount.issues}}
+            <div class="info-box-joined issues" style="--issues:{{cargoCount.issues}};">
+                {{#if cargoCount.missing}}
+                    <div class="info-box missing">
+                        <h5>{{localize "PF1ECaravans.Free"}}</h5>
+                        <span class="value">{{cargoCount.missing}}</span>
+                    </div>
+                {{else if cargoCount.excess}}
+                    <div class="info-box excess">
+                        <h5>{{localize "PF1.Excess"}}</h5>
+                        <span class="value">{{cargoCount.excess}}</span>
+                    </div>
+                {{/if}}
+
+                {{#if cargoCount.disabled}}
+                    <div class="info-box disabled">
+                        <h5>{{localize "PF1.Disabled"}}</h5>
+                        <span class="value">{{cargoCount.disabled}}</span>
+                    </div>
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+</footer>

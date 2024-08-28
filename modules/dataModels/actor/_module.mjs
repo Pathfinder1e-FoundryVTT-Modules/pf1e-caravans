@@ -1,0 +1,1 @@
+export {CaravanModel} from "./caravan-model.mjs";

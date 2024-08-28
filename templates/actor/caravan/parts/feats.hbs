@@ -1,0 +1,51 @@
+<div class="inventory-filters flexrow">
+    {{~> "systems/pf1/templates/internal/item-search.hbs" category="features"}}
+</div>
+
+<hr>
+
+<footer data-tooltip-direction="UP" data-tooltip-extended="feats">
+    <div class="feats-counts">
+        <div class="info-box-joined stats">
+            <div class="info-box owned">
+                <h5>{{localize "PF1.Feats"}}</h5>
+                <span class="value">{{featCount.count}}</span>
+            </div>
+            <div class="info-box by-wagons">
+                <h5>{{localize "PF1.ByLevel"}}</h5>
+                <span class="value">{{featCount.levels}}</span>
+            </div>
+            <div class="info-box by-extra">
+                <h5>{{localize "PF1.ByBonus"}}</h5>
+                <span class="value">{{featCount.bonus}}</span>
+            </div>
+            <div class="info-box total">
+                <h5>{{localize "PF1.Total"}}</h5>
+                <span class="value">{{featCount.max}}</span>
+            </div>
+        </div>
+
+        {{#if featCount.issues}}
+            <div class="info-box-joined issues" style="--issues:{{featCount.issues}};">
+                {{#if featCount.missing}}
+                    <div class="info-box missing">
+                        <h5>{{localize "PF1.Missing"}}</h5>
+                        <span class="value">{{featCount.missing}}</span>
+                    </div>
+                {{else if featCount.excess}}
+                    <div class="info-box excess">
+                        <h5>{{localize "PF1.Excess"}}</h5>
+                        <span class="value">{{featCount.excess}}</span>
+                    </div>
+                {{/if}}
+
+                {{#if featCount.disabled}}
+                    <div class="info-box disabled">
+                        <h5>{{localize "PF1.Disabled"}}</h5>
+                        <span class="value">{{featCount.disabled}}</span>
+                    </div>
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+</footer>

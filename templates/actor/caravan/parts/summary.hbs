@@ -1,0 +1,217 @@
+<div class="summary-header">
+    <img class="profile" src="{{actor.img}}" data-edit="img">
+
+    <div class="flexcol basic-info">
+        <div class="flexrow name-xp">
+            <h1 class="char-name">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize "PF1.CharacterName"}}"
+                       data-tooltip="PF1.CharacterName">
+            </h1>
+
+            <div class="hd-level flexcol">
+                <div class="inputs">
+                    <div class="info-box-joined level">
+                        <div class="info-box level">
+                            <h5>{{localize "PF1.Level"}}</h5>
+                            <span class="text-box direct" name="system.details.level"
+                                  data-dtype="String">{{actor.system.details.level}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="character-summary flexrow">
+            <div class="flexrow">
+                <label for="caravan-condition">
+                    {{localize "PF1ECaravans.Condition"}}
+                </label>
+                <select name="system.details.condition" id="caravan-condition">
+                    {{selectOptions conditionOptions selected=actor.system.details.condition localize=true}}
+                </select>
+            </div>
+            <div></div>
+            <div></div>
+            <div>&nbsp;</div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="flexrow">
+            <div class="item flexrow"></div>
+            <div class="flexrow item-list misc-header-items">
+                {{!-- Rest --}}
+                <div class="actor-quick-actions">
+                    <button type="button" class="rest"><i class="fas fa-bed"></i> {{localize "PF1.Rest"}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="attributes flexrow">
+    <div class="info-box-header health-details" data-tooltip-extended="hit-points">
+        <h3>{{localize "PF1.HitPoints"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current">
+                <h5>{{localize "PF1.Current"}}</h5>
+                <span class="text-box wheel-change direct allow-relative" data-wheel-step="1"
+                      name="system.attributes.hp.value" data-dtype="Number">{{actor.system.attributes.hp.value}}</span>
+            </div>
+            <div class="info-box maximum">
+                <h5>{{localize "PF1.Maximum"}}</h5>
+                <span class="value">{{actor.system.attributes.hp.max}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box-header unrest-details" data-tooltip-extended="unrest">
+        <h3>{{localize "PF1ECaravans.Statistics.Unrest"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current">
+                <h5>{{localize "PF1.Current"}}</h5>
+                <span class="text-box wheel-change direct allow-relative" data-wheel-step="1"
+                      name="system.attributes.unrest.value"
+                      data-dtype="Number">{{actor.system.attributes.unrest.value}}</span>
+            </div>
+            <div class="info-box maximum">
+                <h5>{{localize "PF1ECaravans.Threshold"}}</h5>
+                <span class="value">{{actor.system.attributes.unrest.limit}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box-header speed-details flexcol" data-tooltip-extended="speed">
+        <h3>{{localize "PF1.Movement.Speed"}}</h3>
+
+        <div class="info-box-joined">
+            <div class="info-box land">
+                <h5>{{localize "PF1.Movement.Mode.land"}}</h5>
+                <span class="value">{{speedConverted}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="attributes flexrow">
+    <div class="info-box-header primaryStatistics-details">
+        <h3>{{localize "PF1ECaravans.PrimaryStatistics"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current" data-tooltip-extended="offense">
+                <h5>{{localize "PF1ECaravans.Statistics.Offense"}}</h5>
+                <span class="text-box wheel-change direct" name="system.statistics.offense.base"
+                      data-dtype="Number">{{actor.system.statistics.offense.total}}</span>
+            </div>
+            <div class="info-box current" data-tooltip-extended="defense">
+                <h5>{{localize "PF1ECaravans.Statistics.Defense"}}</h5>
+                <span class="text-box wheel-change direct" name="system.statistics.defense.base"
+                      data-dtype="Number">{{actor.system.statistics.defense.total}}</span>
+            </div>
+            <div class="info-box current" data-tooltip-extended="mobility">
+                <h5>{{localize "PF1ECaravans.Statistics.Mobility"}}</h5>
+                <span class="text-box wheel-change direct" name="system.statistics.mobility.base"
+                      data-dtype="Number">{{actor.system.statistics.mobility.total}}</span>
+            </div>
+            <div class="info-box current" data-tooltip-extended="morale">
+                <h5>{{localize "PF1ECaravans.Statistics.Morale"}}</h5>
+                <span class="text-box wheel-change direct" name="system.statistics.morale.base"
+                      data-dtype="Number">{{actor.system.statistics.morale.total}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box-header derivedStatistics-details">
+        <h3>{{localize "PF1ECaravans.DerivedStatistics"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current" data-tooltip-extended="attack">
+                <h5><a class="rollable"><i class="fas fa-dice"></i> <span>{{localize
+                        "PF1ECaravans.Statistics.Attack"}}</span></a></h5>
+                <span class="value">{{#if (gte actor.system.statistics.attack 0)}}
+                    +{{/if}}{{actor.system.statistics.attack}}</span>
+            </div>
+            <div class="info-box current" data-tooltip-extended="armor-class">
+                <h5>{{localize "PF1ECaravans.Statistics.ArmorClass"}}</h5>
+                <span class="value">{{actor.system.statistics.armorClass}}</span>
+            </div>
+            <div class="info-box current" data-tooltip-extended="security">
+                <h5><a class="rollable"><i class="fas fa-dice"></i> <span>{{localize
+                        "PF1ECaravans.Statistics.Security"}}</span></a></h5>
+                <span class="value">{{#if (gte actor.system.statistics.security 0)}}
+                    +{{/if}}{{actor.system.statistics.security}}</span>
+            </div>
+            <div class="info-box current" data-tooltip-extended="resolve">
+                <h5><a class="rollable"><i class="fas fa-dice"></i> <span>{{localize
+                        "PF1ECaravans.Statistics.Resolve"}}</span></a></h5>
+                <span class="value">{{#if (gte actor.system.statistics.resolve 0)}}
+                    +{{/if}}{{actor.system.statistics.resolve}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="attributes flexrow">
+    <div class="info-box-header primaryStatistics-details" data-tooltip-extended="consumption">
+        <h3>{{localize "PF1ECaravans.Statistics.Consumption"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current">
+                <h5>{{localize "PF1ECaravans.Statistics.Consumption"}}</h5>
+                <span class="value">{{actor.system.attributes.consumption}}</span>
+            </div>
+            <div class="info-box current">
+                <h5>{{localize "PF1ECaravans.Statistics.Provisions"}}</h5>
+                <span class="text-box wheel-change direct" name="system.attributes.provisions"
+                      data-dtype="Number">{{actor.system.attributes.provisions}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box-header primaryStatistics-details" data-tooltip-extended="travelers">
+        <h3>{{localize "PF1ECaravans.Travelers"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current">
+                <h5>{{localize "PF1.Current"}}</h5>
+                <span class="value">{{actor.system.travelers.count}}</span>
+            </div>
+            <div class="info-box current">
+                <h5>{{localize "PF1.Maximum"}}</h5>
+                <span class="value">{{actor.system.travelers.max}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box-header primaryStatistics-details" data-tooltip-extended="wagons">
+        <h3>{{localize "PF1ECaravans.Wagons"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current">
+                <h5>{{localize "PF1.Current"}}</h5>
+                <span class="value">{{actor.system.wagons.count}}</span>
+            </div>
+            <div class="info-box current">
+                <h5>{{localize "PF1.Maximum"}}</h5>
+                <span class="value">{{actor.system.wagons.max}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box-header primaryStatistics-details" data-tooltip-extended="cargo">
+        <h3>{{localize "PF1ECaravans.Cargo"}}</h3>
+
+        <div class="info-box-joined tooltip">
+            <div class="info-box current">
+                <h5>{{localize "PF1.Current"}}</h5>
+                <span class="value">{{actor.system.cargo.count}}</span>
+            </div>
+            <div class="info-box current">
+                <h5>{{localize "PF1.Maximum"}}</h5>
+                <span class="value">{{actor.system.cargo.max}}</span>
+            </div>
+        </div>
+    </div>
+</div>

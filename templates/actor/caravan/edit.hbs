@@ -1,0 +1,38 @@
+<form class="{{cssClass}}" data-tooltip-class="pf1" autocomplete="off">
+    <nav class="sheet-navigation tabs" data-group="primary">
+        <a class="item" data-tab="summary" data-group="primary">{{localize "PF1.Summary"}}</a>
+        <a class="item" data-tab="travelers" data-group="primary">{{ localize "PF1ECaravans.Travelers" }}</a>
+        <a class="item" data-tab="wagons" data-group="primary">{{ localize "PF1ECaravans.Wagons" }}</a>
+        <a class="item" data-tab="cargo" data-group="primary">{{ localize "PF1ECaravans.Cargo" }}</a>
+        <a class="item" data-tab="feats" data-group="primary">{{ localize "PF1.Feats" }}</a>
+        <a class="item" data-tab="notes" data-group="primary">{{ localize "PF1.Notes" }}</a>
+    </nav>
+
+    <section class="primary-body">
+        <div class="tab summary flexcol" data-group="primary" data-tab="summary">
+            {{> "modules/pf1e-caravans/templates/actor/caravan/parts/summary.hbs"}}
+        </div>
+
+        <div class="tab travelers flexcol" data-group="primary" data-tab="travelers">
+            {{> "modules/pf1e-caravans/templates/actor/caravan/parts/travelers.hbs" sections=travelers}}
+        </div>
+
+        <div class="tab wagons flexcol" data-group="primary" data-tab="wagons">
+            {{> "modules/pf1e-caravans/templates/actor/caravan/parts/wagons.hbs" sections=wagons}}
+        </div>
+
+        <div class="tab cargo flexcol" data-group="primary" data-tab="cargo">
+            {{> "modules/pf1e-caravans/templates/actor/caravan/parts/cargo.hbs"}}
+        </div>
+
+        <div class="tab feats flexcol" data-group="primary" data-tab="feats">
+            {{> "modules/pf1e-caravans/templates/actor/caravan/parts/feats.hbs"}}
+        </div>
+
+        <div class="tab actor-notes flexcol" data-group="primary" data-tab="notes">
+            <div class="primary-content">
+                {{editor notesHTML target="system.details.notes.value" button=true editable=editable engine="prosemirror" collaborate=false}}
+            </div>
+        </div>
+    </section>
+</form>
