@@ -1,1 +1,84 @@
-Wagon
+<form class="{{cssClass}} flexcol" autocomplete="off" data-tooltip-class="pf1">
+
+    {{!-- Item Sheet Header --}}
+    <header class="sheet-header flexrow">
+        <img class="profile" src="{{item.img}}" data-tooltip="{{item.name}}" data-edit="img">
+
+        <div class="flexrow header-details">
+            <h1 class="item-name">
+                <input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PF1.ItemName"}}">
+            </h1>
+        </div>
+    </header>
+
+    {{!-- Sidebar --}}
+    <section class="sidebar">
+        <header>
+            <h3 class="item-type">{{itemType}}</h3>
+
+            <h4 class="item-subtype">{{labels.wagonType}}</h4>
+        </header>
+
+        <label class="descriptor checkbox">
+            <span>{{localize "PF1ECaravans.Statistics.Consumption"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.consumption"
+                   type="number" data-dtype="Number" value="{{system.consumption}}" {{disabled (not customizable)}} readonly>
+        </label>
+        <label class="descriptor checkbox">
+            <span>{{localize "PF1ECaravans.Travelers"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.capacity.traveler"
+                   type="number" data-dtype="Number" value="{{system.capacity.traveler}}" {{disabled (not customizable)}} readonly>
+        </label>
+        <label class="descriptor checkbox">
+            <span>{{localize "PF1ECaravans.Cargo"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.capacity.cargo"
+                   type="number" data-dtype="Number" value="{{system.capacity.cargo}}" {{disabled (not customizable)}} readonly>
+        </label>
+        <label class="descriptor checkbox">
+            <span>{{localize "PF1.Price"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.cost"
+                   type="number" data-dtype="Number" value="{{system.cost}}" {{disabled (not customizable)}} readonly>
+        </label>
+        <label class="descriptor checkbox">
+            <span>{{localize "PF1.HPShort"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.hp"
+                   type="number" data-dtype="Number" value="{{system.hp}}" {{disabled (not customizable)}} readonly>
+        </label>
+    </section>
+
+    {{!-- Item Sheet Navigation --}}
+    <nav class="sheet-navigation tabs" data-group="primary">
+        <a class="item" data-tab="description">{{ localize "PF1.Description" }}</a>
+        <a class="item" data-tab="details">{{ localize "PF1.Details" }}</a>
+        <a class="item" data-tab="changes">{{ localize "PF1.Changes" }}</a>
+    </nav>
+
+    {{!-- Item Sheet Body --}}
+    <section class="primary-body">
+        {{!-- Description Tab --}}
+        {{> "systems/pf1/templates/items/parts/item-description.hbs"}}
+
+        {{!-- Details Tab --}}
+        <div class="tab details" data-group="primary" data-tab="details">
+            {{!-- Wagon Type --}}
+            <div class="form-group select">
+                <label>{{localize "PF1.Type"}}</label>
+                <div class="form-fields">
+                    <select name="system.subType" value="{{system.subType}}">
+                        {{selectOptions wagonTypes selected=system.subType}}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Changes Tab --}}
+        <div class="tab changes" data-group="primary" data-tab="changes">
+            {{~> "modules/pf1e-caravans/templates/item/parts/changes.hbs"}}
+        </div>
+    </section>
+</form>

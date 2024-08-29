@@ -1,10 +1,9 @@
 import * as Registry from "./registry/_module.mjs";
 import * as Config from "./config/_module.mjs";
+import {getChangeFlat} from "./hooks/getChangeFlat.mjs";
 import {CaravanModel, EquipmentModel, FeatModel, TravelerModel, WagonModel} from "./dataModels/_module.mjs";
 import {CaravanSheet, EquipmentSheet, FeatSheet, TravelerSheet, WagonSheet} from "./applications/_module.mjs";
-import {getChangeFlat} from "./hooks/getChangeFlat.mjs";
-import {CaravanActor} from "./documents/actor/caravan-actor.mjs";
-import {CaravanItem} from "./documents/item/caravan-item.mjs";
+import {CaravanActor, CaravanItem, TravelerItem, WagonItem} from "./documents/_module.mjs";
 
 export const MODULE_ID = "pf1e-caravans";
 
@@ -136,11 +135,13 @@ function registerItems() {
     Object.assign(CONFIG.Item.documentClasses, {
         [`${MODULE_ID}.equipment`]: CaravanItem,
         [`${MODULE_ID}.feat`]: CaravanItem,
-        [`${MODULE_ID}.traveler`]: CaravanItem,
-        [`${MODULE_ID}.wagon`]: CaravanItem,
+        [`${MODULE_ID}.traveler`]: TravelerItem,
+        [`${MODULE_ID}.wagon`]: WagonItem,
     })
     Object.assign(pf1.documents.item, {
-        CaravanItem: CaravanItem
+        CaravanItem: CaravanItem,
+        TravelerItem: TravelerItem,
+        WagonItem: WagonItem,
     })
 
     Object.assign(CONFIG.Item.dataModels, {
@@ -175,5 +176,6 @@ function registerTemplates() {
         "modules/pf1e-caravans/templates/actor/caravan/parts/feats.hbs",
 
         // ITEM
+        "modules/pf1e-caravans/templates/item/parts/changes.hbs"
     ]);
 }

@@ -6,7 +6,7 @@ export class TravelerRole extends RegistryEntry {
     static defineSchema() {
         return {
             ...super.defineSchema(),
-            monthlyWage: new fields.NumberField({initial: 0}),
+            monthlyWage: new fields.NumberField({required: false, initial: undefined}),
             max: new fields.NumberField({required: false, initial: undefined}),
             onlyParty: new fields.BooleanField({initial: false}),
             changes: new fields.ArrayField(new fields.SchemaField({
@@ -19,7 +19,7 @@ export class TravelerRole extends RegistryEntry {
             })),
             contextNotes: new fields.ArrayField(new fields.SchemaField({
                 target: new fields.StringField({initial: ""}),
-                note: new fields.StringField({initial: ""})
+                text: new fields.StringField({initial: ""})
             })),
             tasks: new fields.ArrayField(new fields.SchemaField({
                 id: new fields.StringField({required: true, initial: ""}),
@@ -34,7 +34,7 @@ export class TravelerRole extends RegistryEntry {
                 })),
                 contextNotes: new fields.ArrayField(new fields.SchemaField({
                     target: new fields.StringField({initial: ""}),
-                    note: new fields.StringField({initial: ""})
+                    text: new fields.StringField({initial: ""})
                 }))
             }))
         }
@@ -86,9 +86,9 @@ export class TravelerRoles extends Registry {
                 target: "caravan_offense",
                 type: "circumstance"
             }],
-            changeNotes: [{
+            contextNotes: [{
                 target: "caravan_security",
-                note: "+1 security to avoid being surprised"
+                text: "+1 to avoid being surprised"
             }]
         },
         {
@@ -107,7 +107,7 @@ export class TravelerRoles extends Registry {
             monthlyWage: 50,
             contextNotes: [{
                 target: "caravan_rest",
-                note: "Provides long-term care for up to 6 travelers"
+                text: "Provides long-term care for up to 6 travelers"
             }]
         },
         {
@@ -116,11 +116,11 @@ export class TravelerRoles extends Registry {
             tasks: [
                 {
                     id: "passenger",
-                    name: "PF1ECaravans.TravelerRole.Passenger.Passenger",
+                    name: "PF1ECaravans.TravelerRole.Passenger.Standard",
                 },
                 {
                     id: "prisoner",
-                    name: "PF1ECaravans.TravelerRole.Prisoner.Prisoner",
+                    name: "PF1ECaravans.TravelerRole.Passenger.Prisoner",
                 }
             ]
         },
@@ -175,9 +175,9 @@ export class TravelerRoles extends Registry {
                         target: "caravan_offense",
                         type: "circumstance"
                     }],
-                    changeNotes: [{
+                    contextNotes: [{
                         target: "caravan_security",
-                        note: "+1 security to avoid being surprised"
+                        text: "+1 to avoid being surprised"
                     }]
                 },
                 {
@@ -194,7 +194,7 @@ export class TravelerRoles extends Registry {
                     name: "PF1ECaravans.TravelerRole.SpellCaster.Healer",
                     contextNotes: [{
                         target: "caravan_rest",
-                        note: "Provides long-term care for up to 6 travelers"
+                        text: "Provides long-term care for up to 6 travelers"
                     }]
                 },
                 {

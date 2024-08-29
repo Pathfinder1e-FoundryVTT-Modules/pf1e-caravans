@@ -3,9 +3,22 @@ export class CaravanItem extends pf1.documents.item.ItemBasePF {
         return true;
     }
 
+    static getDefaultArtwork(itemData) {
+        const result = super.getDefaultArtwork(itemData);
+        const image = pf1.config.defaultIcons.items[itemData?.type];
+        if (image) result.img = image;
+        return result;
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
         this._prepareChanges();
+
+        if (this.system.contextNotes?.length) {
+            this.system.contextNotes = this.system.contextNotes.map(
+                (cn) => new pf1.components.ContextNote(cn, { parent: this })
+            );
+        }
     }
 
     _prepareChanges() {
@@ -27,5 +40,17 @@ export class CaravanItem extends pf1.documents.item.ItemBasePF {
 
     getRollData(options = {refresh: false}) {
         return this.parent.getRollData(options);
+    }
+
+    getLabels({ actionId, rollData } = {}) {
+        const action = actionId ? this.actions.get(actionId) : this.defaultAction;
+        return {
+            activation: pf1.config.abilityActivationTypes.passive, // Default passive if no action is present
+            ...(action?.getLabels({ rollData }) ?? {}),
+        };
+    }
+
+    get defaultAction() {
+        return this.actions?.get(this.system.actions?.[0]?._id);
     }
 }

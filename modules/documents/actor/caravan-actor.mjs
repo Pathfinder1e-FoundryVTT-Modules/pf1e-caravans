@@ -1,5 +1,6 @@
 import {buffTargets} from "../../config/buffTargets.mjs";
 import {MODULE_ID} from "../../pf1e-caravans.mjs";
+import {enrichHTMLUnrolled} from "../../../../../systems/pathfinder-1e/module/utils/lib.mjs";
 
 export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     constructor(...args) {
@@ -38,6 +39,16 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             this._rollData = null;
     }
 
+    static getDefaultArtwork(actorData) {
+        const result = super.getDefaultArtwork(actorData);
+        const image = pf1.config.defaultIcons.actors[actorData?.type];
+        if (image) {
+            result.img = image;
+            result.texture.src = image;
+        }
+        return result;
+    }
+
     prepareBaseData() {
         this._initialized = false;
         super.prepareBaseData();
@@ -69,7 +80,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             c.set(uniqueId, change);
         }
         this.changes = c;
-        console.log(this.changes);
     }
 
     _addDefaultChanges(changes) {
@@ -77,7 +87,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
         const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
         const travelers = this.itemTypes[`${MODULE_ID}.traveler`];
-        const heroesCount = travelers.filter(traveler => traveler.system.details.isHero).length;
+        const heroesCount = Math.min(4, travelers.filter(traveler => traveler.system.details.isHero).length);
 
         for (const [derivedAttributeId, baseAttributeId] of [
             ["attack", "offense"],
@@ -216,6 +226,15 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 }))
                 break;
         }
+
+        changes.push(new pf1.components.ItemChange({
+            formula: travelers.reduce((acc, traveler) => acc + traveler.system.monthlyWage || 0, 0),
+            target: "caravan_wages",
+            type: "untyped",
+            operator: "add",
+            priority: 10,
+            flavor: game.i18n.localize(`PF1ECaravans.Travelers`)
+        }));
     }
 
     applyActiveEffects() {
@@ -371,5 +390,76 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     static _getSourceLabel(src) {
         // TODO: Anything needed here?
         return src.name;
+    }
+
+    async rollAttributeTest(attribute, options = {}) {
+        if (!this.isOwner) {
+            return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", { name: this.name }));
+        }
+
+        const allowedAttributes = ["resolve", "security"];
+        if(!allowedAttributes.includes(attribute)) {
+            return void ui.notifications.warn(game.i18n.format("PF1ECaravans.Error.InvalidAttribute", { attribute }));
+        }
+
+        // Add contextual notes
+        const rollData = options.rollData || this.getRollData();
+        const noteObjects = this.getContextNotes(`caravan_${attribute}`);
+        const notes = this.formatContextNotes(noteObjects, rollData);
+
+        const label = game.i18n.localize(`PF1ECaravans.Statistics.${attribute.capitalize()}`);
+        const parts = [`@statistics.${attribute}[${label}]`];
+
+        const props = [];
+        if (notes.length > 0) props.push({ header: game.i18n.localize("PF1.Notes"), value: notes });
+
+        const token = options.token ?? this.token;
+
+        const rollOptions = {
+            ...options,
+            parts,
+            rollData,
+            flavor: game.i18n.format(`PF1ECaravans.${attribute.capitalize()}Test`),
+            chatTemplateData: { properties: props },
+            speaker: ChatMessage.implementation.getSpeaker({ actor: this, token, alias: token?.name }),
+        };
+
+        return await pf1.dice.d20Roll(rollOptions);
+    }
+
+    formatContextNotes(notes, rollData, { roll = true } = {}) {
+        const result = [];
+        rollData ??= this.getRollData();
+        for (const noteObj of notes) {
+            rollData.item = {};
+            if (noteObj.item != null) rollData = noteObj.item.getRollData();
+
+            for (const note of noteObj.notes) {
+                result.push(
+                    ...note
+                        .split(/[\n\r]+/)
+                        .map((subNote) => enrichHTMLUnrolled(subNote, { rollData, rolls: roll, relativeTo: this }))
+                );
+            }
+        }
+        return result;
+    }
+
+    get allNotes() {
+        return this.items
+            .filter((item) => item.isActive && item.system.contextNotes?.length > 0)
+            .map((item) => ({ notes: item.system.contextNotes, item }));
+    }
+
+    getContextNotes(context, all = true) {
+        if (context.string) context = context.string;
+        const result = this.allNotes;
+
+        const notes = result.filter((n) => n.target == context);
+        for (const note of result) {
+            note.notes = note.notes.filter((o) => o.target === context).map((o) => o.text);
+        }
+
+        return result.filter((n) => n.notes.length);
     }
 }

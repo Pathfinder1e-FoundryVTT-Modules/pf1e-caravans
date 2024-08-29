@@ -1,8 +1,11 @@
-export class TravelerModel extends foundry.abstract.TypeDataModel {
+import {CaravanItemModel} from "./caravan-item-model.js";
+
+export class TravelerModel extends CaravanItemModel {
     static defineSchema() {
         const fields = foundry.data.fields;
         return {
             subType: new fields.StringField({required: true, default: "passenger"}),
+            monthlyWage: new fields.NumberField({required: false, default: 0}),
             details: new fields.SchemaField({
                 description: new fields.SchemaField({
                     value: new fields.StringField({required: true, default: ""}),
@@ -18,29 +21,16 @@ export class TravelerModel extends foundry.abstract.TypeDataModel {
     }
 
     _mergeRoleDetails() {
-        const roleDetails = pf1.registry.travelerRoles.get(this.subType) ?? {};
-
-        const recurseAttach = (obj, details) => {
-            Object.entries(details).forEach(([key, value]) => {
-                if (Array.isArray(value)) {
-                    if (!obj[key]) {
-                        obj[key] = [];
-                    }
-                    obj[key].push(...value);
-                } else if (typeof value === "object") {
-                    if (!obj[key]) {
-                        obj[key] = {};
-                    }
-                    recurseAttach(obj[key], value);
-                } else {
-                    obj[key] = value;
-                }
-            });
+        if(this.roleDetailsMerged) {
+            return;
         }
-        recurseAttach(this, roleDetails);
+        this.roleDetailsMerged = true;
+
+        const roleDetails = pf1.registry.travelerRoles.get(this.subType) ?? {};
+        this._recurseAttach(this, roleDetails);
 
         if (roleDetails.tasks?.length) {
-            if(!this.details.task) {
+            if (!this.details.task) {
                 this.details.task = roleDetails.tasks[0].id;
             }
 
@@ -52,13 +42,16 @@ export class TravelerModel extends foundry.abstract.TypeDataModel {
                 }
             }
 
-            if (task) {
-                this.taskName = task.name;
-                recurseAttach(this, {
-                    changes: task.changes,
-                    contextNotes: task.contextNotes,
-                })
+            if (!task) {
+                this.details.task = roleDetails.tasks[0].id;
+                task = roleDetails.tasks[0];
             }
+
+            this.taskName = task.name;
+            this._recurseAttach(this, {
+                changes: task.changes,
+                contextNotes: task.contextNotes,
+            })
         }
     }
 }

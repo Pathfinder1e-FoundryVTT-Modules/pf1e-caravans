@@ -1,4 +1,6 @@
-export class WagonModel extends foundry.abstract.TypeDataModel {
+import {CaravanItemModel} from "./caravan-item-model.js";
+
+export class WagonModel extends CaravanItemModel {
     static defineSchema() {
         const fields = foundry.data.fields;
         return {
@@ -7,7 +9,15 @@ export class WagonModel extends foundry.abstract.TypeDataModel {
                 description: new fields.SchemaField({
                     value: new fields.StringField({required: true, default: ""}),
                 })
-            })
+            }),
+            cost: new fields.NumberField({required: false, initial: undefined}),
+            hp: new fields.NumberField({required: false, initial: undefined}),
+            capacity: new fields.SchemaField({
+                traveler: new fields.NumberField({required: false, initial: undefined}),
+                cargo: new fields.NumberField({required: false, initial: undefined})
+            }),
+            max: new fields.NumberField({required: false, initial: undefined}),
+            consumption: new fields.NumberField({required: false, initial: undefined}),
         };
     }
 
@@ -16,29 +26,17 @@ export class WagonModel extends foundry.abstract.TypeDataModel {
     }
 
     _mergeWagonDetails() {
+        if(this.wagonDetailsMerged) {
+            return;
+        }
+        this.wagonDetailsMerged = true;
+
         const wagonDetails = pf1.registry.wagonTypes.get(this.subType) ?? {
             capacity: {
                 passengers: 0,
                 cargo: 0
             }
         };
-        const recurseAttach = (obj, details) => {
-            Object.entries(details).forEach(([key, value]) => {
-                if (Array.isArray(value)) {
-                    if (!obj[key]) {
-                        obj[key] = [];
-                    }
-                    obj[key].push(...value);
-                } else if (typeof value === "object") {
-                    if (!obj[key]) {
-                        obj[key] = {};
-                    }
-                    recurseAttach(obj[key], value);
-                } else {
-                    obj[key] = value;
-                }
-            });
-        }
-        recurseAttach(this, wagonDetails);
+        this._recurseAttach(this, wagonDetails);
     }
 }

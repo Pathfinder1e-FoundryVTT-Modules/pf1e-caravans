@@ -78,9 +78,6 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
         })
 
         // ATTRIBUTES
-        const wagons = this.parent.itemTypes[`${MODULE_ID}.wagon`];
-        const travelers = this.parent.itemTypes[`${MODULE_ID}.traveler`];
-
         this.attributes ??= {};
 
         this.attributes.unrest ??= {value: 0, limit: 0};
@@ -92,6 +89,7 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
         this.attributes.hp.value = Math.max(this.attributes.hp.value, 0);
 
         this.attributes.consumption = 0;
+        this.details.wages = 0;
     }
 
     _prepareTravelerCounts() {

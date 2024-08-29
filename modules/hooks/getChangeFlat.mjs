@@ -16,6 +16,10 @@ export function getChangeFlat(result, target, modifierType, value) {
             result.push("system.attributes.hp.max");
             break;
 
+        case "caravan_wages":
+            result.push("system.details.wages");
+            break;
+
         case "caravan_speed":
             result.push("system.details.speed.total");
             break;

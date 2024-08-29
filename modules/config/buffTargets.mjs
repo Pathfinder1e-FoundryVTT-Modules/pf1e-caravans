@@ -4,6 +4,11 @@ export const buffTargets = {
         label: "PF1ECaravans.BuffTargets.HP",
         sort: 100
     },
+    caravan_wages: {
+        category: "caravan",
+        label: "PF1ECaravans.BuffTargets.Wages",
+        sort: 150
+    },
     caravan_speed: {
         category: "caravan",
         label: "PF1ECaravans.BuffTargets.Speed",

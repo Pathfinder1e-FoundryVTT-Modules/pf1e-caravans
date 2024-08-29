@@ -1,4 +1,4 @@
-import {CaravanItemSheet} from "./_caravanItem.mjs";
+import {CaravanItemSheet} from "./caravan-item-sheet.mjs";
 
 export class EquipmentSheet extends CaravanItemSheet {
     get template() {

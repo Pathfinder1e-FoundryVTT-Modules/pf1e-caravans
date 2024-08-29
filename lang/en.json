@@ -116,14 +116,19 @@
     "ByWagon": "By Wagon",
     "Cargo": "Cargo",
     "Free": "Free",
+    "Wage": "Wage",
     "Task": "Task",
     "Heroes": "Heroes",
     "Wagons": "Wagons",
+    "Misc": "Miscellaneous",
     "Threshold": "Threshold",
     "NoFortuneTeller": "No Fortune Teller",
     "PrimaryStatistics": "Primary Statistics",
     "DerivedStatistics": "Derived Statistics",
     "Condition": "Condition",
+    "SecurityTest": "Security Test",
+    "ResolveTest": "Resolve Test",
+    "MonthlyWages": "Monthly Wages",
     "Conditions": {
       "Normal": "Normal",
       "Fatigued": "Fatigued",
@@ -147,6 +152,7 @@
       "Travelers": "Max. Travelers",
       "Wagons": "Max. Wagons",
       "Unrest": "Unrest Threshold",
+      "Wages": "Monthly Wages",
       "TravelerRoleLimit": {
         "cook": "Max. Cooks",
         "fortuneTeller": "Max. Fortune Tellers"
@@ -160,6 +166,15 @@
       }
     },
     "BuffTargetCategories": {
+      "Caravan": "Caravan"
+    },
+    "ContextNoteTargets": {
+      "Rest": "Rest",
+      "Security": "Security",
+      "Resolve": "Resolve",
+      "Attack": "Attack"
+    },
+    "ContextNoteTargetCategories": {
       "Caravan": "Caravan"
     },
     "Statistics": {
@@ -187,7 +202,7 @@
       "Healer": "Healer",
       "Passenger": {
         "Base": "Passenger",
-        "Passenger": "Passenger",
+        "Standard": "Standard",
         "Prisoner": "Prisoner"
       },
       "Scout": {
@@ -216,6 +231,9 @@
       "PrisonerWagon": "Prisoner Wagon",
       "RoyalCarriage": "Royal Carriage",
       "SupplyWagon": "Supply Wagon"
+    },
+    "Errors": {
+      "InvalidAttribute": "Attribute {attribute} is not a valid attribute."
     }
   }
 }

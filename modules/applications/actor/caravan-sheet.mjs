@@ -17,6 +17,22 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
     get template() {
         return `modules/pf1e-caravans/templates/actor/caravan/${this.isEditable ? "edit" : "view"}.hbs`;
     }
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find(".attribute.attack .rollable").on("click", this._onRollAttack.bind(this));
+        html.find(".attribute:is(.security, .resolve) .rollable").on("click", this._onRollAttribute.bind(this));
+    }
+
+    async _onRollAttack(event) {
+        event.preventDefault();
+        await this.actor.rollAttack({ token: this.token });
+    }
+
+    async _onRollAttribute(event) {
+        event.preventDefault();
+        const attribute = event.currentTarget.closest(".attribute").dataset.attribute;
+        await this.actor.rollAttributeTest(attribute, { token: this.token });
+    }
 
     async getData(options = {}) {
         const isOwner = this.actor.isOwner;
@@ -300,6 +316,8 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                     sources: getSource(`system.statistics.${proxyId}`),
                     untyped: true,
                 });
+
+                notes = getNotes(`caravan_${id}`);
                 break;
             }
 

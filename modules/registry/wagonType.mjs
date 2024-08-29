@@ -6,14 +6,14 @@ export class WagonType extends RegistryEntry {
     static defineSchema() {
         return {
             ...super.defineSchema(),
-            cost: new fields.NumberField({initial: 0}),
-            hp: new fields.NumberField({initial: 0}),
+            cost: new fields.NumberField({required: false, initial: undefined}),
+            hp: new fields.NumberField({required: false, initial: undefined}),
             capacity: new fields.SchemaField({
-                traveler: new fields.NumberField({initial: 0}),
-                cargo: new fields.NumberField({initial: 0})
+                traveler: new fields.NumberField({required: false, initial: undefined}),
+                cargo: new fields.NumberField({required: false, initial: undefined})
             }),
             max: new fields.NumberField({required: false, initial: undefined}),
-            consumption: new fields.NumberField({initial: 0}),
+            consumption: new fields.NumberField({required: false, initial: undefined}),
             changes: new fields.ArrayField(new fields.SchemaField({
                 formula: new fields.StringField({initial: ""}),
                 target: new fields.StringField({initial: ""}),
