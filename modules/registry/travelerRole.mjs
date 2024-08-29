@@ -9,7 +9,7 @@ export class TravelerRole extends RegistryEntry {
             monthlyWage: new fields.NumberField({required: false, initial: undefined}),
             max: new fields.NumberField({required: false, initial: undefined}),
             onlyParty: new fields.BooleanField({initial: false}),
-            changes: new fields.ArrayField(new fields.SchemaField({
+            _changes: new fields.ArrayField(new fields.SchemaField({
                 formula: new fields.StringField({initial: ""}),
                 target: new fields.StringField({initial: ""}),
                 type: new fields.StringField({initial: ""}),
@@ -17,14 +17,14 @@ export class TravelerRole extends RegistryEntry {
                 priority: new fields.NumberField({required: false, initial: undefined}),
                 continuous: new fields.BooleanField({required: false, initial: undefined}),
             })),
-            contextNotes: new fields.ArrayField(new fields.SchemaField({
+            _contextNotes: new fields.ArrayField(new fields.SchemaField({
                 target: new fields.StringField({initial: ""}),
                 text: new fields.StringField({initial: ""})
             })),
             tasks: new fields.ArrayField(new fields.SchemaField({
                 id: new fields.StringField({required: true, initial: ""}),
                 name: new fields.StringField({initial: "", localize: true}),
-                changes: new fields.ArrayField(new fields.SchemaField({
+                _changes: new fields.ArrayField(new fields.SchemaField({
                     formula: new fields.StringField({initial: ""}),
                     target: new fields.StringField({initial: ""}),
                     type: new fields.StringField({initial: ""}),
@@ -32,7 +32,7 @@ export class TravelerRole extends RegistryEntry {
                     priority: new fields.NumberField({required: false, initial: undefined}),
                     continuous: new fields.BooleanField({required: false, initial: undefined}),
                 })),
-                contextNotes: new fields.ArrayField(new fields.SchemaField({
+                _contextNotes: new fields.ArrayField(new fields.SchemaField({
                     target: new fields.StringField({initial: ""}),
                     text: new fields.StringField({initial: ""})
                 }))
@@ -50,7 +50,7 @@ export class TravelerRoles extends Registry {
             name: "PF1ECaravans.TravelerRole.Cook",
             monthlyWage: 10,
             max: 5,
-            changes: [{
+            _changes: [{
                 formula: "@attributes.provisions >= 10 ? -2 : 0",
                 target: "caravan_consumption",
                 type: "circumstance"
@@ -65,7 +65,7 @@ export class TravelerRoles extends Registry {
             _id: "entertainer",
             name: "PF1ECaravans.TravelerRole.Entertainer",
             monthlyWage: 10,
-            changes: [{
+            _changes: [{
                 formula: "1",
                 target: "caravan_resolve",
                 type: "circumstance"
@@ -81,12 +81,12 @@ export class TravelerRoles extends Registry {
             _id: "guard",
             name: "PF1ECaravans.TravelerRole.Guard",
             monthlyWage: 100,
-            changes: [{
+            _changes: [{
                 formula: "1",
                 target: "caravan_offense",
                 type: "circumstance"
             }],
-            contextNotes: [{
+            _contextNotes: [{
                 target: "caravan_security",
                 text: "+1 to avoid being surprised"
             }]
@@ -95,7 +95,7 @@ export class TravelerRoles extends Registry {
             _id: "guide",
             name: "PF1ECaravans.TravelerRole.Guide",
             monthlyWage: 50,
-            changes: [{
+            _changes: [{
                 formula: "1",
                 target: "caravan_security",
                 type: "circumstance"
@@ -105,7 +105,7 @@ export class TravelerRoles extends Registry {
             _id: "healer",
             name: "PF1ECaravans.TravelerRole.Healer",
             monthlyWage: 50,
-            contextNotes: [{
+            _contextNotes: [{
                 target: "caravan_rest",
                 text: "Provides long-term care for up to 6 travelers"
             }]
@@ -133,7 +133,7 @@ export class TravelerRoles extends Registry {
                 {
                     id: "food",
                     name: "PF1ECaravans.TravelerRole.Scout.Food",
-                    changes: [{
+                    _changes: [{
                         formula: -3,
                         target: "caravan_consumption",
                         type: "circumstance"
@@ -141,7 +141,7 @@ export class TravelerRoles extends Registry {
                 }, {
                     id: "security",
                     name: "PF1ECaravans.TravelerRole.Scout.Security",
-                    changes: [{
+                    _changes: [{
                         formula: "1",
                         target: "caravan_security",
                         type: "circumstance"
@@ -161,7 +161,7 @@ export class TravelerRoles extends Registry {
                 {
                     id: "entertainer",
                     name: "PF1ECaravans.TravelerRole.SpellCaster.Entertainer",
-                    changes: [{
+                    _changes: [{
                         formula: "1",
                         target: "caravan_resolve",
                         type: "circumstance"
@@ -170,12 +170,12 @@ export class TravelerRoles extends Registry {
                 {
                     id: "guard",
                     name: "PF1ECaravans.TravelerRole.SpellCaster.Guard",
-                    changes: [{
+                    _changes: [{
                         formula: "1",
                         target: "caravan_offense",
                         type: "circumstance"
                     }],
-                    contextNotes: [{
+                    _contextNotes: [{
                         target: "caravan_security",
                         text: "+1 to avoid being surprised"
                     }]
@@ -183,7 +183,7 @@ export class TravelerRoles extends Registry {
                 {
                     id: "guide",
                     name: "PF1ECaravans.TravelerRole.SpellCaster.Guide",
-                    changes: [{
+                    _changes: [{
                         formula: "1",
                         target: "caravan_security",
                         type: "circumstance"
@@ -192,7 +192,7 @@ export class TravelerRoles extends Registry {
                 {
                     id: "healer",
                     name: "PF1ECaravans.TravelerRole.SpellCaster.Healer",
-                    contextNotes: [{
+                    _contextNotes: [{
                         target: "caravan_rest",
                         text: "Provides long-term care for up to 6 travelers"
                     }]
@@ -200,20 +200,16 @@ export class TravelerRoles extends Registry {
                 {
                     id: "scoutFood",
                     name: "PF1ECaravans.TravelerRole.SpellCaster.ScoutFood",
-                    changes: [{
-                        formula: -2,
+                    _changes: [{
+                        formula: -3,
                         target: "caravan_consumption",
                         type: "circumstance"
-                    }, {
-                        formula: -1,
-                        target: "caravan_consumption",
-                        type: "untyped"
                     }]
                 },
                 {
                     id: "scoutSecurity",
                     name: "PF1ECaravans.TravelerRole.SpellCaster.ScoutSecurity",
-                    changes: [{
+                    _changes: [{
                         formula: "1",
                         target: "caravan_security",
                         type: "circumstance"

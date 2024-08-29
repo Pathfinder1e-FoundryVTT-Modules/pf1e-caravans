@@ -68,7 +68,7 @@ function registerConfig() {
             path: `caravanWagon.${wagonType.id}`,
         };
 
-        if (wagonType.max) {
+        if (wagonType.max !== undefined) {
             pf1.config.buffTargets[`caravan_wagonLimit_${wagonType.id}`] = {
                 label: `PF1ECaravans.BuffTargets.WagonLimit.${wagonType.id}`,
                 category: "caravan",
@@ -93,7 +93,7 @@ function registerConfig() {
             path: `caravanTraveler.${travelerRole._id}`,
         }
 
-        if (travelerRole.max) {
+        if (travelerRole.max !== undefined) {
             pf1.config.buffTargets[`caravan_travelerRoleLimit_${travelerRole.id}`] = {
                 label: `PF1ECaravans.BuffTargets.TravelerRoleLimit.${travelerRole.id}`,
                 category: "caravan",
@@ -103,7 +103,20 @@ function registerConfig() {
     })
     Object.assign(pf1.config.sheetSections, {
         caravanWagon: caravanWagonSections,
-        caravanTraveler: caravanTravelerSections
+        caravanTraveler: caravanTravelerSections,
+        caravanFeat: {
+            default: {
+                category: "caravanFeat",
+                create: {type: `${MODULE_ID}.feat`},
+                filters: {type: `${MODULE_ID}.feat`},
+                id: "default",
+                interface: {
+                    create: true,
+                },
+                label: game.i18n.localize(`PF1.Feats`),
+                path: `caravanFeat.default`,
+            }
+        }
     });
 }
 

@@ -67,7 +67,7 @@
     "Item": {
       "equipment": {
         "htmlFields": [
-          "details.description.value"
+          "description.value"
         ],
         "filePathFields": {
           "img": [
@@ -77,7 +77,7 @@
       },
       "wagon": {
         "htmlFields": [
-          "details.description.value"
+          "description.value"
         ],
         "filePathFields": {
           "img": [
@@ -87,7 +87,7 @@
       },
       "traveler": {
         "htmlFields": [
-          "details.description.value"
+          "description.value"
         ],
         "filePathFields": {
           "img": [
@@ -97,7 +97,7 @@
       },
       "feat": {
         "htmlFields": [
-          "details.description.value"
+          "description.value"
         ],
         "filePathFields": {
           "img": [

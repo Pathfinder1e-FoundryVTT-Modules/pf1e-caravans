@@ -17,6 +17,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
     get template() {
         return `modules/pf1e-caravans/templates/actor/caravan/${this.isEditable ? "edit" : "view"}.hbs`;
     }
+
     activateListeners(html) {
         super.activateListeners(html);
         html.find(".attribute.attack .rollable").on("click", this._onRollAttack.bind(this));
@@ -133,9 +134,15 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             travelerSections.push(section);
         }
 
+        let featSections = pf1.config.sheetSections.caravanFeat;
+        featSections.default.interface.excess = this.actor.system.feats.excess;
+        featSections.default.items = this.actor.itemTypes[`${MODULE_ID}.feat`];
+        featSections = Object.values(featSections);
+
         const categories = [
             { key: "wagons", sections: wagonSections },
             { key: "travelers", sections: travelerSections },
+            { key: "feats", sections: featSections },
         ];
 
         for (const { key, sections } of categories) {
@@ -148,6 +155,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
         data.wagons = wagonSections;
         data.travelers = travelerSections;
+        data.feats = featSections;
     }
 
     _getTooltipContext(fullId, context) {
@@ -256,6 +264,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 break;
             }
 
+            case "feats":
             case "travelers":
             case "wagons":
             case "cargo": {

@@ -213,7 +213,6 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
             },
         }
 
-        // TODO: Add actual calculation
         this.cargo = result;
     }
 
@@ -239,8 +238,6 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
                 return Math.max(0, -this.discrepancy);
             },
         }
-
-        // TODO: Add actual calculation
 
         this.feats = result;
     }

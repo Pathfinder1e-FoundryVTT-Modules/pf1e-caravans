@@ -9,6 +9,10 @@ export class CaravanItemSheet extends pf1.applications.item.ItemSheetPF {
         };
     }
 
+    async _updateObject(event, formData) {
+        return ItemSheet.prototype._updateObject.call(this, event, formData);
+    }
+
     async getData(options = {}) {
         const lang = game.settings.get("core", "language");
 
@@ -46,11 +50,11 @@ export class CaravanItemSheet extends pf1.applications.item.ItemSheetPF {
 
         context.hasSubCategory = ["wagon", "traveler"].includes(item.system.subType);
 
-        context.descriptionHTML = await TextEditor.enrichHTML(this.object.system.details.description.value || "", {
+        context.descriptionHTML = {identified: await TextEditor.enrichHTML(this.object.system.description.value || "", {
             async: true,
             secrets: this.object.isOwner,
             relativeTo: this.object
-        });
+        })};
 
         // Prepare stuff for changes
         if (item.changes?.size) {
@@ -97,9 +101,6 @@ export class CaravanItemSheet extends pf1.applications.item.ItemSheetPF {
         context.distanceUnit = game.i18n.localize(
             pf1.utils.getDistanceSystem() === "imperial" ? "PF1.Distance.ftShort" : "PF1.Distance.mShort"
         );
-
-        // Add links
-        const pLinks = await this._prepareLinks(context);
 
         return context;
     }

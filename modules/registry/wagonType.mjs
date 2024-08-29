@@ -14,14 +14,18 @@ export class WagonType extends RegistryEntry {
             }),
             max: new fields.NumberField({required: false, initial: undefined}),
             consumption: new fields.NumberField({required: false, initial: undefined}),
-            changes: new fields.ArrayField(new fields.SchemaField({
+            _changes: new fields.ArrayField(new fields.SchemaField({
                 formula: new fields.StringField({initial: ""}),
                 target: new fields.StringField({initial: ""}),
                 type: new fields.StringField({initial: ""}),
                 operator: new fields.StringField({required: false, initial: undefined}),
                 priority: new fields.NumberField({required: false, initial: undefined}),
                 continuous: new fields.BooleanField({required: false, initial: undefined}),
-            }))
+            })),
+            _contextNotes: new fields.ArrayField(new fields.SchemaField({
+                target: new fields.StringField({initial: ""}),
+                text: new fields.StringField({initial: ""})
+            })),
         }
     }
 }
@@ -41,7 +45,7 @@ export class WagonTypes extends Registry {
             },
             max: 2,
             consumption: 2,
-            changes: [{
+            _changes: [{
                 formula: "3",
                 target: "caravan_armorClass",
                 type: "untyped"
@@ -69,7 +73,7 @@ export class WagonTypes extends Registry {
             },
             max: 1,
             consumption: 1,
-            changes: [{
+            _changes: [{
                 formula: "1",
                 target: "caravan_travelerRoleLimit_fortuneTeller",
                 type: "untyped"
@@ -86,7 +90,7 @@ export class WagonTypes extends Registry {
             },
             max: 3,
             consumption: 6,
-            changes: [{
+            _changes: [{
                 formula: "4",
                 target: "caravan_speed",
                 type: "untyped"
@@ -103,7 +107,7 @@ export class WagonTypes extends Registry {
             },
             max: 2,
             consumption: 2,
-            changes: [{
+            _changes: [{
                 formula: "2",
                 target: "caravan_security",
                 type: "untyped"
@@ -120,7 +124,7 @@ export class WagonTypes extends Registry {
             },
             max: 1,
             consumption: 2,
-            changes: [{
+            _changes: [{
                 formula: "@travelers.counts.entertainer.count > 0 ? 4 : 0",
                 target: "caravan_resolve",
                 type: "untyped"

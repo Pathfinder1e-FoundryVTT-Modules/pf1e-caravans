@@ -18,17 +18,24 @@
 
             <h4 class="item-subtype">
                 {{labels.travelerRole}}
-                {{#if system.details.task}}
+                {{#if hasTasks}}
                     ({{labels.task}})
                 {{/if}}
             </h4>
         </header>
 
-        <label class="descriptor checkbox">
+        {{#if (not system.details.isHero)}}
+        <label class="descriptor">
             <span>{{localize "PF1ECaravans.Wage"}}</span>
 
             <input data-action="input-text" class="select-on-click" name="system.monthlyWage"
                    type="number" data-dtype="Number" value="{{system.monthlyWage}}" {{disabled (not customizable)}} readonly>
+        </label>
+        {{/if}}
+
+        <label class="descriptor checkbox">
+            <input type="checkbox" name="system.details.isHero" {{checked system.details.isHero}} {{disabled system.onlyParty}}>
+            <span>{{localize "PF1ECaravans.Hero"}}</span>
         </label>
     </section>
 

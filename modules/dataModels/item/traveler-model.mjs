@@ -6,22 +6,45 @@ export class TravelerModel extends CaravanItemModel {
         return {
             subType: new fields.StringField({required: true, default: "passenger"}),
             monthlyWage: new fields.NumberField({required: false, default: 0}),
+            description: new fields.SchemaField({
+                value: new fields.StringField({required: true, default: ""}),
+            }),
             details: new fields.SchemaField({
-                description: new fields.SchemaField({
-                    value: new fields.StringField({required: true, default: ""}),
-                }),
                 task: new fields.StringField(),
                 isHero: new fields.BooleanField({required: true, default: false}),
-            })
+            }),
+            onlyParty: new fields.BooleanField({required: true, default: false}),
+            changes: new fields.ArrayField(new fields.SchemaField({
+                _id: new fields.StringField({required: true, initial: ""}),
+                formula: new fields.StringField({initial: ""}),
+                target: new fields.StringField({initial: ""}),
+                type: new fields.StringField({initial: ""}),
+                operator: new fields.StringField({required: false, initial: undefined}),
+                priority: new fields.NumberField({required: false, initial: undefined}),
+                continuous: new fields.BooleanField({required: false, initial: undefined}),
+            })),
+            contextNotes: new fields.ArrayField(new fields.SchemaField({
+                target: new fields.StringField({initial: ""}),
+                text: new fields.StringField({initial: ""})
+            })),
         };
     }
 
     prepareDerivedData() {
+        super.prepareDerivedData();
+
         this._mergeRoleDetails();
+        if (this.onlyParty) {
+            this.details.isHero = true;
+        }
+
+        if (this.details.isHero) {
+            this.monthlyWage = 0;
+        }
     }
 
     _mergeRoleDetails() {
-        if(this.roleDetailsMerged) {
+        if (this.roleDetailsMerged) {
             return;
         }
         this.roleDetailsMerged = true;

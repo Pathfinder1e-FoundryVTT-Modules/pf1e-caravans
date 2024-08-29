@@ -10,3 +10,22 @@ export const getBuffTargets = function (actor, type = "buffs") {
         }[type]
     );
 }
+
+export function keepUpdateArray(sourceObj, targetObj, keepPath) {
+    let newValue = foundry.utils.getProperty(targetObj, keepPath);
+    if (newValue == null) return;
+    if (!Array.isArray(newValue)) newValue = Object.entries(newValue);
+
+    const newArray = foundry.utils.deepClone(foundry.utils.getProperty(sourceObj, keepPath) || []);
+
+    newValue.map((element, index) => {
+        if (foundry.utils.getType(element) === "Object") {
+            const subData = foundry.utils.expandObject(element);
+            newArray[index] = foundry.utils.mergeObject(newArray[index] ?? {}, subData);
+        } else {
+            newArray[index] = element;
+        }
+    })
+
+    foundry.utils.setProperty(targetObj, keepPath, newArray);
+}

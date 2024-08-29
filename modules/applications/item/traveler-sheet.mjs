@@ -8,7 +8,6 @@ export class TravelerSheet extends CaravanItemSheet {
     async getData(options = {}) {
         const context = await super.getData(options);
 
-
         const travelerRoles = {};
         pf1.registry.travelerRoles.map(travelerRole => {
             travelerRoles[travelerRole.id] = travelerRole.name;

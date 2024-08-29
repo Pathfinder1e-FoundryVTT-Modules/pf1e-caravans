@@ -1,6 +1,17 @@
-export class CaravanItem extends pf1.documents.item.ItemBasePF {
+import {keepUpdateArray} from "../../util/util.mjs";
+
+export class CaravanItem extends pf1.documents.item.ItemPF {
+    static get hasChanges() {
+        return this.system.hasChanges;
+    }
+
+    static system = Object.freeze({
+        hasChanges: true,
+        links: []
+    });
+
     get hasChanges() {
-        return true;
+        return this.constructor.hasChanges;
     }
 
     static getDefaultArtwork(itemData) {
@@ -10,43 +21,84 @@ export class CaravanItem extends pf1.documents.item.ItemBasePF {
         return result;
     }
 
+    async _preCreate(data, context, user) {
+        await super._preCreate(data, context, user);
+
+        // Ensure unique Change IDs
+        const actor = this.actor;
+        if (actor && data?.system?.changes?.length > 0) {
+            const changes = data.system.changes;
+
+            let ids = new Set();
+            while (ids.size < changes.length) ids.add(foundry.utils.randomID(8));
+            ids = Array.from(ids);
+            for (const c of changes) c._id = ids.pop();
+            this.updateSource({"system.changes": changes});
+        }
+
+        const updates = this.preCreateData(data, context, user);
+
+        if (Object.keys(updates).length) this.updateSource(updates);
+    }
+
+    preCreateData(data, options, user) {
+        return {};
+    }
+
     prepareDerivedData() {
         super.prepareDerivedData();
-        this._prepareChanges();
 
-        if (this.system.contextNotes?.length) {
-            this.system.contextNotes = this.system.contextNotes.map(
-                (cn) => new pf1.components.ContextNote(cn, { parent: this })
+        if (this.system._contextNotes?.length) {
+            this.system._contextNotes = this.system._contextNotes.map(
+                (cn) => new pf1.components.ContextNote(cn, {parent: this})
             );
         }
     }
 
+    async _preUpdate(changed, context, user) {
+        await super._preUpdate(changed, context, user);
+
+        // No system data changes
+        if (!changed.system) return;
+
+        const keepPaths = [
+            "system.contextNotes",
+            "system.changes",
+        ];
+
+        const itemData = this.toObject();
+        for (const path of keepPaths) {
+            keepUpdateArray(itemData, changed, path);
+        }
+    }
+
     _prepareChanges() {
-        const prior = this.changes;
-        const collection = new Collection();
-        for (const c of this.system.changes ?? []) {
+        super._prepareChanges();
+
+        const _prior = this._changes;
+        const _collection = new Collection();
+        for (const c of this.system._changes ?? []) {
             let change = null;
-            if (prior && prior.has(c._id)) {
-                change = prior.get(c._id);
+            if (_prior && _prior.has(c._id)) {
+                change = _prior.get(c._id);
                 const updateData = {...c};
                 change.updateSource(updateData, {recursive: false});
                 change.prepareData();
             } else change = new pf1.components.ItemChange(c, {parent: this});
-            collection.set(c._id || change.data._id, change);
+            _collection.set(c._id || change.data._id, change);
         }
-
-        this.changes = collection;
+        this._changes = _collection;
     }
 
     getRollData(options = {refresh: false}) {
-        return this.parent.getRollData(options);
+        return this.parent?.getRollData(options) ?? {};
     }
 
-    getLabels({ actionId, rollData } = {}) {
+    getLabels({actionId, rollData} = {}) {
         const action = actionId ? this.actions.get(actionId) : this.defaultAction;
         return {
             activation: pf1.config.abilityActivationTypes.passive, // Default passive if no action is present
-            ...(action?.getLabels({ rollData }) ?? {}),
+            ...(action?.getLabels({rollData}) ?? {}),
         };
     }
 

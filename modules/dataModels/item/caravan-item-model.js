@@ -1,4 +1,7 @@
 export class CaravanItemModel extends foundry.abstract.TypeDataModel {
+    prepareDerivedData() {
+    }
+
     _recurseAttach = (obj, details) => {
         Object.entries(details).forEach(([key, value]) => {
             if (Array.isArray(value)) {

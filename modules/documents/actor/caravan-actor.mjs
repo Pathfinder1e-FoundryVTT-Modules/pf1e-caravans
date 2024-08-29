@@ -40,13 +40,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     }
 
     static getDefaultArtwork(actorData) {
-        const result = super.getDefaultArtwork(actorData);
-        const image = pf1.config.defaultIcons.actors[actorData?.type];
-        if (image) {
-            result.img = image;
-            result.texture.src = image;
-        }
-        return result;
+        return pf1.documents.actor.ActorPF.getDefaultArtwork.call(this, actorData);
     }
 
     prepareBaseData() {
@@ -69,7 +63,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
         this.changeItems = this.items.filter((item) => item.hasChanges && item.isActive);
         for (const i of this.changeItems) {
-            changes.push(...i.changes);
+            changes.push(...i.changes, ...(i._changes ?? []));
         }
 
         const c = new Collection();
@@ -234,6 +228,15 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             operator: "add",
             priority: 10,
             flavor: game.i18n.localize(`PF1ECaravans.Travelers`)
+        }));
+
+        changes.push(new pf1.components.ItemChange({
+            formula: this.system.details.level,
+            target: "caravan_feats",
+            type: "untyped",
+            operator: "add",
+            priority: 10,
+            flavor: game.i18n.localize(`PF1ECaravans.Levels`)
         }));
     }
 
@@ -447,8 +450,13 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
     get allNotes() {
         return this.items
-            .filter((item) => item.isActive && item.system.contextNotes?.length > 0)
-            .map((item) => ({ notes: item.system.contextNotes, item }));
+            .filter((item) => item.isActive && (item.system.contextNotes?.length > 0 || item.system._contextNotes?.length > 0))
+            .map((item) => {
+                const notes = [];
+                notes.push(...(item.system.contextNotes ?? []));
+                notes.push(...(item.system._contextNotes ?? []));
+                return { notes, item };
+            });
     }
 
     getContextNotes(context, all = true) {
