@@ -130,6 +130,9 @@
     "SecurityTest": "Security Test",
     "ResolveTest": "Resolve Test",
     "MonthlyWages": "Monthly Wages",
+    "Equipment": "Equipment",
+    "Treasure": "Treasure",
+    "CargoUnits": "Cargo Units",
     "Conditions": {
       "Normal": "Normal",
       "Fatigued": "Fatigued",

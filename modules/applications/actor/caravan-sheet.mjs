@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../../pf1e-caravans.mjs";
+import { MODULE_ID } from "../../_moduleId.mjs";
 import {toCamelCase} from "../../util/util.mjs";
 
 export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
@@ -15,7 +15,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
     }
 
     get template() {
-        return `modules/pf1e-caravans/templates/actor/caravan/${this.isEditable ? "edit" : "view"}.hbs`;
+        return `modules/${MODULE_ID}/templates/actor/caravan/${this.isEditable ? "edit" : "view"}.hbs`;
     }
 
     activateListeners(html) {
@@ -69,22 +69,20 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             })
         };
 
-        // Prepare owned items
-        this._prepareItems(context);
-
         // Feat Counts
         {
-            const feats = this.actor.system.feats;
+            const feats = this.actor.getFeatCount();
             feats.bonus = feats.formula + feats.changes;
             feats.issues = 0;
             if(feats.missing > 0 || feats.excess) feats.issues += 1;
             if(feats.disabled > 0) feats.issues += 1;
             context.featCount = feats;
+            console.log(feats)
         }
 
         // Cargo Counts
         {
-            const cargo = this.actor.system.cargo;
+            const cargo = this.actor.getCargoCount();
             cargo.bonus = cargo.formula + cargo.changes;
             cargo.issues = 0;
             if(cargo.missing > 0 || cargo.excess) cargo.issues += 1;
@@ -94,7 +92,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
         // Wagon Counts
         {
-            const wagons = this.actor.system.wagons;
+            const wagons = this.actor.getWagonCount();
             wagons.bonus = wagons.formula + wagons.changes;
             wagons.issues = 0;
             if(wagons.missing > 0 || wagons.excess) wagons.issues += 1;
@@ -104,13 +102,16 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
         // Traveler Counts
         {
-            const travelers = this.actor.system.travelers;
+            const travelers = this.actor.getTravelerCount();
             travelers.bonus = travelers.formula + travelers.changes;
             travelers.issues = 0;
             if(travelers.missing > 0 || travelers.excess) travelers.issues += 1;
             if(travelers.disabled > 0) travelers.issues += 1;
             context.travelerCount = travelers;
         }
+
+        // Prepare owned items
+        this._prepareItems(context);
 
         context.speedConverted = pf1.utils.convertDistance(this.actor.system.details.speed.total, "mi")[0];
 
@@ -135,16 +136,23 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         }
 
         let featSections = pf1.config.sheetSections.caravanFeat;
-        featSections.default.interface.excess = this.actor.system.feats.excess;
+        featSections.default.interface.excess = this.actor.getFeatCount().excess;
         featSections.default.items = this.actor.itemTypes[`${MODULE_ID}.feat`];
         featSections = Object.values(featSections);
+
+        let cargoSections = pf1.config.sheetSections.caravanCargo;
+        cargoSections.equipment.items = this.actor.itemTypes[`${MODULE_ID}.equipment`];
+        cargoSections.treasure.items = this.actor.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`));
+        cargoSections = Object.values(cargoSections);
 
         const categories = [
             { key: "wagons", sections: wagonSections },
             { key: "travelers", sections: travelerSections },
             { key: "feats", sections: featSections },
+            { key: "cargo", sections: cargoSections }
         ];
 
+        console.log(this._filters);
         for (const { key, sections } of categories) {
             const set = this._filters.sections[key];
             for (const section of sections) {
@@ -156,6 +164,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         data.wagons = wagonSections;
         data.travelers = travelerSections;
         data.feats = featSections;
+        data.cargo = cargoSections;
     }
 
     _getTooltipContext(fullId, context) {
@@ -264,32 +273,6 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 break;
             }
 
-            case "feats":
-            case "travelers":
-            case "wagons":
-            case "cargo": {
-                const value = system[id];
-                paths.push({
-                    path: `@${id}.max`,
-                    value: value.max,
-                }, {
-                    path: `@${id}.count`,
-                    value: value.count,
-                }, {
-                    path: `@${id}.missing`,
-                    value: value.missing,
-                }, {
-                    path: `@${id}.excess`,
-                    value: value.excess,
-                });
-
-                sources.push({
-                    sources: getSource(`system.${id}.max`),
-                    untyped: true,
-                });
-                break;
-            }
-
             case "offense":
             case "defense":
             case "mobility":
@@ -327,6 +310,22 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 });
 
                 notes = getNotes(`caravan_${id}`);
+                break;
+            }
+
+            case "wagons":
+            case "travelers":
+            case "cargo": {
+                const attribute = system[id];
+                paths.push({
+                    path: `@${id}.max`,
+                    value: attribute.max,
+                });
+
+                sources.push({
+                    sources: getSource(`system.${id}.max`),
+                    untyped: true,
+                });
                 break;
             }
 

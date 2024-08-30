@@ -1,8 +1,9 @@
 import {CaravanItemSheet} from "./caravan-item-sheet.mjs";
+import {MODULE_ID} from "../../_moduleId.mjs";
 
 export class TravelerSheet extends CaravanItemSheet {
     get template() {
-        return `modules/pf1e-caravans/templates/item/traveler.hbs`;
+        return `modules/${MODULE_ID}/templates/item/traveler.hbs`;
     }
 
     async getData(options = {}) {
@@ -18,7 +19,7 @@ export class TravelerSheet extends CaravanItemSheet {
         let tasks = {};
         if(travelerRole?.tasks?.length) {
             travelerRole.tasks.map(task => {
-                tasks[task.id] = game.i18n.localize(task.name);
+                tasks[task.id] = task.name;
             })
         }
         context.hasTasks = travelerRole?.tasks?.length || false;

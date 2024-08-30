@@ -20,3 +20,32 @@
     flex: 0;
     margin: 2px;
 }
+
+.pf1 .type-color.type-pf1e-caravans\.traveler {
+    --primary: #283E51;
+    --secondary: #4B79A1;
+    --foreground: white;
+}
+
+.pf1 .type-color.type-pf1e-caravans\.wagon {
+    --primary: #cb2d3e;
+    --secondary: #ef473a;
+    --foreground: white;
+}
+
+.pf1 .type-color.type-pf1e-caravans\.feat {
+    --primary: #5f00a3;
+    --secondary: #8900ea;
+    --foreground: white;
+}
+
+.pf1 .type-color.type-pf1e-caravans\.cargo {
+    --primary: #56ab2f;
+    --secondary: #a8e063;
+    --foreground: white;
+}
+
+.icon-pf.icon-wooden-crate {
+    mask-image: url(../public/icons/wooden-crate.svg);
+    -webkit-mask-image: url(../public/icons/wooden-crate.svg);
+}

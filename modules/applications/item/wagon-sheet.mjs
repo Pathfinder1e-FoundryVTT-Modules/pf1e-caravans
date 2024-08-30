@@ -1,8 +1,9 @@
 import {CaravanItemSheet} from "./caravan-item-sheet.mjs";
+import {MODULE_ID} from "../../_moduleId.mjs";
 
 export class WagonSheet extends CaravanItemSheet {
     get template() {
-        return `modules/pf1e-caravans/templates/item/wagon.hbs`;
+        return `modules/${MODULE_ID}/templates/item/wagon.hbs`;
     }
 
     async getData(options = {}) {

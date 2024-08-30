@@ -23,7 +23,7 @@ export class TravelerRole extends RegistryEntry {
             })),
             tasks: new fields.ArrayField(new fields.SchemaField({
                 id: new fields.StringField({required: true, initial: ""}),
-                name: new fields.StringField({initial: "", localize: true}),
+                name: new fields.StringField({ required: true, blank: false, initial: "", localize: true }),
                 _changes: new fields.ArrayField(new fields.SchemaField({
                     formula: new fields.StringField({initial: ""}),
                     target: new fields.StringField({initial: ""}),
@@ -38,6 +38,39 @@ export class TravelerRole extends RegistryEntry {
                 }))
             }))
         }
+    }
+
+    /**
+     * Prepares the data of the registry entry.
+     */
+    prepareData() {
+        this.reset();
+
+        // Localize fields marked for localization
+        const handleLocalization = (obj, objFields) => {
+            for (const [name, field] of Object.entries(objFields)) {
+                if (field instanceof fields.StringField && field.options.localize === true)
+                    obj[name] = game.i18n.localize(obj[name]);
+
+                if(field instanceof fields.SchemaField) {
+                    handleLocalization(obj[name], field.fields);
+                }
+
+                if(field instanceof fields.ArrayField) {
+                    if(field.element instanceof fields.SchemaField) {
+                        obj[name] = obj[name].map((item) => {
+                            handleLocalization(item, field.element.fields);
+                            return item;
+                        });
+                    }
+
+                    if(field.element instanceof fields.StringField && field.element.options.localize === true) {
+                        obj[name] = obj[name].map((item) => game.i18n.localize(item));
+                    }
+                }
+            }
+        }
+        handleLocalization(this, this.constructor.schema.fields);
     }
 }
 

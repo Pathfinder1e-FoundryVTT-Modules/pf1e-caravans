@@ -9,10 +9,8 @@ export class TravelerModel extends CaravanItemModel {
             description: new fields.SchemaField({
                 value: new fields.StringField({required: true, default: ""}),
             }),
-            details: new fields.SchemaField({
-                task: new fields.StringField(),
-                isHero: new fields.BooleanField({required: true, default: false}),
-            }),
+            task: new fields.StringField(),
+            isHero: new fields.BooleanField({required: true, default: false}),
             onlyParty: new fields.BooleanField({required: true, default: false}),
             changes: new fields.ArrayField(new fields.SchemaField({
                 _id: new fields.StringField({required: true, initial: ""}),
@@ -35,10 +33,10 @@ export class TravelerModel extends CaravanItemModel {
 
         this._mergeRoleDetails();
         if (this.onlyParty) {
-            this.details.isHero = true;
+            this.isHero = true;
         }
 
-        if (this.details.isHero) {
+        if (this.isHero) {
             this.monthlyWage = 0;
         }
     }
@@ -53,20 +51,20 @@ export class TravelerModel extends CaravanItemModel {
         this._recurseAttach(this, roleDetails);
 
         if (roleDetails.tasks?.length) {
-            if (!this.details.task) {
-                this.details.task = roleDetails.tasks[0].id;
+            if (!this.task) {
+                this.task = roleDetails.tasks[0].id;
             }
 
             let task = null;
             for (const taskDetails of roleDetails.tasks || []) {
-                if (taskDetails.id === this.details.task) {
+                if (taskDetails.id === this.task) {
                     task = taskDetails;
                     break;
                 }
             }
 
             if (!task) {
-                this.details.task = roleDetails.tasks[0].id;
+                this.task = roleDetails.tasks[0].id;
                 task = roleDetails.tasks[0];
             }
 

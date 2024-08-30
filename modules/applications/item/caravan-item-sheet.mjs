@@ -3,6 +3,7 @@ import {getBuffTargets} from "../../util/util.mjs";
 export class CaravanItemSheet extends pf1.applications.item.ItemSheetPF {
     static get defaultOptions() {
         const options = super.defaultOptions;
+
         return {
             ...options,
             classes: [...options.classes, "pf1", "item", "caravanItem"]

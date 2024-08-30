@@ -1,1 +1,50 @@
-Equipment
+<form class="{{cssClass}} flexcol" autocomplete="off" data-tooltip-class="pf1">
+
+    {{!-- Item Sheet Header --}}
+    <header class="sheet-header flexrow">
+        <img class="profile" src="{{item.img}}" data-tooltip="{{item.name}}" data-edit="img">
+
+        <div class="flexrow header-details">
+            <h1 class="item-name">
+                <input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PF1.ItemName"}}">
+            </h1>
+        </div>
+    </header>
+
+    {{!-- Sidebar --}}
+    <section class="sidebar">
+        <header>
+            <h3 class="item-type">{{itemType}}</h3>
+        </header>
+
+        <label class="quantity">
+            <span>{{localize "PF1.Quantity"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.quantity"
+                   type="number" data-dtype="Number" value="{{system.quantity}}" readonly>
+        </label>
+        <label class="descriptor">
+            <span>{{localize "PF1ECaravans.CargoUnits"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.units"
+                   type="number" data-dtype="Number" value="{{system.units}}" readonly>
+        </label>
+    </section>
+
+    {{!-- Item Sheet Navigation --}}
+    <nav class="sheet-navigation tabs" data-group="primary">
+        <a class="item" data-tab="description">{{ localize "PF1.Description" }}</a>
+        <a class="item" data-tab="changes">{{ localize "PF1.Changes" }}</a>
+    </nav>
+
+    {{!-- Item Sheet Body --}}
+    <section class="primary-body">
+        {{!-- Description Tab --}}
+        {{> "systems/pf1/templates/items/parts/item-description.hbs"}}
+
+        {{!-- Changes Tab --}}
+        <div class="tab changes" data-group="primary" data-tab="changes">
+            {{~> "modules/pf1e-caravans/templates/item/parts/changes.hbs"}}
+        </div>
+    </section>
+</form>

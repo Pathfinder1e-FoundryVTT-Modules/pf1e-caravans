@@ -7,6 +7,8 @@ export class EquipmentModel extends CaravanItemModel {
             description: new fields.SchemaField({
                 value: new fields.StringField({required: true, default: ""}),
             }),
+            quantity: new fields.NumberField({required: true, default: 1}),
+            units: new fields.NumberField({required: true, default: 1}),
             changes: new fields.ArrayField(new fields.SchemaField({
                 _id: new fields.StringField({required: true, initial: ""}),
                 formula: new fields.StringField({initial: ""}),

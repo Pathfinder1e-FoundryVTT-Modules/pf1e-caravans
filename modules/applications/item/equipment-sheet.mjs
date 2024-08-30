@@ -1,7 +1,8 @@
 import {CaravanItemSheet} from "./caravan-item-sheet.mjs";
+import {MODULE_ID} from "../../_moduleId.mjs";
 
 export class EquipmentSheet extends CaravanItemSheet {
     get template() {
-        return `modules/pf1e-caravans/templates/item/equipment.hbs`;
+        return `modules/${MODULE_ID}/templates/item/equipment.hbs`;
     }
 }

@@ -1,11 +1,10 @@
+import {MODULE_ID} from "./_moduleId.mjs";
 import * as Registry from "./registry/_module.mjs";
 import * as Config from "./config/_module.mjs";
 import {getChangeFlat} from "./hooks/getChangeFlat.mjs";
 import {CaravanModel, EquipmentModel, FeatModel, TravelerModel, WagonModel} from "./dataModels/_module.mjs";
 import {CaravanSheet, EquipmentSheet, FeatSheet, TravelerSheet, WagonSheet} from "./applications/_module.mjs";
-import {CaravanActor, CaravanItem, TravelerItem, WagonItem} from "./documents/_module.mjs";
-
-export const MODULE_ID = "pf1e-caravans";
+import {CaravanActor, CaravanItem, EquipmentItem, TravelerItem, WagonItem} from "./documents/_module.mjs";
 
 Hooks.on("init", () => {
     registerConfig();
@@ -64,7 +63,7 @@ function registerConfig() {
                 create: true,
                 max: wagonType.max,
             },
-            label: game.i18n.localize(`PF1.Subtypes.Item.pf1e-caravans.wagon.${wagonType.id}.Plural`),
+            label: game.i18n.localize(`PF1.Subtypes.Item.${MODULE_ID}.wagon.${wagonType.id}.Plural`),
             path: `caravanWagon.${wagonType.id}`,
         };
 
@@ -89,7 +88,7 @@ function registerConfig() {
                 hasTasks: (travelerRole.tasks || []).length > 0,
                 max: travelerRole.max,
             },
-            label: game.i18n.localize(`PF1.Subtypes.Item.pf1e-caravans.traveler.${travelerRole.id}.Plural`),
+            label: game.i18n.localize(`PF1.Subtypes.Item.${MODULE_ID}.traveler.${travelerRole.id}.Plural`),
             path: `caravanTraveler.${travelerRole._id}`,
         }
 
@@ -103,20 +102,7 @@ function registerConfig() {
     })
     Object.assign(pf1.config.sheetSections, {
         caravanWagon: caravanWagonSections,
-        caravanTraveler: caravanTravelerSections,
-        caravanFeat: {
-            default: {
-                category: "caravanFeat",
-                create: {type: `${MODULE_ID}.feat`},
-                filters: {type: `${MODULE_ID}.feat`},
-                id: "default",
-                interface: {
-                    create: true,
-                },
-                label: game.i18n.localize(`PF1.Feats`),
-                path: `caravanFeat.default`,
-            }
-        }
+        caravanTraveler: caravanTravelerSections
     });
 }
 
@@ -146,15 +132,16 @@ function registerActors() {
 
 function registerItems() {
     Object.assign(CONFIG.Item.documentClasses, {
-        [`${MODULE_ID}.equipment`]: CaravanItem,
+        [`${MODULE_ID}.equipment`]: EquipmentItem,
         [`${MODULE_ID}.feat`]: CaravanItem,
         [`${MODULE_ID}.traveler`]: TravelerItem,
         [`${MODULE_ID}.wagon`]: WagonItem,
     })
     Object.assign(pf1.documents.item, {
         CaravanItem: CaravanItem,
-        TravelerItem: TravelerItem,
-        WagonItem: WagonItem,
+        CaravanTravelerItem: TravelerItem,
+        CaravanWagonItem: WagonItem,
+        CaravanEquipmentItem: EquipmentItem,
     })
 
     Object.assign(CONFIG.Item.dataModels, {
@@ -182,13 +169,13 @@ function registerItems() {
 function registerTemplates() {
     loadTemplates([
         // ACTOR
-        "modules/pf1e-caravans/templates/actor/caravan/parts/cargo.hbs",
-        "modules/pf1e-caravans/templates/actor/caravan/parts/summary.hbs",
-        "modules/pf1e-caravans/templates/actor/caravan/parts/travelers.hbs",
-        "modules/pf1e-caravans/templates/actor/caravan/parts/wagons.hbs",
-        "modules/pf1e-caravans/templates/actor/caravan/parts/feats.hbs",
+        `modules/${MODULE_ID}/templates/actor/caravan/parts/cargo.hbs`,
+        `modules/${MODULE_ID}/templates/actor/caravan/parts/summary.hbs`,
+        `modules/${MODULE_ID}/templates/actor/caravan/parts/travelers.hbs`,
+        `modules/${MODULE_ID}/templates/actor/caravan/parts/wagons.hbs`,
+        `modules/${MODULE_ID}/templates/actor/caravan/parts/feats.hbs`,
 
         // ITEM
-        "modules/pf1e-caravans/templates/item/parts/changes.hbs"
+        `modules/${MODULE_ID}/templates/item/parts/changes.hbs`
     ]);
 }

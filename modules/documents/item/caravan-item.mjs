@@ -95,11 +95,7 @@ export class CaravanItem extends pf1.documents.item.ItemPF {
     }
 
     getLabels({actionId, rollData} = {}) {
-        const action = actionId ? this.actions.get(actionId) : this.defaultAction;
-        return {
-            activation: pf1.config.abilityActivationTypes.passive, // Default passive if no action is present
-            ...(action?.getLabels({rollData}) ?? {}),
-        };
+        return {};
     }
 
     get defaultAction() {

@@ -1,6 +1,6 @@
 import {buffTargets} from "../../config/buffTargets.mjs";
-import {MODULE_ID} from "../../pf1e-caravans.mjs";
-import {enrichHTMLUnrolled} from "../../../../../systems/pathfinder-1e/module/utils/lib.mjs";
+import {MODULE_ID} from "../../_moduleId.mjs";
+import {getHighestChanges} from "../../../../../systems/pathfinder-1e/module/documents/actor/utils/apply-changes.mjs";
 
 export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     constructor(...args) {
@@ -81,7 +81,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
         const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
         const travelers = this.itemTypes[`${MODULE_ID}.traveler`];
-        const heroesCount = Math.min(4, travelers.filter(traveler => traveler.system.details.isHero).length);
+        const heroesCount = Math.min(4, travelers.filter(traveler => traveler.system.isHero).length);
 
         for (const [derivedAttributeId, baseAttributeId] of [
             ["attack", "offense"],
@@ -146,7 +146,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
-                formula: "" + wagons.reduce((acc, wagon) =>  acc + wagon.system.capacity.traveler, 0),
+                formula: "" + wagons.reduce((acc, wagon) => acc + wagon.system.capacity.traveler, 0),
                 target: "caravan_travelers",
                 type: "untyped",
                 operator: "add",
@@ -154,7 +154,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
-                formula: "" + wagons.reduce((acc, wagon) =>  acc + wagon.system.capacity.cargo, 0),
+                formula: "" + wagons.reduce((acc, wagon) => acc + wagon.system.capacity.cargo, 0),
                 target: "caravan_cargo",
                 type: "untyped",
                 operator: "add",
@@ -345,7 +345,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         }
         sourceDetails["system.details.speed.total"].push({
             name: game.i18n.localize("PF1.Base"),
-            value: game.i18n.format("PF1.SetTo", { value: 32 })
+            value: game.i18n.format("PF1.SetTo", {value: 32})
         });
 
         // Add extra data
@@ -397,12 +397,12 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
     async rollAttributeTest(attribute, options = {}) {
         if (!this.isOwner) {
-            return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", { name: this.name }));
+            return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", {name: this.name}));
         }
 
         const allowedAttributes = ["resolve", "security"];
-        if(!allowedAttributes.includes(attribute)) {
-            return void ui.notifications.warn(game.i18n.format("PF1ECaravans.Error.InvalidAttribute", { attribute }));
+        if (!allowedAttributes.includes(attribute)) {
+            return void ui.notifications.warn(game.i18n.format("PF1ECaravans.Error.InvalidAttribute", {attribute}));
         }
 
         // Add contextual notes
@@ -414,7 +414,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         const parts = [`@statistics.${attribute}[${label}]`];
 
         const props = [];
-        if (notes.length > 0) props.push({ header: game.i18n.localize("PF1.Notes"), value: notes });
+        if (notes.length > 0) props.push({header: game.i18n.localize("PF1.Notes"), value: notes});
 
         const token = options.token ?? this.token;
 
@@ -423,14 +423,138 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             parts,
             rollData,
             flavor: game.i18n.format(`PF1ECaravans.${attribute.capitalize()}Test`),
-            chatTemplateData: { properties: props },
-            speaker: ChatMessage.implementation.getSpeaker({ actor: this, token, alias: token?.name }),
+            chatTemplateData: {properties: props},
+            speaker: ChatMessage.implementation.getSpeaker({actor: this, token, alias: token?.name}),
         };
 
         return await pf1.dice.d20Roll(rollOptions);
     }
 
-    formatContextNotes(notes, rollData, { roll = true } = {}) {
+    getFeatCount() {
+        const owned = this.itemTypes[`${MODULE_ID}.feat`].length;
+        const active = this.itemTypes[`${MODULE_ID}.feat`].filter((o) => o.isActive).length;
+
+        const result = {
+            max: this.system.feats.max,
+            levels: this.system.details.level,
+            owned,
+            active,
+            disabled: owned - active,
+            formula: 0,
+            changes: 0,
+            // Count totals
+            get discrepancy() {
+                return this.max - this.active;
+            },
+            get missing() {
+                return Math.max(0, this.discrepancy);
+            },
+            get excess() {
+                return Math.max(0, -this.discrepancy);
+            },
+        };
+
+        // Bonuses from changes
+        result.changes = getHighestChanges(
+            this.changes.filter((c) => {
+                if (c.target !== "bonusFeats") return false;
+                return c.operator !== "set";
+            }),
+            {ignoreTarget: true}
+        ).reduce((cur, c) => cur + c.value, 0);
+        result.max += result.changes;
+
+        return result;
+    }
+
+    getWagonCount() {
+        const owned = this.itemTypes[`${MODULE_ID}.wagon`].length;
+        const active = this.itemTypes[`${MODULE_ID}.wagon`].filter((o) => o.isActive).length;
+
+        return {
+            max: this.system.wagons.max,
+            base: 5,
+            owned,
+            active,
+            disabled: owned - active,
+            formula: 0,
+            changes: 0,
+            // Count totals
+            get discrepancy() {
+                return this.max - this.active;
+            },
+            get missing() {
+                return Math.max(0, this.discrepancy);
+            },
+            get excess() {
+                return Math.max(0, -this.discrepancy);
+            },
+        };
+    }
+
+    getTravelerCount() {
+        const owned = this.itemTypes[`${MODULE_ID}.traveler`].length;
+        const active = this.itemTypes[`${MODULE_ID}.traveler`].filter((o) => o.isActive).length;
+        const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
+        const byWagons = wagons.reduce((acc, wagon) => acc + wagon.system.capacity.traveler, 0);
+
+        return {
+            max: this.system.travelers.max,
+            base: 0,
+            wagons: byWagons,
+            owned,
+            active,
+            disabled: owned - active,
+            formula: 0,
+            changes: 0,
+            // Count totals
+            get discrepancy() {
+                return this.max - this.active;
+            },
+            get missing() {
+                return Math.max(0, this.discrepancy);
+            },
+            get excess() {
+                return Math.max(0, -this.discrepancy);
+            },
+        };
+    }
+
+    getCargoCount() {
+        const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
+        const byWagons = wagons.reduce((acc, wagon) => acc + wagon.system.capacity.cargo, 0);
+
+        const equipment = this.itemTypes[`${MODULE_ID}.equipment`];
+        const treasure = this.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`));
+
+        const owned = equipment.map((item) => item.system.quantity * item.system.units).reduce((acc, cur) => acc + cur, 0)
+            + Math.ceil(treasure.map((item) => item.system.weight.total).reduce((acc, cur) => acc + cur, 0) / 50)
+            + Math.ceil(this.system.attributes.provisions / 10)
+
+        return {
+            max: this.system.cargo.max,
+            base: 0,
+            wagons: byWagons,
+            owned,
+            active: owned,
+            disabled: 0,
+            formula: 0,
+            changes: 0,
+            // Count totals
+            get discrepancy() {
+                return this.max - this.active;
+            },
+            get missing() {
+                return Math.max(0, this.discrepancy);
+            },
+            get excess() {
+                return Math.max(0, -this.discrepancy);
+            },
+        };
+    }
+
+
+    formatContextNotes(notes, rollData, {roll = true} = {}) {
         const result = [];
         rollData ??= this.getRollData();
         for (const noteObj of notes) {
@@ -441,7 +565,11 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 result.push(
                     ...note
                         .split(/[\n\r]+/)
-                        .map((subNote) => enrichHTMLUnrolled(subNote, { rollData, rolls: roll, relativeTo: this }))
+                        .map((subNote) => pf1.utils.enrichHTMLUnrolled(subNote, {
+                            rollData,
+                            rolls: roll,
+                            relativeTo: this
+                        }))
                 );
             }
         }
@@ -455,7 +583,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 const notes = [];
                 notes.push(...(item.system.contextNotes ?? []));
                 notes.push(...(item.system._contextNotes ?? []));
-                return { notes, item };
+                return {notes, item};
             });
     }
 

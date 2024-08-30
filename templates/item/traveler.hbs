@@ -24,7 +24,7 @@
             </h4>
         </header>
 
-        {{#if (not system.details.isHero)}}
+        {{#if (not system.isHero)}}
         <label class="descriptor">
             <span>{{localize "PF1ECaravans.Wage"}}</span>
 
@@ -34,7 +34,7 @@
         {{/if}}
 
         <label class="descriptor checkbox">
-            <input type="checkbox" name="system.details.isHero" {{checked system.details.isHero}} {{disabled system.onlyParty}}>
+            <input type="checkbox" name="system.isHero" {{checked system.isHero}} {{disabled system.onlyParty}}>
             <span>{{localize "PF1ECaravans.Hero"}}</span>
         </label>
     </section>
@@ -68,8 +68,8 @@
             <div class="form-group select">
                 <label>{{localize "PF1ECaravans.Task"}}</label>
                 <div class="form-fields">
-                    <select name="system.details.task" value="{{system.details.task}}">
-                        {{selectOptions tasks selected=system.details.task}}
+                    <select name="system.task" value="{{system.task}}">
+                        {{selectOptions tasks selected=system.task}}
                     </select>
                 </div>
             </div>
