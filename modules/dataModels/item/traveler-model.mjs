@@ -4,14 +4,14 @@ export class TravelerModel extends CaravanItemModel {
     static defineSchema() {
         const fields = foundry.data.fields;
         return {
-            subType: new fields.StringField({required: true, default: "passenger"}),
-            monthlyWage: new fields.NumberField({required: false, default: 0}),
+            subType: new fields.StringField({required: true, initial: "passenger"}),
+            monthlyWage: new fields.NumberField({required: false, initial: 0}),
             description: new fields.SchemaField({
-                value: new fields.StringField({required: true, default: ""}),
+                value: new fields.StringField({required: true, initial: ""}),
             }),
             task: new fields.StringField(),
-            isHero: new fields.BooleanField({required: true, default: false}),
-            onlyParty: new fields.BooleanField({required: true, default: false}),
+            isHero: new fields.BooleanField({required: true, initial: false}),
+            onlyParty: new fields.BooleanField({required: true, initial: false}),
             changes: new fields.ArrayField(new fields.SchemaField({
                 _id: new fields.StringField({required: true, initial: ""}),
                 formula: new fields.StringField({initial: ""}),

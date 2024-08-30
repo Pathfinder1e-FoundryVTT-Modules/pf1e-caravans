@@ -26,8 +26,14 @@
         <label class="descriptor">
             <span>{{localize "PF1ECaravans.CargoUnits"}}</span>
 
-            <input data-action="input-text" class="select-on-click" name="system.units"
-                   type="number" data-dtype="Number" value="{{system.units}}" readonly>
+            <input data-action="input-text" class="select-on-click" name="system.units.value"
+                   type="number" data-dtype="Number" value="{{system.units.value}}" readonly>
+        </label>
+        <label class="descriptor">
+            <span>{{localize "PF1.Price"}}</span>
+
+            <input data-action="input-text" class="select-on-click" name="system.price"
+                   type="number" data-dtype="Number" value="{{system.price}}" readonly>
         </label>
     </section>
 

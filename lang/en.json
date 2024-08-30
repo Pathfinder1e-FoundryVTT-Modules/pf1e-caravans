@@ -132,6 +132,13 @@
     "MonthlyWages": "Monthly Wages",
     "Equipment": "Equipment",
     "Treasure": "Treasure",
+    "Load": "Load",
+    "CargoLabels": {
+      "ProvisionsInStores": "{provisions} Provisions in {stores} Stores",
+      "KGofTreasure": "{weight} kg in {treasure} Treasure",
+      "LBSofTreasure": "{weight} lbs in {treasure} Treasure",
+      "WorthOfTreasure": "Treasure worth: {pp} pp, {gp} gp, {sp} sp, {cp} cp"
+    },
     "CargoUnits": "Cargo Units",
     "Conditions": {
       "Normal": "Normal",

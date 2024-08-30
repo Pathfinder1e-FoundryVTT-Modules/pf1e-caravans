@@ -12,6 +12,20 @@
     flex: 4;
 }
 
+.pf1.actor.caravan.sheet .tab.cargo footer {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 3px;
+}
+
+.pf1.actor.caravan.sheet .tab.cargo footer :is(.cargo-counts, .cargo-capacity) {
+    flex: 1 100%;
+}
+
+.pf1.actor.caravan.sheet .tab.cargo footer .cargo-capacity .encumbrance {
+    margin-right: 1px;
+}
+
 .pf1.actor.caravan.sheet .tab:is(.travelers, .wagons, .feats, .cargo) .item-notifications {
     display: flex;
     flex-flow: row wrap;
@@ -48,4 +62,42 @@
 .icon-pf.icon-wooden-crate {
     mask-image: url(../public/icons/wooden-crate.svg);
     -webkit-mask-image: url(../public/icons/wooden-crate.svg);
+}
+
+.pf1.sheet.actor.caravan .tab .encumbrance:not(.encumbered) .encumbrance-bar.stores {
+    background: #E53935;
+    border-color: #FFCDD2;
+}
+.pf1.sheet.actor.caravan .tab .encumbrance:not(.encumbered) .encumbrance-bar.treasure {
+    background: #FFA000;
+    border-color: #FFECB3;
+}
+.pf1.sheet.actor.caravan .tab .encumbrance.encumbered .encumbrance-bar:is(.equipment, .stores) {
+    display: none;
+}
+
+.pf1.sheet form .tab.cargo footer :is(.provisions, .cargo-tags) {
+    flex: 1;
+    align-self: center;
+}
+
+.pf1.sheet form .tab.cargo footer .provisions {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.pf1.sheet form .tab.cargo footer .cargo-tags {
+    justify-content: flex-end;
+}
+
+.pf1.sheet form .tab.cargo footer .provisions label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    flex: 0;
+    margin-left: 8px;
+    text-align: right;
+    line-height: 20px;
+    color: var(--pf1-tan);
+    white-space: nowrap;
 }

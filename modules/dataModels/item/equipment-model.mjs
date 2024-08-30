@@ -5,10 +5,13 @@ export class EquipmentModel extends CaravanItemModel {
         const fields = foundry.data.fields;
         return {
             description: new fields.SchemaField({
-                value: new fields.StringField({required: true, default: ""}),
+                value: new fields.StringField({required: true, initial: ""}),
             }),
-            quantity: new fields.NumberField({required: true, default: 1}),
-            units: new fields.NumberField({required: true, default: 1}),
+            quantity: new fields.NumberField({required: true, initial: 1}),
+            units: new fields.SchemaField({
+                value: new fields.NumberField({required: true, initial: 1})
+            }),
+            price: new fields.NumberField({required: true, initial: 0}),
             changes: new fields.ArrayField(new fields.SchemaField({
                 _id: new fields.StringField({required: true, initial: ""}),
                 formula: new fields.StringField({initial: ""}),
@@ -23,5 +26,11 @@ export class EquipmentModel extends CaravanItemModel {
                 text: new fields.StringField({initial: ""})
             })),
         };
+    }
+
+    prepareDerivedData() {
+        super.prepareDerivedData();
+
+        this.units.total = this.quantity * this.units.value;
     }
 }

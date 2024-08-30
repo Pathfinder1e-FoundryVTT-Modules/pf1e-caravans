@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../../_moduleId.mjs";
+import {MODULE_ID} from "../../_moduleId.mjs";
 import {toCamelCase} from "../../util/util.mjs";
 
 export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
@@ -9,7 +9,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             classes: [...options.classes, "pf1", "actor", "caravan"],
             width: 900,
             height: 800,
-            tabs: [{ navSelector: "nav.tabs", contentSelector: "section.primary-body", initial: "summary" }],
+            tabs: [{navSelector: "nav.tabs", contentSelector: "section.primary-body", initial: "summary"}],
             scrollY: [".tab.summary"],
         };
     }
@@ -26,13 +26,13 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
     async _onRollAttack(event) {
         event.preventDefault();
-        await this.actor.rollAttack({ token: this.token });
+        await this.actor.rollAttack({token: this.token});
     }
 
     async _onRollAttribute(event) {
         event.preventDefault();
         const attribute = event.currentTarget.closest(".attribute").dataset.attribute;
-        await this.actor.rollAttributeTest(attribute, { token: this.token });
+        await this.actor.rollAttributeTest(attribute, {token: this.token});
     }
 
     async getData(options = {}) {
@@ -42,6 +42,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         const context = {
             actor: this.actor,
             document: this.actor,
+            system: this.actor.system,
             owner: isOwner,
             itemTypes: this.actor.itemTypes,
             limited: this.actor.limited,
@@ -66,18 +67,19 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 async: true,
                 secrets: this.object.isOwner,
                 relativeTo: this.object
-            })
+            }),
         };
+
+        context.hasCurrency = Object.values(this.actor.system.currency).some((o) => o > 0);
 
         // Feat Counts
         {
             const feats = this.actor.getFeatCount();
             feats.bonus = feats.formula + feats.changes;
             feats.issues = 0;
-            if(feats.missing > 0 || feats.excess) feats.issues += 1;
-            if(feats.disabled > 0) feats.issues += 1;
+            if (feats.missing > 0 || feats.excess) feats.issues += 1;
+            if (feats.disabled > 0) feats.issues += 1;
             context.featCount = feats;
-            console.log(feats)
         }
 
         // Cargo Counts
@@ -85,9 +87,10 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             const cargo = this.actor.getCargoCount();
             cargo.bonus = cargo.formula + cargo.changes;
             cargo.issues = 0;
-            if(cargo.missing > 0 || cargo.excess) cargo.issues += 1;
-            if(cargo.disabled > 0) cargo.issues += 1;
+            if (cargo.missing > 0 || cargo.excess) cargo.issues += 1;
+            if (cargo.disabled > 0) cargo.issues += 1;
             context.cargoCount = cargo;
+            context.cargoDetails = this._computeCargoDetails(cargo);
         }
 
         // Wagon Counts
@@ -95,8 +98,8 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             const wagons = this.actor.getWagonCount();
             wagons.bonus = wagons.formula + wagons.changes;
             wagons.issues = 0;
-            if(wagons.missing > 0 || wagons.excess) wagons.issues += 1;
-            if(wagons.disabled > 0) wagons.issues += 1;
+            if (wagons.missing > 0 || wagons.excess) wagons.issues += 1;
+            if (wagons.disabled > 0) wagons.issues += 1;
             context.wagonCount = wagons;
         }
 
@@ -105,8 +108,8 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             const travelers = this.actor.getTravelerCount();
             travelers.bonus = travelers.formula + travelers.changes;
             travelers.issues = 0;
-            if(travelers.missing > 0 || travelers.excess) travelers.issues += 1;
-            if(travelers.disabled > 0) travelers.issues += 1;
+            if (travelers.missing > 0 || travelers.excess) travelers.issues += 1;
+            if (travelers.disabled > 0) travelers.issues += 1;
             context.travelerCount = travelers;
         }
 
@@ -120,7 +123,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
     _prepareItems(data) {
         let wagonSections = [];
-        for(let section of Object.values(pf1.config.sheetSections.caravanWagon)) {
+        for (let section of Object.values(pf1.config.sheetSections.caravanWagon)) {
             section.items = this.actor.itemTypes[`${MODULE_ID}.wagon`].filter((item) => item.system.subType === section.id);
             section.interface.max = this.actor.system.wagons.counts[section.id].max;
             section.interface.excess = this.actor.system.wagons.counts[section.id].excess;
@@ -128,7 +131,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         }
 
         let travelerSections = [];
-        for(let section of Object.values(pf1.config.sheetSections.caravanTraveler)) {
+        for (let section of Object.values(pf1.config.sheetSections.caravanTraveler)) {
             section.items = this.actor.itemTypes[`${MODULE_ID}.traveler`].filter((item) => item.system.subType === section.id);
             section.interface.max = this.actor.system.travelers.counts[section.id].max;
             section.interface.excess = this.actor.system.travelers.counts[section.id].excess;
@@ -146,14 +149,13 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         cargoSections = Object.values(cargoSections);
 
         const categories = [
-            { key: "wagons", sections: wagonSections },
-            { key: "travelers", sections: travelerSections },
-            { key: "feats", sections: featSections },
-            { key: "cargo", sections: cargoSections }
+            {key: "wagons", sections: wagonSections},
+            {key: "travelers", sections: travelerSections},
+            {key: "feats", sections: featSections},
+            {key: "cargo", sections: cargoSections}
         ];
 
-        console.log(this._filters);
-        for (const { key, sections } of categories) {
+        for (const {key, sections} of categories) {
             const set = this._filters.sections[key];
             for (const section of sections) {
                 if (!section) continue;
@@ -183,7 +185,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
         const getNotes = (context, all = true) => {
             const noteObjs = actor.getContextNotes(context, all);
-            return actor.formatContextNotes(noteObjs, lazy.rollData, { roll: false });
+            return actor.formatContextNotes(noteObjs, lazy.rollData, {roll: false});
         };
 
         let header, subHeader;
@@ -193,7 +195,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         let notes;
 
         const re = /^(?<id>[\w-]+)(?:\.(?<detail>.*))?$/.exec(fullId);
-        const { id, detail } = re?.groups ?? {};
+        const {id, detail} = re?.groups ?? {};
 
         switch (id) {
             case "speed": {
@@ -201,7 +203,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 sources.push({
                     sources: getSource("system.details.speed.total"),
                     untyped: true,
-                },{
+                }, {
                     sources: getSource("system.details.speed.base"),
                     untyped: true,
                 });
@@ -264,6 +266,9 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 paths.push({
                     path: "@attributes.consumption",
                     value: consumption,
+                }, {
+                    path: "@attributes.provisions",
+                    value: system.attributes.provisions,
                 });
 
                 sources.push({
@@ -340,5 +345,39 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         context.paths = paths;
         context.sources = sources;
         context.notes = notes ?? [];
+    }
+
+    _computeCargoDetails(cargoCount) {
+        const cargo = {};
+
+        const weightSystem = pf1.utils.getWeightSystem();
+        const treasure = this.actor.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`))
+        const treasureWeight = treasure.reduce((acc, item) => acc + item.system.weight.total, 0);
+        const treasureCount = Math.ceil(treasureWeight / 50);
+        const treasureWorth = treasure.reduce((acc, item) => acc + item.system.price * item.system.quantity, 0);
+
+        const stores = Math.ceil(this.actor.system.attributes.provisions / 10);
+
+        cargo.percentage = {
+            equipment: Math.min(Math.round((cargoCount.owned - stores - treasureCount) * 100 / cargoCount.max), 99.5),
+            stores: Math.min(Math.round((cargoCount.owned - treasureCount) * 100 / cargoCount.max), 99.5),
+            treasure: Math.min(Math.round(cargoCount.owned * 100 / cargoCount.max), 99.5)
+        };
+
+        cargo.encumbered = cargoCount.excess > 0;
+
+        cargo.labels = [
+            game.i18n.format("PF1ECaravans.CargoLabels.ProvisionsInStores", {
+                provisions: this.actor.system.attributes.provisions,
+                stores: stores
+            }),
+            game.i18n.format(weightSystem === "metric" ? "PF1ECaravans.CargoLabels.KGofTreasure" : "PF1ECaravans.CargoLabels.LBSofTreasure", {
+                weight: pf1.utils.convertWeight(treasureWeight),
+                treasure: treasureCount
+            }),
+            game.i18n.format("PF1ECaravans.CargoLabels.WorthOfTreasure", pf1.utils.currency.split(100 * treasureWorth, {standard: false}))
+        ];
+
+        return cargo;
     }
 }

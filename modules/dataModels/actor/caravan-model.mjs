@@ -6,44 +6,50 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
         return {
             attributes: new fields.SchemaField({
                 hp: new fields.SchemaField({
-                    value: new fields.NumberField({required: true, default: 0}),
+                    value: new fields.NumberField({required: true, initial: 0}),
                 }),
                 unrest: new fields.SchemaField({
-                    value: new fields.NumberField({required: true, default: 0})
+                    value: new fields.NumberField({required: true, initial: 0})
                 }),
-                provisions: new fields.NumberField({required: true, default: 0})
+                provisions: new fields.NumberField({required: true, initial: 0})
             }),
             details: new fields.SchemaField({
-                level: new fields.NumberField({required: true, default: 1}),
+                level: new fields.NumberField({required: true, initial: 1}),
                 notes: new fields.SchemaField({
                     value: new fields.HTMLField({required: false, blank: true}),
                 }),
-                condition: new fields.StringField({required: true, default: "normal"})
+                condition: new fields.StringField({required: true, initial: "normal"})
             }),
             statistics: new fields.SchemaField({
                 offense: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 1})
+                    base: new fields.NumberField({required: true, initial: 1})
                 }),
                 defense: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 1})
+                    base: new fields.NumberField({required: true, initial: 1})
                 }),
                 mobility: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 1})
+                    base: new fields.NumberField({required: true, initial: 1})
                 }),
                 morale: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 1})
+                    base: new fields.NumberField({required: true, initial: 1})
                 })
             }),
             capacity: new fields.SchemaField({
                 cargo: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 0})
+                    base: new fields.NumberField({required: true, initial: 0})
                 }),
                 travelers: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 0})
+                    base: new fields.NumberField({required: true, initial: 0})
                 }),
                 wagons: new fields.SchemaField({
-                    base: new fields.NumberField({required: true, default: 5})
+                    base: new fields.NumberField({required: true, initial: 5})
                 })
+            }),
+            currency: new fields.SchemaField({
+                pp: new fields.NumberField({required: true, initial: 0}),
+                gp: new fields.NumberField({required: true, initial: 0}),
+                sp: new fields.NumberField({required: true, initial: 0}),
+                cp: new fields.NumberField({required: true, initial: 0})
             })
         }
     }
@@ -59,7 +65,8 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
         this._prepareTravelers();
         this._prepareWagons();
         this.cargo = {max: 0};
-        this.feats = {max: this.details.level}
+        this.feats = {max: 0}
+        this.currency ??= {pp: 0, gp: 0, sp: 0, cp: 0};
 
         // STATISTICS
         for (let statisticKey of ["offense", "defense", "mobility", "morale"]) {

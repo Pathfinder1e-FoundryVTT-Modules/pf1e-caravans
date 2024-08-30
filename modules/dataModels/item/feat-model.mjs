@@ -5,7 +5,7 @@ export class FeatModel extends CaravanItemModel {
         const fields = foundry.data.fields;
         return {
             description: new fields.SchemaField({
-                value: new fields.StringField({required: true, default: ""}),
+                value: new fields.StringField({required: true, initial: ""}),
             }),
             changes: new fields.ArrayField(new fields.SchemaField({
                 _id: new fields.StringField({required: true, initial: ""}),

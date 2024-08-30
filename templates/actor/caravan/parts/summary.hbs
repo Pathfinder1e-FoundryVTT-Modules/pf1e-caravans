@@ -14,7 +14,7 @@
                         <div class="info-box level">
                             <h5>{{localize "PF1.Level"}}</h5>
                             <span class="text-box direct" name="system.details.level"
-                                  data-dtype="String">{{actor.system.details.level}}</span>
+                                  data-dtype="String">{{system.details.level}}</span>
                         </div>
                     </div>
                 </div>
@@ -50,11 +50,11 @@
             <div class="info-box current">
                 <h5>{{localize "PF1.Current"}}</h5>
                 <span class="text-box wheel-change direct allow-relative" data-wheel-step="1"
-                      name="system.attributes.hp.value" data-dtype="Number">{{actor.system.attributes.hp.value}}</span>
+                      name="system.attributes.hp.value" data-dtype="Number">{{system.attributes.hp.value}}</span>
             </div>
             <div class="info-box maximum">
                 <h5>{{localize "PF1.Maximum"}}</h5>
-                <span class="value">{{actor.system.attributes.hp.max}}</span>
+                <span class="value">{{system.attributes.hp.max}}</span>
             </div>
         </div>
     </div>
@@ -67,11 +67,11 @@
                 <h5>{{localize "PF1.Current"}}</h5>
                 <span class="text-box wheel-change direct allow-relative" data-wheel-step="1"
                       name="system.attributes.unrest.value"
-                      data-dtype="Number">{{actor.system.attributes.unrest.value}}</span>
+                      data-dtype="Number">{{system.attributes.unrest.value}}</span>
             </div>
             <div class="info-box maximum">
                 <h5>{{localize "PF1ECaravans.Threshold"}}</h5>
-                <span class="value">{{actor.system.attributes.unrest.limit}}</span>
+                <span class="value">{{system.attributes.unrest.limit}}</span>
             </div>
         </div>
     </div>
@@ -89,14 +89,14 @@
                 <h5>{{localize "PF1ECaravans.Condition"}}</h5>
                 <span class="value">
                     <select name="system.details.condition" id="caravan-condition">
-                        {{selectOptions conditionOptions selected=actor.system.details.condition localize=true}}
+                        {{selectOptions conditionOptions selected=system.details.condition localize=true}}
                     </select>
                 </span>
             </div>
 
             <div class="info-box">
                 <h5>{{localize "PF1ECaravans.MonthlyWages"}}</h5>
-                <span class="value">{{localize "PF1.Currency.Inline.gp" value=actor.system.details.wages}}</span>
+                <span class="value">{{localize "PF1.Currency.Inline.gp" value=system.details.wages}}</span>
             </div>
         </div>
     </div>
@@ -110,22 +110,22 @@
             <div class="info-box attribute offense" data-tooltip-extended="offense">
                 <h5>{{localize "PF1ECaravans.Statistics.Offense"}}</h5>
                 <span class="text-box wheel-change direct" name="system.statistics.offense.base"
-                      data-dtype="Number">{{actor.system.statistics.offense.total}}</span>
+                      data-dtype="Number">{{system.statistics.offense.total}}</span>
             </div>
             <div class="info-box attribute defense" data-tooltip-extended="defense">
                 <h5>{{localize "PF1ECaravans.Statistics.Defense"}}</h5>
                 <span class="text-box wheel-change direct" name="system.statistics.defense.base"
-                      data-dtype="Number">{{actor.system.statistics.defense.total}}</span>
+                      data-dtype="Number">{{system.statistics.defense.total}}</span>
             </div>
             <div class="info-box attribute mobility" data-tooltip-extended="mobility">
                 <h5>{{localize "PF1ECaravans.Statistics.Mobility"}}</h5>
                 <span class="text-box wheel-change direct" name="system.statistics.mobility.base"
-                      data-dtype="Number">{{actor.system.statistics.mobility.total}}</span>
+                      data-dtype="Number">{{system.statistics.mobility.total}}</span>
             </div>
             <div class="info-box attribute morale" data-tooltip-extended="morale">
                 <h5>{{localize "PF1ECaravans.Statistics.Morale"}}</h5>
                 <span class="text-box wheel-change direct" name="system.statistics.morale.base"
-                      data-dtype="Number">{{actor.system.statistics.morale.total}}</span>
+                      data-dtype="Number">{{system.statistics.morale.total}}</span>
             </div>
         </div>
     </div>
@@ -137,21 +137,21 @@
             <div class="info-box attribute attack" data-attribute="attack" data-tooltip-extended="attack">
                 <h5><a class="rollable"><i class="fas fa-dice"></i> <span>{{localize
                         "PF1ECaravans.Statistics.Attack"}}</span></a></h5>
-                <span class="value">{{numberFormat actor.system.statistics.attack sign=true}}</span>
+                <span class="value">{{numberFormat system.statistics.attack sign=true}}</span>
             </div>
             <div class="info-box attribute armor-class" data-tooltip-extended="armor-class">
                 <h5>{{localize "PF1ECaravans.Statistics.ArmorClass"}}</h5>
-                <span class="value">{{actor.system.statistics.armorClass}}</span>
+                <span class="value">{{system.statistics.armorClass}}</span>
             </div>
             <div class="info-box attribute security" data-attribute="security" data-tooltip-extended="security">
                 <h5><a class="rollable"><i class="fas fa-dice"></i> <span>{{localize
                         "PF1ECaravans.Statistics.Security"}}</span></a></h5>
-                <span class="value">{{numberFormat actor.system.statistics.security sign=true}}</span>
+                <span class="value">{{numberFormat system.statistics.security sign=true}}</span>
             </div>
             <div class="info-box attribute resolve" data-attribute="resolve" data-tooltip-extended="resolve">
                 <h5><a class="rollable"><i class="fas fa-dice"></i> <span>{{localize
                         "PF1ECaravans.Statistics.Resolve"}}</span></a></h5>
-                <span class="value">{{numberFormat actor.system.statistics.resolve sign=true}}</span>
+                <span class="value">{{numberFormat system.statistics.resolve sign=true}}</span>
             </div>
         </div>
     </div>
@@ -164,12 +164,12 @@
         <div class="info-box-joined tooltip">
             <div class="info-box current">
                 <h5>{{localize "PF1ECaravans.Statistics.Consumption"}}</h5>
-                <span class="value">{{actor.system.attributes.consumption}}</span>
+                <span class="value">{{system.attributes.consumption}}</span>
             </div>
             <div class="info-box current">
                 <h5>{{localize "PF1ECaravans.Statistics.Provisions"}}</h5>
                 <span class="text-box wheel-change direct" name="system.attributes.provisions"
-                      data-dtype="Number">{{actor.system.attributes.provisions}}</span>
+                      data-dtype="Number">{{system.attributes.provisions}}</span>
             </div>
         </div>
     </div>

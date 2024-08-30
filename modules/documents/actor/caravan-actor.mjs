@@ -527,8 +527,8 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         const equipment = this.itemTypes[`${MODULE_ID}.equipment`];
         const treasure = this.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`));
 
-        const owned = equipment.map((item) => item.system.quantity * item.system.units).reduce((acc, cur) => acc + cur, 0)
-            + Math.ceil(treasure.map((item) => item.system.weight.total).reduce((acc, cur) => acc + cur, 0) / 50)
+        const owned = equipment.reduce((acc, cur) => acc + cur.system.units.total, 0)
+            + Math.ceil(treasure.reduce((acc, cur) => acc + cur.system.weight.total, 0) / 50)
             + Math.ceil(this.system.attributes.provisions / 10)
 
         return {

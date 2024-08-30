@@ -4,9 +4,9 @@ export class WagonModel extends CaravanItemModel {
     static defineSchema() {
         const fields = foundry.data.fields;
         return {
-            subType: new fields.StringField({required: true, default: "coveredWagon"}),
+            subType: new fields.StringField({required: true, initial: "coveredWagon"}),
             description: new fields.SchemaField({
-                value: new fields.StringField({required: true, default: ""}),
+                value: new fields.StringField({required: true, initial: ""}),
             }),
             cost: new fields.NumberField({required: false, initial: undefined}),
             hp: new fields.NumberField({required: false, initial: undefined}),
