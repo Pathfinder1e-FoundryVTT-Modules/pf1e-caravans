@@ -10,8 +10,8 @@ export class TravelerModel extends CaravanItemModel {
                 value: new fields.StringField({required: true, initial: ""}),
             }),
             task: new fields.StringField(),
-            isHero: new fields.BooleanField({required: true, initial: false}),
-            onlyParty: new fields.BooleanField({required: true, initial: false}),
+            actorId: new fields.StringField(),
+            isNPC: new fields.BooleanField({required: false, initial: false}),
             changes: new fields.ArrayField(new fields.SchemaField({
                 _id: new fields.StringField({required: true, initial: ""}),
                 formula: new fields.StringField({initial: ""}),
@@ -32,12 +32,14 @@ export class TravelerModel extends CaravanItemModel {
         super.prepareDerivedData();
 
         this._mergeRoleDetails();
-        if (this.onlyParty) {
-            this.isHero = true;
+
+        if (this.actorId || this.onlyParty) {
+            this.isNPC = true;
         }
 
-        if (this.isHero) {
+        if(this.isNPC) {
             this.monthlyWage = 0;
+            this.isHero = 0;
         }
     }
 

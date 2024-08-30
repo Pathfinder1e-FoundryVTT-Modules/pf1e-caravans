@@ -94,7 +94,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: `caravan_${derivedAttributeId}`,
                 type: "untyped",
                 operator: "add",
-                priority: 1000,
+                priority: -1,
                 flavor: game.i18n.localize(`PF1ECaravans.Statistics.${baseAttributeId.capitalize()}`)
             }));
         }
@@ -104,7 +104,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_unrest",
             type: "untyped",
             operator: "add",
-            priority: 0,
+            priority: -1,
             flavor: game.i18n.localize("PF1ECaravans.Statistics.Morale")
         }));
 
@@ -114,7 +114,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: `caravan_${derivedAttributeId}`,
                 type: "untyped",
                 operator: "add",
-                priority: 0,
+                priority: -1,
                 flavor: game.i18n.localize(`PF1ECaravans.Heroes`)
             }));
         }
@@ -124,7 +124,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_consumption",
             type: "untyped",
             operator: "add",
-            priority: 10,
+            priority: -1,
             flavor: game.i18n.localize(`PF1ECaravans.Travelers`)
         }));
 
@@ -134,7 +134,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_consumption",
                 type: "untyped",
                 operator: "add",
-                priority: 0,
+                priority: -1,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
@@ -142,7 +142,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_hp",
                 type: "untyped",
                 operator: "add",
-                priority: 0,
+                priority: -1,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
@@ -150,7 +150,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_travelers",
                 type: "untyped",
                 operator: "add",
-                priority: 0,
+                priority: -1,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
@@ -158,7 +158,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_cargo",
                 type: "untyped",
                 operator: "add",
-                priority: 0,
+                priority: -1,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             })
         );
@@ -171,7 +171,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     target: `caravan_${attribute}`,
                     type: "untyped",
                     operator: "add",
-                    priority: 2,
+                    priority: -1,
                     flavor: game.i18n.localize("PF1ECaravans.NoFortuneTeller")
                 }));
             }
@@ -185,7 +185,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                         target: `caravan_${statistic}`,
                         type: "untyped",
                         operator: "add",
-                        priority: 1001,
+                        priority: -1,
                         flavor: game.i18n.localize("PF1ECaravans.Conditions.Fatigued")
                     }))
                 }
@@ -194,7 +194,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     target: `caravan_speed`,
                     type: "untyped",
                     operator: "add",
-                    priority: 1001,
+                    priority: -1,
                     flavor: game.i18n.localize("PF1ECaravans.Conditions.Fatigued")
                 }))
                 break;
@@ -206,7 +206,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                         target: `caravan_${statistic}`,
                         type: "untyped",
                         operator: "add",
-                        priority: 1001,
+                        priority: -1,
                         flavor: game.i18n.localize("PF1ECaravans.Conditions.Exhausted")
                     }))
                 }
@@ -215,7 +215,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     target: `caravan_speed`,
                     type: "untyped",
                     operator: "set",
-                    priority: 1001,
+                    priority: -1,
                     flavor: game.i18n.localize("PF1ECaravans.Conditions.Exhausted")
                 }))
                 break;
@@ -226,7 +226,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_wages",
             type: "untyped",
             operator: "add",
-            priority: 10,
+            priority: -1,
             flavor: game.i18n.localize(`PF1ECaravans.Travelers`)
         }));
 
@@ -235,7 +235,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_feats",
             type: "untyped",
             operator: "add",
-            priority: 10,
+            priority: -1,
             flavor: game.i18n.localize(`PF1ECaravans.Levels`)
         }));
     }
@@ -431,7 +431,8 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     }
 
     getFeatCount() {
-        const owned = this.itemTypes[`${MODULE_ID}.feat`].length;
+        console.log(this.system);
+        const owned = this.system.feats.owned;
         const active = this.itemTypes[`${MODULE_ID}.feat`].filter((o) => o.isActive).length;
 
         const result = {
@@ -468,7 +469,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     }
 
     getWagonCount() {
-        const owned = this.itemTypes[`${MODULE_ID}.wagon`].length;
+        const owned = this.system.wagons.owned;
         const active = this.itemTypes[`${MODULE_ID}.wagon`].filter((o) => o.isActive).length;
 
         return {
@@ -493,7 +494,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     }
 
     getTravelerCount() {
-        const owned = this.itemTypes[`${MODULE_ID}.traveler`].length;
+        const owned = this.system.travelers.owned;
         const active = this.itemTypes[`${MODULE_ID}.traveler`].filter((o) => o.isActive).length;
         const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
         const byWagons = wagons.reduce((acc, wagon) => acc + wagon.system.capacity.traveler, 0);
@@ -524,12 +525,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
         const byWagons = wagons.reduce((acc, wagon) => acc + wagon.system.capacity.cargo, 0);
 
-        const equipment = this.itemTypes[`${MODULE_ID}.equipment`];
-        const treasure = this.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`));
-
-        const owned = equipment.reduce((acc, cur) => acc + cur.system.units.total, 0)
-            + Math.ceil(treasure.reduce((acc, cur) => acc + cur.system.weight.total, 0) / 50)
-            + Math.ceil(this.system.attributes.provisions / 10)
+        const owned = this.system.cargo.owned;
 
         return {
             max: this.system.cargo.max,

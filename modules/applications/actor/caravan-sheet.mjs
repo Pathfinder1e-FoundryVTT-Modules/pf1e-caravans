@@ -325,6 +325,9 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 paths.push({
                     path: `@${id}.max`,
                     value: attribute.max,
+                }, {
+                    path: `@${id}.owned`,
+                    value: attribute.owned,
                 });
 
                 sources.push({
@@ -379,5 +382,25 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         ];
 
         return cargo;
+    }
+
+    async _onDrop(event) {
+        const data = TextEditor.getDragEventData(event);
+        switch(data.type) {
+            case "Actor":
+                console.log(this);
+                await this.actor.createEmbeddedDocuments("Item", [{
+                    type: `${MODULE_ID}.traveler`,
+                    name: data.uuid,
+                    system: {
+                        subType: "passenger",
+                        actorId: data.uuid
+                    }
+                }])
+                break;
+
+            default:
+                return super._onDrop(event);
+        }
     }
 }

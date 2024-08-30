@@ -90,10 +90,6 @@ export class CaravanItem extends pf1.documents.item.ItemPF {
         this._changes = _collection;
     }
 
-    getRollData(options = {refresh: false}) {
-        return this.parent?.getRollData(options) ?? {};
-    }
-
     getLabels({actionId, rollData} = {}) {
         return {};
     }

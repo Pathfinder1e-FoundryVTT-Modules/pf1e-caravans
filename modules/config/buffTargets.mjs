@@ -47,7 +47,8 @@ export const buffTargets = {
     caravan_damage: {
         category: "caravan",
         label: "PF1ECaravans.BuffTargets.Damage",
-        sort: 800
+        sort: 800,
+        deferred: true
     },
     caravan_armorClass: {
         category: "caravan",

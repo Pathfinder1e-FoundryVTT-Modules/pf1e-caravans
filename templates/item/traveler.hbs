@@ -2,11 +2,15 @@
 
     {{!-- Item Sheet Header --}}
     <header class="sheet-header flexrow">
-        <img class="profile" src="{{item.img}}" data-tooltip="{{item.name}}" data-edit="img">
+        <img class="profile" src="{{item.img}}" data-tooltip="{{item.name}}" {{#if (not isActor)}}data-edit="img"{{/if}}>
 
         <div class="flexrow header-details">
             <h1 class="item-name">
-                <input name="name" type="text" value="{{item.name}}" placeholder="{{localize "PF1.ItemName"}}">
+                {{#if isActor}}
+                    <span class="input-proxy">{{item.name}}</span>
+                {{else}}
+                    <input name="name" type="text" value="{{item.name}}" {{disabled (not isActor)}} placeholder="{{localize "PF1.ItemName"}}">
+                {{/if}}
             </h1>
         </div>
     </header>
@@ -24,7 +28,7 @@
             </h4>
         </header>
 
-        {{#if (not system.isHero)}}
+        {{#if (not isActor)}}
         <label class="descriptor">
             <span>{{localize "PF1ECaravans.Wage"}}</span>
 
@@ -33,10 +37,12 @@
         </label>
         {{/if}}
 
+        {{#if (not isActor)}}
         <label class="descriptor checkbox">
-            <input type="checkbox" name="system.isHero" {{checked system.isHero}} {{disabled system.onlyParty}}>
-            <span>{{localize "PF1ECaravans.Hero"}}</span>
+            <input type="checkbox" name="system.isNPC" {{checked system.isNPC}} {{disabled system.onlyParty}}>
+            <span>{{localize "PF1ECaravans.NPC"}}</span>
         </label>
+        {{/if}}
     </section>
 
     {{!-- Item Sheet Navigation --}}

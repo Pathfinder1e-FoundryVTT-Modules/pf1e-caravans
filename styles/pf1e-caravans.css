@@ -101,3 +101,9 @@
     color: var(--pf1-tan);
     white-space: nowrap;
 }
+
+.pf1.sheet .sheet-header h1 .input-proxy {
+    font-size: calc(var(--font-size-28)* 1.2);
+    font-variant-caps: small-caps;
+    margin: 0;
+}

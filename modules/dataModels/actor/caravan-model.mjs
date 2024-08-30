@@ -64,8 +64,12 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
 
         this._prepareTravelers();
         this._prepareWagons();
-        this.cargo = {max: 0};
-        this.feats = {max: 0}
+        this._prepareCargo();
+        this.feats = {
+            max: 0,
+            owned: this.parent.itemTypes[`${MODULE_ID}.feat`].length
+        }
+
         this.currency ??= {pp: 0, gp: 0, sp: 0, cp: 0};
 
         // STATISTICS
@@ -99,16 +103,34 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
         this.details.wages = 0;
     }
 
+    _prepareCargo() {
+        const equipment = this.parent.itemTypes[`${MODULE_ID}.equipment`];
+        const treasure = this.parent.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`));
+
+        const owned = equipment.reduce((acc, cur) => acc + cur.system.units.total, 0)
+            + Math.ceil(treasure.reduce((acc, cur) => acc + cur.system.weight.total, 0) / 50)
+            + Math.ceil(this.attributes.provisions / 10);
+
+        this.cargo = {
+            max: 0,
+            owned
+        };
+    }
+
     _prepareTravelers() {
         const travelers = this.parent.itemTypes[`${MODULE_ID}.traveler`];
         const wagons = this.parent.itemTypes[`${MODULE_ID}.wagon`];
 
         const travelerTypes = {}
-        pf1.registry.travelerRoles.map(travelerRole => travelerTypes[travelerRole.id] = {count: 0, max: travelerRole.max});
+        pf1.registry.travelerRoles.map(travelerRole => travelerTypes[travelerRole.id] = {
+            count: 0,
+            max: travelerRole.max
+        });
         travelers.map(traveler => travelerTypes[traveler.system.subType].count++);
 
         this.travelers = {
             max: 0,
+            owned: travelers.length,
             counts: travelerTypes
         };
     }
@@ -122,6 +144,7 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
 
         this.wagons = {
             max: 5,
+            owned: wagons.length,
             counts: wagonTypes,
         };
     }

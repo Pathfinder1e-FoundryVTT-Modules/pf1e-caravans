@@ -14,6 +14,15 @@ export class CaravanItemSheet extends pf1.applications.item.ItemSheetPF {
         return ItemSheet.prototype._updateObject.call(this, event, formData);
     }
 
+    _onDeleteChange(event) {
+        event.preventDefault();
+        const el = event.target;
+        const changeId = el.dataset.changeId;
+
+        game.tooltip.dismissLockedTooltip(el.closest(".locked-tooltip"));
+        this.item.changes.get(changeId)?.delete();
+    }
+
     async getData(options = {}) {
         const lang = game.settings.get("core", "language");
 
