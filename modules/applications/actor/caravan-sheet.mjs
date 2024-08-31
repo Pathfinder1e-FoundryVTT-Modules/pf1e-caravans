@@ -38,28 +38,28 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
     get conditions() {
         const conditions = [];
-        if(this.actor.system.attributes.unrest.value > this.actor.system.attributes.unrest.limit) {
+        if (this.actor.system.attributes.unrest.value > this.actor.system.attributes.unrest.limit) {
             conditions.push({
                 key: "mutiny",
                 label: "PF1ECaravans.Conditions.Mutiny",
                 icon: `modules/${MODULE_ID}/public/icons/fist.svg`
             })
         }
-        if(this.actor.system.details.condition !== "normal") {
+        if (this.actor.system.details.condition !== "normal") {
             conditions.push({
                 key: this.actor.system.details.condition,
                 label: game.i18n.localize(`PF1ECaravans.Conditions.${this.actor.system.details.condition.capitalize()}`),
                 icon: (this.actor.system.details.condition === "fatigued" ? "icons/svg/unconscious.svg" : "systems/pf1/icons/conditions/exhausted.svg")
             })
         }
-        if(this.actor.getCargoCount().excess > 0) {
+        if (this.actor.getCargoCount().excess > 0) {
             conditions.push({
                 key: this.actor.system.details.condition,
                 label: game.i18n.localize(`PF1ECaravans.Conditions.Overloaded`),
                 icon: `modules/${MODULE_ID}/public/icons/push.svg`
             })
         }
-        if(
+        if (
             this.actor.system.details.speed.total <= 0
             || this.actor.getCargoCount().excess > 0
             || this.actor.getTravelerCount().excess > 0
@@ -423,23 +423,33 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         cargo.encumbered = cargoCount.excess > 0;
 
         cargo.labels = [
-            game.i18n.format("PF1ECaravans.CargoLabels.ProvisionsInStores", {
-                provisions: this.actor.system.attributes.provisions,
-                stores: stores
-            }),
-            game.i18n.format(weightSystem === "metric" ? "PF1ECaravans.CargoLabels.KGofTreasure" : "PF1ECaravans.CargoLabels.LBSofTreasure", {
-                weight: pf1.utils.convertWeight(treasureWeight),
-                treasure: treasureCount
-            }),
-            game.i18n.format("PF1ECaravans.CargoLabels.WorthOfTreasure", pf1.utils.currency.split(100 * treasureWorth, {standard: false}))
-        ];
+            this.actor.system.attributes.provisions
+                ? game.i18n.format("PF1ECaravans.CargoLabels.ProvisionsInStores", {
+                    provisions: this.actor.system.attributes.provisions,
+                    stores: stores
+                })
+                : null,
+            this.actor.system.attributes.provisions
+                ? game.i18n.format("PF1ECaravans.CargoLabels.WorthOfProvisions", pf1.utils.currency.split(50 * this.actor.system.attributes.provisions, {omit: ["pp", "cp"], standard: false}))
+                : null,
+            treasureCount
+                ? game.i18n.format(weightSystem === "metric" ? "PF1ECaravans.CargoLabels.KGofTreasure" : "PF1ECaravans.CargoLabels.LBSofTreasure", {
+                    weight: pf1.utils.convertWeight(treasureWeight),
+                    treasure: treasureCount
+                })
+                : null,
+            treasureCount
+                ? game.i18n.format("PF1ECaravans.CargoLabels.WorthOfTreasure",
+                    pf1.utils.currency.split(100 * treasureWorth, {omit: ["pp"], standard: false}))
+                : null
+        ].filter((o) => !!o);
 
         return cargo;
     }
 
     async _onDrop(event) {
         const data = TextEditor.getDragEventData(event);
-        switch(data.type) {
+        switch (data.type) {
             case "Actor":
                 await this.actor.createEmbeddedDocuments("Item", [{
                     type: `${MODULE_ID}.traveler`,
@@ -464,7 +474,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             const button = event.currentTarget;
             button.disabled = true;
             try {
-                await this.actor.performRest({ verbose: true });
+                await this.actor.performRest({verbose: true});
             } finally {
                 button.disabled = false;
             }
@@ -472,7 +482,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             const app = Object.values(this.actor.apps).find((o) => {
                 return o instanceof CaravanRestDialog && o._element;
             });
-            if (app) app.render(true, { focus: true });
+            if (app) app.render(true, {focus: true});
             else new CaravanRestDialog(this.actor).render(true);
         }
     }

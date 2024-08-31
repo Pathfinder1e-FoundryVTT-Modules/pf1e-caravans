@@ -82,18 +82,17 @@
     display: none;
 }
 
-.pf1.sheet form .tab.cargo footer :is(.provisions, .cargo-tags) {
+.pf1.sheet form .tab.cargo footer .provisions {
+    display: flex;
+    flex-flow: row nowrap;
     flex: 1;
     align-self: center;
 }
 
-.pf1.sheet form .tab.cargo footer .provisions {
-    display: flex;
-    flex-flow: row nowrap;
-}
-
 .pf1.sheet form .tab.cargo footer .cargo-tags {
     justify-content: flex-end;
+    flex: 3;
+    align-self: center;
 }
 
 .pf1.sheet form .tab.cargo footer .provisions label {
