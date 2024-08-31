@@ -113,3 +113,7 @@
     font-variant-caps: small-caps;
     margin: 0;
 }
+
+.pf1.sheet.type-pf1e-caravans\.traveler .sheet-header .summary li {
+    width: unset;
+}

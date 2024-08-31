@@ -147,6 +147,7 @@
     "Attack": "Attack",
     "Damage": "Damage",
     "ExtraDamage": "Extra Damage ({source})",
+    "LinkedActorId": "Linked Actor ID",
     "CargoLabels": {
       "ProvisionsInStores": "{provisions} Provisions in {stores} Stores",
       "KGofTreasure": "{weight} kg in {treasure} Treasure",

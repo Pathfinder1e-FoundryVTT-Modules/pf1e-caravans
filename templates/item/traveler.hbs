@@ -12,6 +12,16 @@
                     <input name="name" type="text" value="{{item.name}}" {{disabled (not isActor)}} placeholder="{{localize "PF1.ItemName"}}">
                 {{/if}}
             </h1>
+
+            {{#if isActor}}
+            <ul class="summary">
+                <li>
+                    <label>
+                        {{localize "PF1ECaravans.LinkedActorId"}}: {{system.actorId}}
+                    </label>
+                </li>
+            </ul>
+            {{/if}}
         </div>
     </header>
 
