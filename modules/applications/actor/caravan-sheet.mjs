@@ -59,7 +59,11 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 icon: `modules/${MODULE_ID}/public/icons/push.svg`
             })
         }
-        if(this.actor.system.attributes.hp.value <= 0 || this.actor.system.details.speed.total <= 0) {
+        if(
+            this.actor.system.details.speed.total <= 0
+            || this.actor.getCargoCount().excess > 0
+            || this.actor.getTravelerCount().excess > 0
+        ) {
             conditions.push({
                 key: this.actor.system.details.condition,
                 label: game.i18n.localize(`PF1ECaravans.Conditions.Immobilized`),
