@@ -36,6 +36,40 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         await this.actor.rollAttributeTest(attribute, {token: this.token});
     }
 
+    get conditions() {
+        const conditions = [];
+        if(this.actor.system.attributes.unrest.value > this.actor.system.attributes.unrest.limit) {
+            conditions.push({
+                key: "mutiny",
+                label: "PF1ECaravans.Conditions.Mutiny",
+                icon: `modules/${MODULE_ID}/public/icons/fist.svg`
+            })
+        }
+        if(this.actor.system.details.condition !== "normal") {
+            conditions.push({
+                key: this.actor.system.details.condition,
+                label: game.i18n.localize(`PF1ECaravans.Conditions.${this.actor.system.details.condition.capitalize()}`),
+                icon: (this.actor.system.details.condition === "fatigued" ? "icons/svg/unconscious.svg" : "systems/pf1/icons/conditions/exhausted.svg")
+            })
+        }
+        if(this.actor.getCargoCount().excess > 0) {
+            conditions.push({
+                key: this.actor.system.details.condition,
+                label: game.i18n.localize(`PF1ECaravans.Conditions.Overloaded`),
+                icon: `modules/${MODULE_ID}/public/icons/push.svg`
+            })
+        }
+        if(this.actor.system.attributes.hp.value <= 0 || this.actor.system.details.speed.total <= 0) {
+            conditions.push({
+                key: this.actor.system.details.condition,
+                label: game.i18n.localize(`PF1ECaravans.Conditions.Immobilized`),
+                icon: `modules/${MODULE_ID}/public/icons/nailed-foot.svg`
+            })
+        }
+        // TODO: Starving
+        return conditions;
+    }
+
     async getData(options = {}) {
         const isOwner = this.actor.isOwner;
         const isMetricDist = pf1.utils.getDistanceSystem() === "metric";
@@ -56,6 +90,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 fatigued: "PF1ECaravans.Conditions.Fatigued",
                 exhausted: "PF1ECaravans.Conditions.Exhausted",
             },
+            conditions: this.conditions,
             units: {
                 weight:
                     pf1.utils.getWeightSystem() === "metric" ? game.i18n.localize("PF1.Kgs") : game.i18n.localize("PF1.Lbs"),

@@ -177,6 +177,17 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             }
         }
 
+        for (const attribute of ["attack", "armorClass", "security", "resolve"]) {
+            changes.push(new pf1.components.ItemChange({
+                formula: `-max(0, @attributes.unrest.value - @attributes.unrest.limit)[${game.i18n.localize("PF1ECaravans.Mutiny")}]`,
+                target: `caravan_${attribute}`,
+                type: "untyped",
+                operator: "add",
+                priority: -1,
+                flavor: game.i18n.localize("PF1ECaravans.Mutiny")
+            }));
+        }
+
         switch (system.details.condition) {
             case "fatigued":
                 for (const statistic of ["attack", "security", "resolve"]) {
@@ -216,9 +227,20 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     type: "untyped",
                     operator: "set",
                     priority: -1,
-                    flavor: game.i18n.localize("PF1ECaravans.Conditions.Exhausted")
+                    flavor: game.i18n.localize("PF1ECaravans.Conditions.Immobilized")
                 }))
                 break;
+        }
+
+        if(system.attributes.hp.value <= 0) {
+            changes.push(new pf1.components.ItemChange({
+                formula: "0",
+                target: `caravan_speed`,
+                type: "untyped",
+                operator: "set",
+                priority: -1,
+                flavor: game.i18n.localize("PF1ECaravans.Conditions.Immobilized")
+            }))
         }
 
         changes.push(new pf1.components.ItemChange({
@@ -238,15 +260,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             priority: 1000,
             flavor: game.i18n.localize(`PF1.Level`)
         }));
-
-        // changes.push(new pf1.components.ItemChange({
-        //     formula: "ifElse(@overloaded, 0, @details.speed.total)",
-        //     target: `caravan_speed`,
-        //     type: "untyped",
-        //     operator: "set",
-        //     priority: -1,
-        //     flavor: game.i18n.localize("PF1ECaravans.Overloaded")
-        // }))
     }
 
     applyActiveEffects() {
@@ -263,7 +276,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
         this._initialized = true;
         this._setSourceDetails();
-
 
         this.attackItem = {
             id: "_caravanAttack",
@@ -787,18 +799,18 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         const updateData = {};
         const chatMessageData = options;
 
-        if(provisions >= consumption) {
+        if (provisions >= consumption) {
             chatMessageData.hadProvisions = true;
             chatMessageData.consumedProvisions = consumption;
 
-            if(restTravelers) {
+            if (restTravelers) {
                 const actorIds = this.itemTypes[`${MODULE_ID}.traveler`]
                     .filter(traveler => traveler.system.actorId !== undefined)
                     .map(traveler => traveler.system.actorId);
 
                 chatMessageData.restedActors = (await Promise.all(actorIds.map(async actorId => {
                     const actor = await fromUuid(actorId);
-                    if(!actor) {
+                    if (!actor) {
                         return null;
                     }
 
@@ -808,7 +820,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             }
 
             updateData["system.attributes.provisions"] = provisions - consumption;
-            switch(this.system.details.condition) {
+            switch (this.system.details.condition) {
                 case "exhausted":
                     updateData["system.details.condition"] = "fatigued";
                     chatMessageData.conditionChangedTo = "fatigued";
@@ -819,15 +831,14 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     chatMessageData.conditionChangedTo = "normal";
                     break;
             }
-        }
-        else {
+        } else {
             chatMessageData.hadProvisions = false;
             chatMessageData.consumedProvisions = provisions;
 
             // Caravan takes damage
             updateData["system.attributes.provisions"] = 0;
 
-            if(this.system.details.condition === "normal") {
+            if (this.system.details.condition === "normal") {
                 updateData["system.details.condition"] = "fatigued";
                 chatMessageData.conditionChangedTo = "fatigued";
             }
@@ -838,16 +849,16 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             updateData["system.attributes.hp.value"] = this.system.attributes.hp.value - damageRoll.total;
         }
 
-        const context = { pf1: { action: "rest", restOptions: options } };
+        const context = {pf1: {action: "rest", restOptions: options}};
         if (!foundry.utils.isEmpty(updateData)) await this.update(updateData, foundry.utils.deepClone(context));
 
         await sendRestChatMessage(this, chatMessageData);
 
         if (verbose) {
             const message = restoreDailyUses ? "PF1.FullRestMessage" : "PF1.RestMessage";
-            ui.notifications.info(game.i18n.format(message, { name: this.token?.name ?? this.name, hours }));
+            ui.notifications.info(game.i18n.format(message, {name: this.token?.name ?? this.name, hours}));
         }
 
-        return { options };
+        return {options};
     }
 }

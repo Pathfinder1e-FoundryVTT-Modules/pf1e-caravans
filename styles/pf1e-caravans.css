@@ -122,3 +122,35 @@
     font-size: 12px;
     line-height: 1.2;
 }
+
+.pf1.sheet.actor.caravan .tab.summary .condition {
+    border: 1px transparent;
+    border-radius: 10px;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.1);
+    text-shadow: 0 0 8px red;
+    height: 34px;
+}
+.pf1.sheet.actor.caravan .tab.summary .condition span {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 4px;
+    align-items: center;
+    color: var(--color-text-dark-primary);
+}
+.pf1.sheet.actor.caravan .tab.summary .condition span > img {
+    border: none;
+}
+.pf1.sheet.actor.caravan .tab.summary .condition span > img[src*=".svg"] {
+    background: black;
+}
+.pf1.sheet.actor.caravan .tab.summary .condition span > .details {
+    display: flex;
+    flex-flow: row wrap;
+}
+.pf1.sheet.actor.caravan .tab.summary .condition span .name {
+    flex: 1 100%;
+}
+.pf1.sheet.actor.caravan .tab .buffs-conditions {
+    flex: 0;
+}

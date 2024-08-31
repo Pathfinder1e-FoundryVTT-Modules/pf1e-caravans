@@ -12,6 +12,7 @@ Should you wish to contribute further languages, please feel free to open a pull
 # Credits
 
 - The following images are included in this project:
-    - [Cartwheel](https://game-icons.net/1x1/lorc/cartwheel.html), by [Lorc](https://lorcblog.blogspot.com/) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
-    - [Wooden Crate](https://game-icons.net/1x1/delapouite/wooden-crate.html) by [Delapouite](https://delapouite.com/) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+    - [Cartwheel](https://game-icons.net/1x1/lorc/cartwheel.html), [Nailed Foot](https://game-icons.net/1x1/lorc/nailed-foot.html) by [Lorc](https://lorcblog.blogspot.com/) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+    - [Wooden Crate](https://game-icons.net/1x1/delapouite/wooden-crate.html), [Push](https://game-icons.net/1x1/delapouite/push.html) by [Delapouite](https://delapouite.com/) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
+    - [Fist](https://game-icons.net/1x1/skoll/fist.html) by Skoll under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
  
