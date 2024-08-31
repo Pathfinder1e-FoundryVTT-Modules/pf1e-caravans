@@ -283,6 +283,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             name: this.name,
             img: this.img,
             system: {},
+            flags: {},
             getChatData() {
                 return {
                     properties: []

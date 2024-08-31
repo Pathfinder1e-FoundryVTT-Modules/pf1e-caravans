@@ -47,6 +47,7 @@ export class CaravanItem extends pf1.documents.item.ItemPF {
 
     prepareDerivedData() {
         super.prepareDerivedData();
+        this.flags ??= {};
 
         if (this.system._contextNotes?.length) {
             this.system._contextNotes = this.system._contextNotes.map(
