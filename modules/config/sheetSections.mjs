@@ -2,16 +2,26 @@ import {MODULE_ID} from "../_moduleId.mjs";
 
 export const sheetSections = {
     caravanFeat: {
-        default: {
+        feat: {
             category: "caravanFeat",
-            create: {type: `${MODULE_ID}.feat`},
-            filters: {type: `${MODULE_ID}.feat`},
+            create: {type: `${MODULE_ID}.feat`, system: {subType: "feat"}},
+            filters: {type: `${MODULE_ID}.feat`, system: {subType: "feat"}},
             id: "default",
             interface: {
                 create: true,
             },
-            label: "PF1.Feats",
+            label: "PF1.Subtypes.Item.pf1e-caravans.feat.feat.Plural",
             path: "caravanFeat.default"
+        },
+        feature: {
+            category: "caravanFeat",
+            create: {type: `${MODULE_ID}.feat`, system: {subType: "feature"}},
+            filters: {type: `${MODULE_ID}.feat`, system: {subType: "feature"}},
+            id: "feature",
+            interface: {
+                create: true,
+            },
+            label: "PF1.Subtypes.Item.pf1e-caravans.feat.feature.Plural",
         }
     },
     caravanCargo: {

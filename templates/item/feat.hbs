@@ -21,6 +21,7 @@
     {{!-- Item Sheet Navigation --}}
     <nav class="sheet-navigation tabs" data-group="primary">
         <a class="item" data-tab="description">{{ localize "PF1.Description" }}</a>
+        <a class="item" data-tab="details">{{ localize "PF1.Details" }}</a>
         <a class="item" data-tab="changes">{{ localize "PF1.Changes" }}</a>
     </nav>
 
@@ -28,6 +29,20 @@
     <section class="primary-body">
         {{!-- Description Tab --}}
         {{> "systems/pf1/templates/items/parts/item-description.hbs"}}
+
+
+        {{!-- Details Tab --}}
+        <div class="tab details" data-group="primary" data-tab="details">
+            {{!-- Feat Type --}}
+            <div class="form-group select">
+                <label>{{localize "PF1.Type"}}</label>
+                <div class="form-fields">
+                    <select name="system.subType" value="{{system.subType}}">
+                        {{selectOptions featTypes selected=system.subType localize=true}}
+                    </select>
+                </div>
+            </div>
+        </div>
 
         {{!-- Changes Tab --}}
         <div class="tab changes" data-group="primary" data-tab="changes">

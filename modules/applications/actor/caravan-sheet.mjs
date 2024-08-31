@@ -143,8 +143,10 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         }
 
         let featSections = pf1.config.sheetSections.caravanFeat;
-        featSections.default.interface.excess = this.actor.getFeatCount().excess;
-        featSections.default.items = this.actor.itemTypes[`${MODULE_ID}.feat`];
+        for (let section of Object.values(pf1.config.sheetSections.caravanFeat)) {
+            section.items = this.actor.itemTypes[`${MODULE_ID}.feat`].filter((item) => item.system.subType === section.id);
+        }
+        featSections.feat.interface.excess = this.actor.getFeatCount().excess;
         featSections = Object.values(featSections);
 
         let cargoSections = pf1.config.sheetSections.caravanCargo;
@@ -321,6 +323,13 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 notes = getNotes(`caravan_${id}`);
                 break;
             }
+
+            case "feats":
+                sources.push({
+                    sources: getSource(`system.feats.max`),
+                    untyped: true,
+                });
+                break;
 
             case "wagons":
             case "travelers":

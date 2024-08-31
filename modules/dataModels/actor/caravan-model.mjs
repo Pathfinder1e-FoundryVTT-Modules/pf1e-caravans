@@ -68,7 +68,7 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
         this._prepareCargo();
         this.feats = {
             max: 0,
-            owned: this.parent.itemTypes[`${MODULE_ID}.feat`].length
+            owned: this.parent.itemTypes[`${MODULE_ID}.feat`].filter(feat => feat.system.subType === "feat").length
         }
 
         this.currency ??= {pp: 0, gp: 0, sp: 0, cp: 0};

@@ -105,6 +105,16 @@
               "Single": "Traveler",
               "Plural": "Other"
             }
+          },
+          "feat": {
+            "feat": {
+              "Single": "Feat",
+              "Plural": "Feats"
+            },
+            "feature": {
+              "Single": "Feature",
+              "Plural": "Miscellaneous"
+            }
           }
         }
       }

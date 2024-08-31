@@ -235,7 +235,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             type: "untyped",
             operator: "add",
             priority: 1000,
-            flavor: game.i18n.localize(`PF1ECaravans.Levels`)
+            flavor: game.i18n.localize(`PF1.Level`)
         }));
 
         // changes.push(new pf1.components.ItemChange({
@@ -561,10 +561,11 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     }
 
     getFeatCount() {
-        const owned = this.system.feats.owned;
-        const active = this.itemTypes[`${MODULE_ID}.feat`].filter((o) => o.isActive).length;
+        const ownedItems = this.itemTypes[`${MODULE_ID}.feat`].filter((o) => o.system.subType === "feat");
+        const owned = ownedItems.length;
+        const active = ownedItems.filter((o) => o.isActive).length;
 
-        const result = {
+        return {
             max: this.system.feats.max,
             levels: this.system.details.level,
             owned,
@@ -583,8 +584,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 return Math.max(0, -this.discrepancy);
             },
         };
-
-        return result;
     }
 
     getWagonCount() {

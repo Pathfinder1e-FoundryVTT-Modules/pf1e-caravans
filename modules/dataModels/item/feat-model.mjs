@@ -4,6 +4,7 @@ export class FeatModel extends CaravanItemModel {
     static defineSchema() {
         const fields = foundry.data.fields;
         return {
+            subType: new fields.StringField({required: true, initial: "feat"}),
             description: new fields.SchemaField({
                 value: new fields.StringField({required: true, initial: ""}),
             }),
