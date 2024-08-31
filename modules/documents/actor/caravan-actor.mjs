@@ -93,7 +93,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: `caravan_${derivedAttributeId}`,
                 type: "untyped",
                 operator: "add",
-                priority: -1,
+                priority: 1000,
                 flavor: game.i18n.localize(`PF1ECaravans.Statistics.${baseAttributeId.capitalize()}`)
             }));
         }
@@ -103,7 +103,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_unrest",
             type: "untyped",
             operator: "add",
-            priority: -1,
+            priority: 1000,
             flavor: game.i18n.localize("PF1ECaravans.Statistics.Morale")
         }));
 
@@ -113,7 +113,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: `caravan_${derivedAttributeId}`,
                 type: "untyped",
                 operator: "add",
-                priority: -1,
+                priority: 1000,
                 flavor: game.i18n.localize(`PF1ECaravans.Heroes`)
             }));
         }
@@ -123,7 +123,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_consumption",
             type: "untyped",
             operator: "add",
-            priority: -1,
+            priority: 1000,
             flavor: game.i18n.localize(`PF1ECaravans.Travelers`)
         }));
 
@@ -133,7 +133,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_consumption",
                 type: "untyped",
                 operator: "add",
-                priority: -1,
+                priority: 1000,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
@@ -141,7 +141,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_hp",
                 type: "untyped",
                 operator: "add",
-                priority: -1,
+                priority: 1000,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
@@ -149,7 +149,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_travelers",
                 type: "untyped",
                 operator: "add",
-                priority: -1,
+                priority: 1000,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             }),
             new pf1.components.ItemChange({
@@ -157,7 +157,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 target: "caravan_cargo",
                 type: "untyped",
                 operator: "add",
-                priority: -1,
+                priority: 1000,
                 flavor: game.i18n.localize(`PF1ECaravans.Wagons`)
             })
         );
@@ -170,7 +170,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     target: `caravan_${attribute}`,
                     type: "untyped",
                     operator: "add",
-                    priority: -1,
+                    priority: 1000,
                     flavor: game.i18n.localize("PF1ECaravans.NoFortuneTeller")
                 }));
             }
@@ -184,7 +184,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                         target: `caravan_${statistic}`,
                         type: "untyped",
                         operator: "add",
-                        priority: -1,
+                        priority: 1000,
                         flavor: game.i18n.localize("PF1ECaravans.Conditions.Fatigued")
                     }))
                 }
@@ -205,7 +205,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                         target: `caravan_${statistic}`,
                         type: "untyped",
                         operator: "add",
-                        priority: -1,
+                        priority: 1000,
                         flavor: game.i18n.localize("PF1ECaravans.Conditions.Exhausted")
                     }))
                 }
@@ -225,7 +225,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_wages",
             type: "untyped",
             operator: "add",
-            priority: -1,
+            priority: 1000,
             flavor: game.i18n.localize(`PF1ECaravans.Travelers`)
         }));
 
@@ -234,9 +234,18 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             target: "caravan_feats",
             type: "untyped",
             operator: "add",
-            priority: -1,
+            priority: 1000,
             flavor: game.i18n.localize(`PF1ECaravans.Levels`)
         }));
+
+        // changes.push(new pf1.components.ItemChange({
+        //     formula: "ifElse(@overloaded, 0, @details.speed.total)",
+        //     target: `caravan_speed`,
+        //     type: "untyped",
+        //     operator: "set",
+        //     priority: -1,
+        //     flavor: game.i18n.localize("PF1ECaravans.Overloaded")
+        // }))
     }
 
     applyActiveEffects() {
@@ -288,11 +297,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         };
 
         const damageChanges = pf1.documents.actor.changes.getHighestChanges(
-            this.changes.filter((c) => {
-                console.log(c);
-                if (c.target !== "caravan_damage") return false;
-                return c.operator !== "set";
-            }),
+            this.changes.filter((c) => c.target === "caravan_damage" && c.operator !== "set"),
             {ignoreTarget: true}
         ).map((c) => ({
             formula: `${c.formula}[${c.flavor}]`,
@@ -578,16 +583,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 return Math.max(0, -this.discrepancy);
             },
         };
-
-        // Bonuses from changes
-        result.changes = pf1.documents.actor.changes.getHighestChanges(
-            this.changes.filter((c) => {
-                if (c.target !== "bonusFeats") return false;
-                return c.operator !== "set";
-            }),
-            {ignoreTarget: true}
-        ).reduce((cur, c) => cur + c.value, 0);
-        result.max += result.changes;
 
         return result;
     }

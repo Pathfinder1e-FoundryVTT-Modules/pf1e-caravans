@@ -55,6 +55,7 @@ export class CaravanModel extends foundry.abstract.TypeDataModel {
     }
 
     prepareDerivedData() {
+        super.prepareDerivedData();
 
         // DETAILS
         this.details ??= {};
