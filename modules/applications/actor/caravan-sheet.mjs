@@ -124,17 +124,21 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
     _prepareItems(data) {
         let wagonSections = [];
         for (let section of Object.values(pf1.config.sheetSections.caravanWagon)) {
+            const count = this.actor.getWagonCount().counts[section.id];
             section.items = this.actor.itemTypes[`${MODULE_ID}.wagon`].filter((item) => item.system.subType === section.id);
-            section.interface.max = this.actor.system.wagons.counts[section.id].max;
-            section.interface.excess = this.actor.system.wagons.counts[section.id].excess;
+            section.interface.max = count.max;
+            section.interface.hasMax = section.interface.max !== undefined;
+            section.interface.excess = count.excess;
             wagonSections.push(section);
         }
 
         let travelerSections = [];
         for (let section of Object.values(pf1.config.sheetSections.caravanTraveler)) {
+            const count = this.actor.getTravelerCount().counts[section.id];
             section.items = this.actor.itemTypes[`${MODULE_ID}.traveler`].filter((item) => item.system.subType === section.id);
-            section.interface.max = this.actor.system.travelers.counts[section.id].max;
-            section.interface.excess = this.actor.system.travelers.counts[section.id].excess;
+            section.interface.max = count.max;
+            section.interface.hasMax = section.interface.max !== undefined;
+            section.interface.excess = count.excess;
             travelerSections.push(section);
         }
 
@@ -388,7 +392,6 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         const data = TextEditor.getDragEventData(event);
         switch(data.type) {
             case "Actor":
-                console.log(this);
                 await this.actor.createEmbeddedDocuments("Item", [{
                     type: `${MODULE_ID}.traveler`,
                     name: data.uuid,

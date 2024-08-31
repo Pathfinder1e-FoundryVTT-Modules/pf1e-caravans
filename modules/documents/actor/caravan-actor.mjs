@@ -266,19 +266,25 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                     properties: []
                 }
             },
-            toObject() {return this},
+            toObject() {
+                return this
+            },
             executeScriptCalls() {
                 return {
                     hideChat: false
                 }
             },
-            getFlag() {return null},
+            getFlag() {
+                return null
+            },
             getRollData(options) {
                 const rollData = this.actor.getRollData(options)
                 rollData.item = this;
                 return rollData;
             },
-            getContextChanges() {return []},
+            getContextChanges() {
+                return []
+            },
         };
         this.attackAction = new pf1.components.ItemAction({
             _id: "_caravanAttack",
@@ -438,13 +444,21 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         return src.name;
     }
 
-    async rollAttack({ev = null, skipDialog = pf1.documents.settings.getSkipActionPrompt(), rollMode, chatMessage = true, dice = pf1.dice.D20RollPF.standardRoll, token, options = {}} = {}) {
+    async rollAttack({
+                         ev = null,
+                         skipDialog = pf1.documents.settings.getSkipActionPrompt(),
+                         rollMode,
+                         chatMessage = true,
+                         dice = pf1.dice.D20RollPF.standardRoll,
+                         token,
+                         options = {}
+                     } = {}) {
         if (!this.isOwner) {
             return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", {name: this.name}));
         }
 
         rollMode ||= game.settings.get("core", "rollMode");
-        token ||= this.token ?? this.getActiveTokens({ document: true, linked: true })[0];
+        token ||= this.token ?? this.getActiveTokens({document: true, linked: true})[0];
 
         if (ev?.originalEvent) ev = ev.originalEvent;
 
@@ -482,10 +496,10 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         Object.defineProperties(shared, {
             item: {value: this.attackItem, writable: false, enumerable: true},
             action: {value: this.attackAction, writable: false, enumerable: true},
-            token: { value: token, writable: false, enumerable: true },
+            token: {value: token, writable: false, enumerable: true},
         });
 
-        return new pf1.actionUse.ActionUse(shared).process({ skipDialog });
+        return new pf1.actionUse.ActionUse(shared).process({skipDialog});
     }
 
     async rollAttributeTest(attribute, options = {}) {
@@ -524,7 +538,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     }
 
     getFeatCount() {
-        console.log(this.system);
         const owned = this.system.feats.owned;
         const active = this.itemTypes[`${MODULE_ID}.feat`].filter((o) => o.isActive).length;
 
@@ -565,6 +578,23 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         const owned = this.system.wagons.owned;
         const active = this.itemTypes[`${MODULE_ID}.wagon`].filter((o) => o.isActive).length;
 
+        const counts = {};
+        for (const [id, count] of Object.entries(this.system.wagons.counts)) {
+            counts[id] = {
+                owned: count.count,
+                max: count.max,
+                get discrepancy() {
+                    return this.max !== undefined ? (this.max - this.owned) : 0;
+                },
+                get missing() {
+                    return Math.max(0, this.discrepancy);
+                },
+                get excess() {
+                    return Math.max(0, -this.discrepancy);
+                },
+            };
+        }
+
         return {
             max: this.system.wagons.max,
             base: 5,
@@ -573,6 +603,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             disabled: owned - active,
             formula: 0,
             changes: 0,
+            counts,
             // Count totals
             get discrepancy() {
                 return this.max - this.active;
@@ -592,7 +623,24 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
         const byWagons = wagons.reduce((acc, wagon) => acc + wagon.system.capacity.traveler, 0);
 
-        return {
+        const counts = {};
+        for (const [id, count] of Object.entries(this.system.travelers.counts)) {
+            counts[id] = {
+                owned: count.count,
+                max: count.max,
+                get discrepancy() {
+                    return this.max !== undefined ? (this.max - this.owned) : 0;
+                },
+                get missing() {
+                    return Math.max(0, this.discrepancy);
+                },
+                get excess() {
+                    return Math.max(0, -this.discrepancy);
+                },
+            };
+        }
+
+        const result = {
             max: this.system.travelers.max,
             base: 0,
             wagons: byWagons,
@@ -601,6 +649,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             disabled: owned - active,
             formula: 0,
             changes: 0,
+            counts,
             // Count totals
             get discrepancy() {
                 return this.max - this.active;
@@ -612,6 +661,8 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 return Math.max(0, -this.discrepancy);
             },
         };
+
+        return result;
     }
 
     getCargoCount() {
@@ -688,8 +739,8 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         return result.filter((n) => n.notes.length);
     }
 
-    getContextNotesParsed(context, { roll = true } = {}) {
-        if(context === "attacks.attack") context = "caravan_attack";
+    getContextNotesParsed(context, {roll = true} = {}) {
+        if (context === "attacks.attack") context = "caravan_attack";
 
         const noteObjects = this.getContextNotes(context);
         return noteObjects.reduce((cur, o) => {

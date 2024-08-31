@@ -25,7 +25,6 @@ export class TravelerSheet extends CaravanItemSheet {
         context.hasTasks = travelerRole?.tasks?.length || false;
         context.tasks = tasks;
 
-        console.log(this.item);
         context.isActor = !!this.item.representsActor;
 
         return context;

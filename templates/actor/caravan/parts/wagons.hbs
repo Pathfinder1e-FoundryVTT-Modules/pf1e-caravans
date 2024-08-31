@@ -17,7 +17,7 @@
                 <li class="item-list-header flexrow">
                     <div class="item-name">
                         <h3>{{section.label}}</h3>
-                        {{#if section.interface.max}}({{localize "PF1ECaravans.Max"}} {{section.interface.max}}){{/if}}
+                        {{#if section.interface.hasMax}}({{localize "PF1ECaravans.Max"}} {{section.interface.max}}){{/if}}
                     </div>
 
                     {{#if @root.owner}}
