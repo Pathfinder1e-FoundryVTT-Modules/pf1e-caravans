@@ -2,6 +2,14 @@ export class CaravanItemModel extends foundry.abstract.TypeDataModel {
     static addDefaultSchemaFields(schema) {
         const fields = foundry.data.fields;
         Object.assign(schema, {
+            uses: new fields.SchemaField({
+                per: new fields.StringField({required: true, initial: ""}),
+                value: new fields.NumberField({required: true, initial: 0}),
+                maxFormula: new fields.StringField({required: true, initial: ""}),
+                autoDeductChargesCost: new fields.StringField({required: true, initial: ""}),
+                rechargeFormula: new fields.StringField({required: true, initial: ""}),
+            }),
+            actions: new fields.ArrayField(new fields.JSONField({required: true, initial: {}})),
             description: new fields.SchemaField({
                 value: new fields.StringField({required: true, initial: ""}),
             }),
