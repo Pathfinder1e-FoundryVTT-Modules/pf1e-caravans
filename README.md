@@ -6,6 +6,7 @@ An implementation of a caravan sheet following the rules found in the [Pathfinde
 
 This module currently supports the following languages:
 - English
+- German (Deutsch)
 
 Should you wish to contribute further languages, please feel free to open a pull request or contact me directly.
 

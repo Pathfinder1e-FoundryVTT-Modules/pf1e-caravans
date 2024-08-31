@@ -1,0 +1,284 @@
+{
+  "TYPES": {
+    "Actor": {
+      "pf1e-caravans": {
+        "caravan": "Karawane"
+      }
+    },
+    "Item": {
+      "pf1e-caravans": {
+        "equipment": "Karawanenausrüstung",
+        "wagon": "Karawanenwagen",
+        "traveler": "Karaanenreisender",
+        "feat": "Karawanentalent"
+      }
+    }
+  },
+  "PF1": {
+    "Subtypes": {
+      "Item": {
+        "pf1e-caravans": {
+          "wagon": {
+            "armoredWagon": {
+              "Single": "Gepanzerter Wagen",
+              "Plural": "Gepanzerte Wägen"
+            },
+            "coveredWagon": {
+              "Single": "Planwagen",
+              "Plural": "Planwägen"
+            },
+            "fortuneTellerWagon": {
+              "Single": "Wahrsager-Wagen",
+              "Plural": "Wahrsager-Wägen"
+            },
+            "horseTrain": {
+              "Single": "Pferdezug",
+              "Plural": "Pferdezüge"
+            },
+            "prisonerWagon": {
+              "Single": "Gefängniswagen",
+              "Plural": "Gefängniswägen"
+            },
+            "royalCarriage": {
+              "Single": "Königliche Kutsche",
+              "Plural": "Königliche Kutschen"
+            },
+            "supplyWagon": {
+              "Single": "Versorgungswagen",
+              "Plural": "Versorgungswägen"
+            },
+            "custom": {
+              "Single": "Wagen",
+              "Plural": "Andere"
+            }
+          },
+          "traveler": {
+            "cook": {
+              "Single": "Koch",
+              "Plural": "Köche"
+            },
+            "driver": {
+              "Single": "Fahrer",
+              "Plural": "Fahrer"
+            },
+            "entertainer": {
+              "Single": "Unterhalter",
+              "Plural": "Unterhalter"
+            },
+            "fortuneTeller": {
+              "Single": "Wahrsager",
+              "Plural": "Wahrsager"
+            },
+            "guard": {
+              "Single": "Wache",
+              "Plural": "Wachen"
+            },
+            "guide": {
+              "Single": "Führer",
+              "Plural": "Führer"
+            },
+            "healer": {
+              "Single": "Heiler",
+              "Plural": "Heiler"
+            },
+            "passenger": {
+              "Single": "Passagier",
+              "Plural": "Passagiere"
+            },
+            "scout": {
+              "Single": "Späher",
+              "Plural": "Späher"
+            },
+            "spellCaster": {
+              "Single": "Zauberer",
+              "Plural": "Zauberer"
+            },
+            "trader": {
+              "Single": "Händler",
+              "Plural": "Händler"
+            },
+            "wainwright": {
+              "Single": "Wagner",
+              "Plural": "Wagner"
+            },
+            "custom": {
+              "Single": "Traveler",
+              "Plural": "Other"
+            }
+          },
+          "feat": {
+            "feat": {
+              "Single": "Talent",
+              "Plural": "Talente"
+            },
+            "feature": {
+              "Single": "Eigenschaft",
+              "Plural": "Sonstige"
+            }
+          }
+        }
+      }
+    }
+  },
+  "PF1ECaravans": {
+    "ConvertToGold": "In Gold umwandeln",
+    "ConvertTreasureToGold": "Schätze in Gold umwandeln",
+    "ConvertTreasureDescription": "{treasureCount} Gegenstände werden in {gp} GM, {sp} SM, {cp} KM umgewandelt.",
+    "DeleteItems": "Gegenstände löschen",
+    "Max": "Max.",
+    "Travelers": "Reisende",
+    "Hero": "Held",
+    "NPC": "NPC",
+    "ByWagon": "Durch Wagen",
+    "Cargo": "Fracht",
+    "Free": "Frei",
+    "Wage": "Lohn",
+    "Task": "Aufgabe",
+    "Heroes": "Helden",
+    "Wagons": "Wagen",
+    "Misc": "Sonstiges",
+    "Threshold": "Schwelle",
+    "NoFortuneTeller": "Kein Wahrsager",
+    "PrimaryStatistics": "Primärstatistiken",
+    "DerivedStatistics": "Abgeleitete Statistiken",
+    "Condition": "Zustand",
+    "SecurityTest": "Sicherheitswurf",
+    "ResolveTest": "Entschlossenheitswurf",
+    "MonthlyWages": "Monatlicher Lohn",
+    "Equipment": "Ausrüstung",
+    "Treasure": "Schätze",
+    "Load": "Ladung",
+    "Attack": "Angriff",
+    "Damage": "Schaden",
+    "ExtraDamage": "Extra Schaden ({source})",
+    "ActorId": "Character-ID",
+    "CargoLabels": {
+      "ProvisionsInStores": "{provisions} Proviant in {stores} Vorräten",
+      "WorthOfProvisions": "Proviantwert: {gp} GM, {sp} SM",
+      "KGofTreasure": "{weight} kg in {treasure} Schätzen",
+      "LBSofTreasure": "{weight} pfd. in {treasure} Schätzen",
+      "WorthOfTreasure": "Schatzwert: {gp} GM, {sp} SM, {cp} KM"
+    },
+    "CargoUnits": "Einheiten",
+    "Mutiny": "Meuterei",
+    "Conditions": {
+      "Normal": "Normal",
+      "Fatigued": "Erschöpft",
+      "Exhausted": "Entkräftet",
+      "Mutiny": "Meuterei",
+      "Overloaded": "Überladen",
+      "Immobilized": "Bewegungsunfähig",
+    },
+    "BuffTargets": {
+      "HP": "Trefferpunkte",
+      "Speed": "Geschwindigkeit",
+      "Consumption": "Verbrauch",
+      "Offense": "Offensiv",
+      "Defense": "Defensiv",
+      "Mobility": "Mobilität",
+      "Morale": "Moral",
+      "Attack": "Angriff",
+      "Damage": "Schaden",
+      "ArmorClass": "Rüstungsklasse",
+      "Security": "Sicherheit",
+      "Resolve": "Entschlossenheit",
+      "Feats": "Talente",
+      "Cargo": "Fracht",
+      "Travelers": "Max. Reisende",
+      "Wagons": "Max. Wagen",
+      "Unrest": "Max. Unruhe",
+      "Wages": "Max. Lohn",
+      "TravelerRoleLimit": {
+        "cook": "Max. Köche",
+        "fortuneTeller": "Max. Wahrsager"
+      },
+      "WagonLimit": {
+        "armoredWagon": "Max. Gepanzerte Wägen",
+        "fortuneTellerWagon": "Max. Wahrsager-Wägen",
+        "horseTrain": "Max. Pferdezüge",
+        "prisonerWagon": "Max. Gefängniswägen",
+        "royalCarriage": "Max. Königliche Kutschen"
+      }
+    },
+    "BuffTargetCategories": {
+      "Caravan": "Karawane"
+    },
+    "ContextNoteTargets": {
+      "Rest": "Rast",
+      "Security": "Sicherheit",
+      "Resolve": "Entschlossenheit",
+      "Attack": "Angriff"
+    },
+    "ContextNoteTargetCategories": {
+      "Caravan": "Karawane"
+    },
+    "Statistics": {
+      "Offense": "Offensiv",
+      "Defense": "Defensiv",
+      "Mobility": "Mobilität",
+      "Morale": "Moral",
+      "Unrest": "Unruhe",
+      "Attack": "Angriff",
+      "ArmorClass": "Rüstungsklasse",
+      "Security": "Sicherheit",
+      "Resolve": "Entschlossenheit",
+      "Consumption": "Verbrauch",
+      "Provisions": "Proviant",
+      "Cargo": "Fracht"
+    },
+    "TravelerRole": {
+      "Custom": "Andere",
+      "Cook": "Koch",
+      "Driver": "Fahrer",
+      "Entertainer": "Unterhalter",
+      "FortuneTeller": "Wahrsager",
+      "Guard": "Wache",
+      "Guide": "Führer",
+      "Healer": "Heiler",
+      "Passenger": {
+        "Base": "Passagier",
+        "Standard": "Standard",
+        "Prisoner": "Gefangener"
+      },
+      "Scout": {
+        "Base": "Späher",
+        "Food": "Proviant",
+        "Security": "Sicherheit"
+      },
+      "SpellCaster": {
+        "Base": "Zauberer",
+        "Entertainer": "Unterhalter",
+        "Guard": "Wache",
+        "Guide": "Führer",
+        "Healer": "Heiler",
+        "ScoutFood": "Späher (Proviant)",
+        "ScoutSecurity": "Späher (Sicherheit)"
+      },
+      "Trader": "Händler",
+      "Wainwright": "Wagner"
+    },
+    "WagonType": {
+      "Custom": "Andere",
+      "ArmoredWagon": "Gepanzerter Wagen",
+      "CoveredWagon": "Planwagen",
+      "FortuneTellerWagon": "Wahrsager-Wagen",
+      "HorseTrain": "Pferdezug",
+      "PrisonerWagon": "Gefängniswagen",
+      "RoyalCarriage": "Königliche Kutsche",
+      "SupplyWagon": "Versorgungswagen"
+    },
+    "Rest": {
+      "MagicalProvisions": "Magischer Proviant",
+      "Description": "{actorName} hat eine {hours}-stündige Rast ausgeführt.",
+      "ConditionChangedTo": "Neuer Zustand:",
+      "ProvisionsConsumed": "Proviant verbraucht:",
+      "DamageTaken": "Schaden genommen:",
+      "InsufficientProvisions": "Ungenügend",
+      "RestedActors": "Gerastete Charaktere:"
+    },
+    "Errors": {
+      "InvalidAttribute": "Attribut {attribute} ist kein gültiges Attribut.",
+      "NoTreasureToConvert": "Die Karawane hat keine Schätze die umgewandelt werden können."
+    }
+  }
+}

@@ -112,6 +112,11 @@
       "lang": "en",
       "name": "English",
       "path": "lang/en.json"
+    },
+    {
+      "lang": "de",
+      "name": "German (Deutsch)",
+      "path": "lang/de.json"
     }
   ],
   "readme": "README.md",
