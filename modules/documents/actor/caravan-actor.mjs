@@ -286,6 +286,21 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 return []
             },
         };
+
+        const damageChanges = pf1.documents.actor.changes.getHighestChanges(
+            this.changes.filter((c) => {
+                console.log(c);
+                if (c.target !== "caravan_damage") return false;
+                return c.operator !== "set";
+            }),
+            {ignoreTarget: true}
+        ).map((c) => ({
+            formula: `${c.formula}[${c.flavor}]`,
+            type: {
+                values: [],
+                custom: game.i18n.format("PF1ECaravans.ExtraDamage", {source: c.flavor})
+            }
+        }))
         this.attackAction = new pf1.components.ItemAction({
             _id: "_caravanAttack",
             name: game.i18n.localize("PF1ECaravans.Attack"),
@@ -301,6 +316,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                         }
                     }
                 ],
+                nonCritParts: damageChanges
             },
         }, this.attackItem);
     }
@@ -444,15 +460,17 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         return src.name;
     }
 
-    async rollAttack({
-                         ev = null,
-                         skipDialog = pf1.documents.settings.getSkipActionPrompt(),
-                         rollMode,
-                         chatMessage = true,
-                         dice = pf1.dice.D20RollPF.standardRoll,
-                         token,
-                         options = {}
-                     } = {}) {
+    async rollAttack(
+        {
+            ev = null,
+            skipDialog = pf1.documents.settings.getSkipActionPrompt(),
+            rollMode,
+            chatMessage = true,
+            dice = pf1.dice.D20RollPF.standardRoll,
+            token,
+            options = {}
+        } = {}
+    ) {
         if (!this.isOwner) {
             return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", {name: this.name}));
         }
