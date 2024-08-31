@@ -58,8 +58,8 @@ export class TravelerModel extends CaravanItemModel {
 
             this.taskName = task.name;
             this._recurseAttach(this, {
-                changes: task.changes,
-                contextNotes: task.contextNotes,
+                _changes: task._changes,
+                _contextNotes: task._contextNotes,
             })
         }
     }

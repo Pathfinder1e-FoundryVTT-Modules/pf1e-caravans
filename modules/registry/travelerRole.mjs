@@ -97,7 +97,7 @@ export class TravelerRoles extends Registry {
         {
             _id: "entertainer",
             name: "PF1ECaravans.TravelerRole.Entertainer",
-            monthlyWage: 10,
+            monthlyWage: 50,
             _changes: [{
                 formula: "1",
                 target: "caravan_resolve",
