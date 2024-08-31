@@ -59,6 +59,7 @@ export class CaravanItemSheet extends pf1.applications.item.ItemSheetPF {
         };
 
         context.hasSubCategory = ["wagon", "traveler"].includes(item.system.subType);
+        this._prepareContentSource(context);
 
         context.descriptionHTML = {identified: await TextEditor.enrichHTML(this.object.system.description.value || "", {
             async: true,

@@ -3,29 +3,15 @@ import {CaravanItemModel} from "./caravan-item-model.js";
 export class TravelerModel extends CaravanItemModel {
     static defineSchema() {
         const fields = foundry.data.fields;
-        return {
+        const schema = {
             subType: new fields.StringField({required: true, initial: "passenger"}),
             monthlyWage: new fields.NumberField({required: false, initial: 0}),
-            description: new fields.SchemaField({
-                value: new fields.StringField({required: true, initial: ""}),
-            }),
             task: new fields.StringField(),
             actorId: new fields.StringField(),
             isNPC: new fields.BooleanField({required: false, initial: false}),
-            changes: new fields.ArrayField(new fields.SchemaField({
-                _id: new fields.StringField({required: true, initial: ""}),
-                formula: new fields.StringField({initial: ""}),
-                target: new fields.StringField({initial: ""}),
-                type: new fields.StringField({initial: ""}),
-                operator: new fields.StringField({required: false, initial: undefined}),
-                priority: new fields.NumberField({required: false, initial: undefined}),
-                continuous: new fields.BooleanField({required: false, initial: undefined}),
-            })),
-            contextNotes: new fields.ArrayField(new fields.SchemaField({
-                target: new fields.StringField({initial: ""}),
-                text: new fields.StringField({initial: ""})
-            })),
         };
+        this.addDefaultSchemaFields(schema);
+        return schema;
     }
 
     prepareDerivedData() {
