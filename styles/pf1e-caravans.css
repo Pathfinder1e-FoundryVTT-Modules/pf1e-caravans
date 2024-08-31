@@ -66,8 +66,8 @@
 }
 
 .icon-pf.icon-wooden-crate {
-    mask-image: url(../public/icons/wooden-crate.svg);
-    -webkit-mask-image: url(../public/icons/wooden-crate.svg);
+    mask-image: url(../icons/wooden-crate.svg);
+    -webkit-mask-image: url(../icons/wooden-crate.svg);
 }
 
 .pf1.sheet.actor.caravan .tab .encumbrance:not(.encumbered) .encumbrance-bar.stores {

@@ -44,7 +44,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             conditions.push({
                 key: "mutiny",
                 label: "PF1ECaravans.Conditions.Mutiny",
-                icon: `modules/${MODULE_ID}/public/icons/fist.svg`
+                icon: `modules/${MODULE_ID}/icons/fist.svg`
             })
         }
         if (this.actor.system.details.condition !== "normal") {
@@ -58,7 +58,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             conditions.push({
                 key: this.actor.system.details.condition,
                 label: game.i18n.localize(`PF1ECaravans.Conditions.Overloaded`),
-                icon: `modules/${MODULE_ID}/public/icons/push.svg`
+                icon: `modules/${MODULE_ID}/icons/push.svg`
             })
         }
         if (
@@ -69,7 +69,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             conditions.push({
                 key: this.actor.system.details.condition,
                 label: game.i18n.localize(`PF1ECaravans.Conditions.Immobilized`),
-                icon: `modules/${MODULE_ID}/public/icons/nailed-foot.svg`
+                icon: `modules/${MODULE_ID}/icons/nailed-foot.svg`
             })
         }
         // TODO: Starving
