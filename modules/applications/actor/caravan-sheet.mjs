@@ -1,5 +1,6 @@
 import {MODULE_ID} from "../../_moduleId.mjs";
 import {toCamelCase} from "../../util/util.mjs";
+import {CaravanRestDialog} from "./caravan-rest.mjs";
 
 export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
     static get defaultOptions() {
@@ -413,6 +414,27 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
             default:
                 return super._onDrop(event);
+        }
+    }
+
+    async _onRest(event) {
+        event.preventDefault();
+
+        const skipDialog = pf1.documents.settings.getSkipActionPrompt();
+        if (skipDialog) {
+            const button = event.currentTarget;
+            button.disabled = true;
+            try {
+                await this.actor.performRest({ verbose: true });
+            } finally {
+                button.disabled = false;
+            }
+        } else {
+            const app = Object.values(this.actor.apps).find((o) => {
+                return o instanceof CaravanRestDialog && o._element;
+            });
+            if (app) app.render(true, { focus: true });
+            else new CaravanRestDialog(this.actor).render(true);
         }
     }
 }

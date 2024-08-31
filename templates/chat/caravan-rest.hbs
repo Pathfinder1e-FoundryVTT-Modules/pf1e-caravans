@@ -1,0 +1,40 @@
+<div class='pf1e-caravans resting-result'>
+    <div class="flexcol">
+        <span><i class='fas fa-bed'></i> {{description}}</span>
+    </div>
+    {{#if conditionChangedTo}}
+        <div class="flexrow">
+            <label class="label">{{localize "PF1ECaravans.Rest.ConditionChangedTo"}}</label>
+            <div class='values'>
+                <span>{{newCondition}}</span>
+            </div>
+        </div>
+    {{/if}}
+    <div class="flexrow">
+        <label class="label">{{localize "PF1ECaravans.Rest.ProvisionsConsumed"}}</label>
+        <div class='values'>
+            <span>[[{{consumedProvisions}}[{{localize "PF1ECaravans.Statistics.Consumption"}}]]]</span>
+            {{#if (not hadProvisions)}}
+                <span>({{localize "PF1ECaravans.Rest.InsufficientProvisions"}})</span>
+            {{/if}}
+        </div>
+    </div>
+    {{#if damageTaken}}
+        <div class="flexrow">
+            <label class="label">{{localize "PF1ECaravans.Rest.DamageTaken"}}</label>
+            <div class='values'>
+                <span>[[{{damageTaken.total}}[1d6]]]</span>
+            </div>
+        </div>
+    {{/if}}
+    {{#if restedActors.length}}
+        <div class="flexrow">
+            <label class="label">{{localize "PF1ECaravans.Rest.RestedActors"}}</label>
+            <div class='values'>
+                {{#each restedActors}}
+                    <span>@UUID[{{this}}]</span>
+                {{/each}}
+            </div>
+        </div>
+    {{/if}}
+</div>

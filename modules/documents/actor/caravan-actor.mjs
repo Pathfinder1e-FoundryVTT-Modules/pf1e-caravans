@@ -1,5 +1,6 @@
 import {buffTargets} from "../../config/buffTargets.mjs";
 import {MODULE_ID} from "../../_moduleId.mjs";
+import {sendRestChatMessage} from "../../util/caravanRestMessage.mjs";
 
 export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     constructor(...args) {
@@ -768,5 +769,85 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
             return cur;
         }, []);
+    }
+
+    async performRest(options = {}) {
+        options.hours ??= 12;
+        const {
+            restoreDailyUses = true,
+            hours = 12,
+            magicalProvisions = 0,
+            verbose = false,
+            restTravelers = true
+        } = options;
+
+        const provisions = this.system.attributes.provisions;
+        const consumption = Math.max(0, this.system.attributes.consumption - magicalProvisions);
+
+        const updateData = {};
+        const chatMessageData = options;
+
+        if(provisions >= consumption) {
+            chatMessageData.hadProvisions = true;
+            chatMessageData.consumedProvisions = consumption;
+
+            if(restTravelers) {
+                const actorIds = this.itemTypes[`${MODULE_ID}.traveler`]
+                    .filter(traveler => traveler.system.actorId !== undefined)
+                    .map(traveler => traveler.system.actorId);
+
+                chatMessageData.restedActors = (await Promise.all(actorIds.map(async actorId => {
+                    const actor = await fromUuid(actorId);
+                    if(!actor) {
+                        return null;
+                    }
+
+                    actor.performRest(options);
+                    return actorId;
+                }))).filter(actorName => actorName !== null);
+            }
+
+            updateData["system.attributes.provisions"] = provisions - consumption;
+            switch(this.system.details.condition) {
+                case "exhausted":
+                    updateData["system.details.condition"] = "fatigued";
+                    chatMessageData.conditionChangedTo = "fatigued";
+                    break;
+
+                default:
+                    updateData["system.details.condition"] = "normal";
+                    chatMessageData.conditionChangedTo = "normal";
+                    break;
+            }
+        }
+        else {
+            chatMessageData.hadProvisions = false;
+            chatMessageData.consumedProvisions = provisions;
+
+            // Caravan takes damage
+            updateData["system.attributes.provisions"] = 0;
+
+            if(this.system.details.condition === "normal") {
+                updateData["system.details.condition"] = "fatigued";
+                chatMessageData.conditionChangedTo = "fatigued";
+            }
+
+            const damageRoll = await RollPF.safeRollAsync("1d6", {}, {}, {suppressError: true});
+            chatMessageData.damageTaken = damageRoll;
+
+            updateData["system.attributes.hp.value"] = this.system.attributes.hp.value - damageRoll.total;
+        }
+
+        const context = { pf1: { action: "rest", restOptions: options } };
+        if (!foundry.utils.isEmpty(updateData)) await this.update(updateData, foundry.utils.deepClone(context));
+
+        await sendRestChatMessage(this, chatMessageData);
+
+        if (verbose) {
+            const message = restoreDailyUses ? "PF1.FullRestMessage" : "PF1.RestMessage";
+            ui.notifications.info(game.i18n.format(message, { name: this.token?.name ?? this.name, hours }));
+        }
+
+        return { options };
     }
 }

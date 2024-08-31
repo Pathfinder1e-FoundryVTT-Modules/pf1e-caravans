@@ -117,3 +117,8 @@
 .pf1.sheet.type-pf1e-caravans\.traveler .sheet-header .summary li {
     width: unset;
 }
+
+.chat-message .pf1e-caravans.resting-result {
+    font-size: 12px;
+    line-height: 1.2;
+}

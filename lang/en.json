@@ -258,6 +258,15 @@
       "RoyalCarriage": "Royal Carriage",
       "SupplyWagon": "Supply Wagon"
     },
+    "Rest": {
+      "MagicalProvisions": "Magical Provisions",
+      "Description": "{actorName} performed a {hours} hour rest.",
+      "ConditionChangedTo": "New condition:",
+      "ProvisionsConsumed": "Provisions consumed:",
+      "DamageTaken": "Damage taken:",
+      "InsufficientProvisions": "Insufficient",
+      "RestedActors": "Rested actors:"
+    },
     "Errors": {
       "InvalidAttribute": "Attribute {attribute} is not a valid attribute."
     }
