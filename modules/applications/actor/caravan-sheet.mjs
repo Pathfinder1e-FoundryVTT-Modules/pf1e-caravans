@@ -20,7 +20,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
     activateListeners(html) {
         super.activateListeners(html);
-        html.find(".attribute.attack .rollable").on("click", this._onRollAttack.bind(this));
+        // html.find(".attribute.attack .rollable").on("click", this._onRollAttack.bind(this));
         html.find(".attribute:is(.security, .resolve) .rollable").on("click", this._onRollAttribute.bind(this));
     }
 

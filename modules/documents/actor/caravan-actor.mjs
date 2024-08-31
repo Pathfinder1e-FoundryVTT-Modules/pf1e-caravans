@@ -1,6 +1,5 @@
 import {buffTargets} from "../../config/buffTargets.mjs";
 import {MODULE_ID} from "../../_moduleId.mjs";
-import {getHighestChanges} from "../../../../../systems/pathfinder-1e/module/documents/actor/utils/apply-changes.mjs";
 
 export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     constructor(...args) {
@@ -254,6 +253,50 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
         this._initialized = true;
         this._setSourceDetails();
+
+
+        this.attackItem = {
+            id: "_caravanAttack",
+            actor: this,
+            name: this.name,
+            img: this.img,
+            system: {},
+            getChatData() {
+                return {
+                    properties: []
+                }
+            },
+            toObject() {return this},
+            executeScriptCalls() {
+                return {
+                    hideChat: false
+                }
+            },
+            getFlag() {return null},
+            getRollData(options) {
+                const rollData = this.actor.getRollData(options)
+                rollData.item = this;
+                return rollData;
+            },
+            getContextChanges() {return []},
+        };
+        this.attackAction = new pf1.components.ItemAction({
+            _id: "_caravanAttack",
+            name: game.i18n.localize("PF1ECaravans.Attack"),
+            actionType: "mwak",
+            attackBonus: `${this.system.statistics.attack}[${game.i18n.localize("PF1ECaravans.Attack")}]`,
+            damage: {
+                parts: [
+                    {
+                        formula: "1d6",
+                        type: {
+                            values: [],
+                            custom: game.i18n.localize("PF1ECaravans.Damage")
+                        }
+                    }
+                ],
+            },
+        }, this.attackItem);
     }
 
     get _skillTargets() {
@@ -395,6 +438,56 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         return src.name;
     }
 
+    async rollAttack({ev = null, skipDialog = pf1.documents.settings.getSkipActionPrompt(), rollMode, chatMessage = true, dice = pf1.dice.D20RollPF.standardRoll, token, options = {}} = {}) {
+        if (!this.isOwner) {
+            return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", {name: this.name}));
+        }
+
+        rollMode ||= game.settings.get("core", "rollMode");
+        token ||= this.token ?? this.getActiveTokens({ document: true, linked: true })[0];
+
+        if (ev?.originalEvent) ev = ev.originalEvent;
+
+
+        // Prepare variables
+        /** @type {SharedActionData} */
+        const shared = {
+            event: ev,
+            action: this.attackAction,
+            item: this.attackItem,
+            token: null,
+            rollData: {
+                item: this.attackItem
+            },
+            skipDialog,
+            chatMessage,
+            dice,
+            cost: null,
+            fullAttack: false,
+            useOptions: options,
+            attackBonus: [],
+            damageBonus: [],
+            attacks: [],
+            chatAttacks: [],
+            rollMode,
+            useMeasureTemplate: false,
+            conditionals: null,
+            conditionalPartsCommon: {},
+            casterLevelCheck: false, // TODO: Move to use-options
+            concentrationCheck: false, // TODO: Move to use-options
+            scriptData: {},
+        };
+
+        // Prevent reassigning the ActionUse's item and token
+        Object.defineProperties(shared, {
+            item: {value: this.attackItem, writable: false, enumerable: true},
+            action: {value: this.attackAction, writable: false, enumerable: true},
+            token: { value: token, writable: false, enumerable: true },
+        });
+
+        return new pf1.actionUse.ActionUse(shared).process({ skipDialog });
+    }
+
     async rollAttributeTest(attribute, options = {}) {
         if (!this.isOwner) {
             return void ui.notifications.warn(game.i18n.format("PF1.Error.NoActorPermissionAlt", {name: this.name}));
@@ -456,7 +549,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         };
 
         // Bonuses from changes
-        result.changes = getHighestChanges(
+        result.changes = pf1.documents.actor.changes.getHighestChanges(
             this.changes.filter((c) => {
                 if (c.target !== "bonusFeats") return false;
                 return c.operator !== "set";
@@ -593,5 +686,24 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         }
 
         return result.filter((n) => n.notes.length);
+    }
+
+    getContextNotesParsed(context, { roll = true } = {}) {
+        if(context === "attacks.attack") context = "caravan_attack";
+
+        const noteObjects = this.getContextNotes(context);
+        return noteObjects.reduce((cur, o) => {
+            for (const note of o.notes) {
+                const enrichOptions = {
+                    rollData: o.item != null ? o.item.getRollData() : this.getRollData(),
+                    rolls: roll,
+                    async: false,
+                    relativeTo: this,
+                };
+                cur.push(pf1.utils.enrichHTMLUnrolled(note, enrichOptions));
+            }
+
+            return cur;
+        }, []);
     }
 }

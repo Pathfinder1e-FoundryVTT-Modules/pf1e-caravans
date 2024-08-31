@@ -35,6 +35,12 @@
     margin: 2px;
 }
 
+.pf1[data-action-id="_caravanAttack"] .type-color.type- {
+    --primary: #93291E;
+    --secondary: #ED213A;
+    --foreground: white;
+}
+
 .pf1 .type-color.type-pf1e-caravans\.traveler {
     --primary: #283E51;
     --secondary: #4B79A1;
@@ -53,9 +59,9 @@
     --foreground: white;
 }
 
-.pf1 .type-color.type-pf1e-caravans\.cargo {
-    --primary: #56ab2f;
-    --secondary: #a8e063;
+.pf1 .type-color.type-pf1e-caravans\.equipment {
+    --primary: #418124;
+    --secondary: #7ba547;
     --foreground: white;
 }
 

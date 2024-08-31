@@ -134,6 +134,8 @@
     "Equipment": "Equipment",
     "Treasure": "Treasure",
     "Load": "Load",
+    "Attack": "Attack",
+    "Damage": "Damage",
     "CargoLabels": {
       "ProvisionsInStores": "{provisions} Provisions in {stores} Stores",
       "KGofTreasure": "{weight} kg in {treasure} Treasure",
