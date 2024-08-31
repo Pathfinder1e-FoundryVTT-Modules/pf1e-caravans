@@ -232,7 +232,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 break;
         }
 
-        if(system.attributes.hp.value <= 0) {
+        if (system.attributes.hp.value <= 0) {
             changes.push(new pf1.components.ItemChange({
                 formula: "0",
                 target: `caravan_speed`,
@@ -781,6 +781,24 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
             return cur;
         }, []);
+    }
+
+    async convertTreasure(options = {}) {
+        const treasure = this.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`) && item.system.quantity);
+        const newGold = pf1.utils.currency.split(treasure.reduce((acc, item) => acc + item.system.price * item.system.quantity, 0) * 100);
+        const currentGold = this.system.currency;
+
+        this.update({
+            system: {
+                currency: {
+                    pp: currentGold.pp + newGold.pp,
+                    gp: currentGold.gp + newGold.gp,
+                    cp: currentGold.cp + newGold.cp,
+                    sp: currentGold.sp + newGold.sp,
+                }
+            }
+        })
+        await Promise.all(treasure.map((item) => options.delete ? item.delete() : item.update({"system.quantity": 0})));
     }
 
     async performRest(options = {}) {

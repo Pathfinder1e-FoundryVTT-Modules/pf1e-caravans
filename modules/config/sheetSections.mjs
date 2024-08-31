@@ -44,6 +44,7 @@ export const sheetSections = {
             interface: {
                 unitWeight: false,
                 create: false,
+                convert: true
             },
             label: "PF1ECaravans.Treasure",
             path: "caravanCargo.treasure",

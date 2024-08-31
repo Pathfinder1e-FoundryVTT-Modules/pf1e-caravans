@@ -121,6 +121,10 @@
     }
   },
   "PF1ECaravans": {
+    "ConvertToGold": "Convert to Gold",
+    "ConvertTreasureToGold": "Convert Treasure to Gold",
+    "ConvertTreasureDescription": "{treasureCount} item(s) will be converted to {gp} gp, {sp} sp, {cp} cp.",
+    "DeleteItems": "Delete Items",
     "Max": "Max.",
     "Travelers": "Travelers",
     "Hero": "Hero",
@@ -273,7 +277,8 @@
       "RestedActors": "Rested actors:"
     },
     "Errors": {
-      "InvalidAttribute": "Attribute {attribute} is not a valid attribute."
+      "InvalidAttribute": "Attribute {attribute} is not a valid attribute.",
+      "NoTreasureToConvert": "The caravan does not possess any treasure that can be converted."
     }
   }
 }

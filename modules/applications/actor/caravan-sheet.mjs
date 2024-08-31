@@ -1,6 +1,7 @@
 import {MODULE_ID} from "../../_moduleId.mjs";
 import {toCamelCase} from "../../util/util.mjs";
 import {CaravanRestDialog} from "./caravan-rest.mjs";
+import {CaravanConvertTreasure} from "./caravan-convert-treasure.mjs";
 
 export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
     static get defaultOptions() {
@@ -23,6 +24,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         super.activateListeners(html);
         // html.find(".attribute.attack .rollable").on("click", this._onRollAttack.bind(this));
         html.find(".attribute:is(.security, .resolve) .rollable").on("click", this._onRollAttribute.bind(this));
+        html.find(".item-convert-to-gold").on("click", this._onConvertTreasure.bind(this));
     }
 
     async _onRollAttack(event) {
@@ -430,7 +432,10 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 })
                 : null,
             this.actor.system.attributes.provisions
-                ? game.i18n.format("PF1ECaravans.CargoLabels.WorthOfProvisions", pf1.utils.currency.split(50 * this.actor.system.attributes.provisions, {omit: ["pp", "cp"], standard: false}))
+                ? game.i18n.format("PF1ECaravans.CargoLabels.WorthOfProvisions", pf1.utils.currency.split(50 * this.actor.system.attributes.provisions, {
+                    omit: ["pp", "cp"],
+                    standard: false
+                }))
                 : null,
             treasureCount
                 ? game.i18n.format(weightSystem === "metric" ? "PF1ECaravans.CargoLabels.KGofTreasure" : "PF1ECaravans.CargoLabels.LBSofTreasure", {
@@ -484,6 +489,33 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             });
             if (app) app.render(true, {focus: true});
             else new CaravanRestDialog(this.actor).render(true);
+        }
+    }
+
+    async _onConvertTreasure(event) {
+        event.preventDefault();
+
+        const treasure = this.actor.items.filter((item) => !item.type.startsWith(`${MODULE_ID}.`) && item.system.quantity);
+        if (!treasure.length) {
+            ui.notifications.warn(game.i18n.localize("PF1ECaravans.Errors.NoTreasureToConvert"));
+            return;
+        }
+
+        const skipDialog = pf1.documents.settings.getSkipActionPrompt();
+        if (skipDialog) {
+            const button = event.currentTarget;
+            button.disabled = true;
+            try {
+                await this.actor.convertTreasure({verbose: true});
+            } finally {
+                button.disabled = false;
+            }
+        } else {
+            const app = Object.values(this.actor.apps).find((o) => {
+                return o instanceof CaravanConvertTreasure && o._element;
+            });
+            if (app) app.render(true, {focus: true});
+            else new CaravanConvertTreasure(this.actor).render(true);
         }
     }
 }

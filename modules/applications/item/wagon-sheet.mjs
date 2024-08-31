@@ -15,6 +15,7 @@ export class WagonSheet extends CaravanItemSheet {
         })
 
         context.wagonTypes = wagonTypes;
+        context.customizable = this.item.system.subType === "custom";
         return context;
     }
 }

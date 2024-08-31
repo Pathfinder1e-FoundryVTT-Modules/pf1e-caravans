@@ -11,7 +11,7 @@ export class CaravanRestDialog extends DocumentSheet {
         });
     }
 
-    /** @type {ActorPF} */
+    /** @type {CaravanActor} */
     get actor() {
         return this.document;
     }

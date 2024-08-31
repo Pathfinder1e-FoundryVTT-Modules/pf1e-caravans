@@ -26,7 +26,8 @@ export class TravelerSheet extends CaravanItemSheet {
         context.tasks = tasks;
 
         context.isActor = !!this.item.representsActor;
-
+        context.customizable = this.item.system.subType === "custom";
+        context.hasWage = !context.isActor && !this.item.system.isNPC;
         return context;
     }
 }
