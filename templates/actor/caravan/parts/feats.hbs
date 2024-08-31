@@ -1,5 +1,11 @@
 <div class="inventory-filters flexrow">
-    {{~> "systems/pf1/templates/internal/item-search.hbs" category="features"}}
+    {{~> "systems/pf1/templates/internal/item-search.hbs" category="feats"}}
+
+    <ul class="filter-list flexrow" data-category="feats">
+        {{#each sections as |section sid|}}
+            <li class="filter-item" data-category="feats" data-filter="{{section.id}}">{{section.label}}</li>
+        {{/each}}
+    </ul>
 </div>
 
 <section class="feats-body">
