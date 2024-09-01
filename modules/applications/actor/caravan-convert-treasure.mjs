@@ -18,7 +18,7 @@ export class CaravanConvertTreasure extends DocumentSheet {
         const newGold = pf1.utils.currency.split(treasure.reduce((acc, item) => acc + item.system.price * item.system.quantity, 0) * 100);
 
         context.description = game.i18n.format("PF1ECaravans.ConvertTreasureDescription", {
-            treasureCount: treasure.length,
+            treasureCount: treasure.reduce((acc, item) => acc + item.system.quantity, 0),
             pp: newGold.pp,
             gp: newGold.gp,
             sp: newGold.sp,
