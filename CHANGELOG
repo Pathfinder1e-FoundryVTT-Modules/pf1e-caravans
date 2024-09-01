@@ -3,6 +3,7 @@
 - Prevent non-caravan items from applying changes to the caravan actor
 - Split up buff targets into categories
 - Prepare for system support of buff target filtering based on actor and item type
+- Activate correct tabs on item drop
 
 ## v0.9.2
 - Improve 3rd Party Module Compatibility

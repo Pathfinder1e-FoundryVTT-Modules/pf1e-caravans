@@ -27,6 +27,28 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         html.find(".item-convert-to-gold").on("click", this._onConvertTreasure.bind(this));
     }
 
+    _focusTabByItem(item) {
+        let tabId;
+        switch(item.type) {
+            case `${MODULE_ID}.feat`:
+                tabId = "feats";
+                break;
+
+            case `${MODULE_ID}.wagon`:
+                tabId = "wagons";
+                break;
+
+            case `${MODULE_ID}.traveler`:
+                tabId = "travelers";
+                break;
+
+            default:
+                tabId = "cargo";
+        }
+
+        if (tabId) this.activateTab(tabId, "primary");
+    }
+
     async _onRollAttack(event) {
         event.preventDefault();
         await this.actor.rollAttack({token: this.token});
