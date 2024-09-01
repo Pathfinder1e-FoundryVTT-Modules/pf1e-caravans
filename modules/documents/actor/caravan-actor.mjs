@@ -61,7 +61,11 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
         this._addDefaultChanges(changes);
 
-        this.changeItems = this.items.filter((item) => item.hasChanges && item.isActive);
+        this.changeItems = this.items.filter((item) =>
+            item.type.startsWith(`${MODULE_ID}.`)
+            && item.hasChanges
+            && item.isActive
+        );
         for (const i of this.changeItems) {
             changes.push(...i.changes, ...(i._changes ?? []));
         }
@@ -744,7 +748,11 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
 
     get allNotes() {
         return this.items
-            .filter((item) => item.isActive && (item.system.contextNotes?.length > 0 || item.system._contextNotes?.length > 0))
+            .filter((item) =>
+                item.type.startsWith(`${MODULE_ID}.`)
+                && item.isActive
+                && (item.system.contextNotes?.length > 0 || item.system._contextNotes?.length > 0)
+            )
             .map((item) => {
                 const notes = [];
                 notes.push(...(item.system.contextNotes ?? []));
