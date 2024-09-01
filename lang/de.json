@@ -201,7 +201,10 @@
       }
     },
     "BuffTargetCategories": {
-      "Caravan": "Karawane"
+      "Attributes": "Attribute (Karawane)",
+      "Statistics": "Statistiken (Karawane)",
+      "Travelers": "Reisende (Karawane)",
+      "Wagons": "Wagen (Karawane)"
     },
     "ContextNoteTargets": {
       "Rest": "Rast",
@@ -210,7 +213,7 @@
       "Attack": "Angriff"
     },
     "ContextNoteTargetCategories": {
-      "Caravan": "Karawane"
+      "Statistics": "Statistiken (Karawane)"
     },
     "Statistics": {
       "Offense": "Offensiv",

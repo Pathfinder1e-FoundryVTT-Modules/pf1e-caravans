@@ -6,7 +6,7 @@ import {CaravanModel, EquipmentModel, FeatModel, TravelerModel, WagonModel} from
 import {CaravanSheet, EquipmentSheet, FeatSheet, TravelerSheet, WagonSheet} from "./applications/_module.mjs";
 import {CaravanActor, CaravanItem, EquipmentItem, TravelerItem, WagonItem} from "./documents/_module.mjs";
 
-Hooks.on("init", () => {
+Hooks.once("init", () => {
     registerConfig();
     registerActors();
     registerItems();
@@ -48,6 +48,18 @@ Hooks.on("pf1GetChangeFlat", getChangeFlat);
 
 function registerConfig() {
     Object.assign(pf1.registry, Registry);
+
+    for (const prop of ["buffTargetCategories", "contextNoteCategories"]) {
+        for (const categoryKey in pf1.config[prop]) {
+            const category = pf1.config[prop][categoryKey];
+            category.filters ??= {};
+            category.filters.item ??= {};
+            category.filters.item.exclude ??= [];
+            category.filters.item.exclude.push(`${MODULE_ID}.feat`, `${MODULE_ID}.traveler`, `${MODULE_ID}.wagon`, `${MODULE_ID}.equipment`);
+            pf1.config[prop][categoryKey] = category;
+        }
+    }
+
     mergeObject(pf1.config, Object.assign({}, Config));
 
     // SHEET SECTIONS
@@ -66,12 +78,12 @@ function registerConfig() {
             label: game.i18n.localize(`PF1.Subtypes.Item.${MODULE_ID}.wagon.${wagonType.id}.Plural`),
             path: `caravanWagon.${wagonType.id}`,
         };
-
         if (wagonType.max !== undefined) {
             pf1.config.buffTargets[`caravan_wagonLimit_${wagonType.id}`] = {
                 label: `PF1ECaravans.BuffTargets.WagonLimit.${wagonType.id}`,
-                category: "caravan",
-                sort: 1410 + buffTargetSort++,
+                category: "caravan_wagons",
+                sort: 4000 + 10 * buffTargetSort++,
+                filters: {item: {include: [`${MODULE_ID}.feat`, `${MODULE_ID}.traveler`, `${MODULE_ID}.wagon`, `${MODULE_ID}.equipment`]}}
             }
         }
     })
@@ -95,8 +107,9 @@ function registerConfig() {
         if (travelerRole.max !== undefined) {
             pf1.config.buffTargets[`caravan_travelerRoleLimit_${travelerRole.id}`] = {
                 label: `PF1ECaravans.BuffTargets.TravelerRoleLimit.${travelerRole.id}`,
-                category: "caravan",
-                sort: 1310 + buffTargetSort++,
+                category: "caravan_travelers",
+                sort: 3000 + 10 * buffTargetSort++,
+                filters: {item: {include: [`${MODULE_ID}.feat`, `${MODULE_ID}.traveler`, `${MODULE_ID}.wagon`, `${MODULE_ID}.equipment`]}}
             }
         }
     })
