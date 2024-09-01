@@ -282,7 +282,8 @@
     "Errors": {
       "InvalidAttribute": "Attribute {attribute} is not a valid attribute.",
       "NoTreasureToConvert": "The caravan does not possess any treasure that can be converted.",
-      "CaravanItemsCannotBeAddedToThisActor": "Caravan items cannot be added to this actor."
+      "CaravanItemsCannotBeAddedToThisActor": "Caravan items cannot be added to this actor.",
+      "OnlyCaravanItemsAndActorEquipmentCanBeAddedToThisActor": "Only caravan items and actor equipment can be added to this actor."
     }
   }
 }

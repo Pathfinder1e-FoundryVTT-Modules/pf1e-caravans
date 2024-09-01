@@ -282,7 +282,8 @@
     "Errors": {
       "InvalidAttribute": "Attribut {attribute} ist kein gültiges Attribut.",
       "NoTreasureToConvert": "Die Karawane hat keine Schätze die umgewandelt werden können.",
-      "CaravanItemsCannotBeAddedToThisActor": "Karawanengegenstände können nicht zu diesem Charakter hinzugefügt werden."
+      "CaravanItemsCannotBeAddedToThisActor": "Karawanengegenstände können nicht zu diesem Charakter hinzugefügt werden.",
+      "OnlyCaravanItemsAndActorEquipmentCanBeAddedToThisActor": "Nur Karawanengegenstände und Charakterausrüstung können zu diesem Charakter hinzugefügt werden."
     }
   }
 }

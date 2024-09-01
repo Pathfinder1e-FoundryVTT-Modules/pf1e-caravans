@@ -49,6 +49,18 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
         if (tabId) this.activateTab(tabId, "primary");
     }
 
+    async _onDropItem(event, data) {
+        const sourceItem = await Item.implementation.fromDropData(data);
+        if(
+            !sourceItem.type.startsWith(`${MODULE_ID}.`)
+            && !["container", "equipment", "implant", "loot", "weapon"].includes(sourceItem.type)
+        ) {
+            return void ui.notifications.warn("PF1ECaravans.Errors.OnlyCaravanItemsAndActorEquipmentCanBeAddedToThisActor", { localize: true });
+        }
+
+        return super._onDropItem(event, data);
+    }
+
     async _onRollAttack(event) {
         event.preventDefault();
         await this.actor.rollAttack({token: this.token});
