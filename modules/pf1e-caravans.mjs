@@ -5,6 +5,7 @@ import {getChangeFlat} from "./hooks/getChangeFlat.mjs";
 import {CaravanModel, EquipmentModel, FeatModel, TravelerModel, WagonModel} from "./dataModels/_module.mjs";
 import {CaravanSheet, EquipmentSheet, FeatSheet, TravelerSheet, WagonSheet} from "./applications/_module.mjs";
 import {CaravanActor, CaravanItem, EquipmentItem, TravelerItem, WagonItem} from "./documents/_module.mjs";
+import {CaravanItemSheet} from "./applications/item/caravan-item-sheet.mjs";
 
 Hooks.once("init", () => {
     registerConfig();
@@ -17,6 +18,26 @@ Hooks.once("init", () => {
 
 Hooks.once('libWrapper.Ready', () => {
     console.log(`${MODULE_ID} | Registering LibWrapper Hooks`);
+
+    for (let key in pf1.applications.actor) {
+        const appClass = pf1.applications.actor[key];
+        const appClassName = appClass.prototype.constructor.name;
+        if (
+            !appClassName?.includes("Sheet")
+            || appClassName.includes("Caravan")
+            || ["ActorSheetPFBasic", "ActorSheetPF"].includes(appClassName)
+        ) continue;
+
+        console.log(appClassName);
+
+        libWrapper.register(MODULE_ID, `pf1.applications.actor.${appClassName}.prototype._onDropItem`, async function (wrapper, event, data) {
+            const sourceItem = await Item.implementation.fromDropData(data);
+            if(sourceItem && sourceItem.type.startsWith(`${MODULE_ID}.`)) {
+                return void ui.notifications.warn("PF1ECaravans.Errors.CaravanItemsCannotBeAddedToThisActor", { localize: true });
+            }
+            return wrapper(event, data);
+        }, libWrapper.MIXED);
+    }
 
     libWrapper.register(MODULE_ID, "pf1.applications.item.CreateDialog.prototype.getSubtypes", function (wrapper, type) {
         switch (type) {
@@ -135,6 +156,9 @@ function registerActors() {
         [`${MODULE_ID}.caravan`]: CaravanSheet
     }
 
+    Object.assign(pf1.applications.actor, {
+        CaravanSheet: CaravanSheet
+    })
     for (let [type, sheet] of Object.entries(actorSheets)) {
         DocumentSheetConfig.registerSheet(Actor, MODULE_ID, sheet, {
             types: [type],
@@ -170,6 +194,14 @@ function registerItems() {
         [`${MODULE_ID}.traveler`]: TravelerSheet,
         [`${MODULE_ID}.wagon`]: WagonSheet,
     }
+
+    Object.assign(pf1.applications.item, {
+        CaravanItemSheet: CaravanItemSheet,
+        CaravanEquipmentSheet: EquipmentSheet,
+        CaravanFeatSheet: FeatSheet,
+        CaravanTravelerSheet: TravelerSheet,
+        CaravanWagonSheet: WagonSheet
+    })
 
     for (let [type, sheet] of Object.entries(itemSheets)) {
         DocumentSheetConfig.registerSheet(Item, MODULE_ID, sheet, {
