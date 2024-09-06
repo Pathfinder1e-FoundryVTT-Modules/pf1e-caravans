@@ -28,8 +28,6 @@ Hooks.once('libWrapper.Ready', () => {
             || ["ActorSheetPFBasic", "ActorSheetPF"].includes(appClassName)
         ) continue;
 
-        console.log(appClassName);
-
         libWrapper.register(MODULE_ID, `pf1.applications.actor.${appClassName}.prototype._onDropItem`, async function (wrapper, event, data) {
             const sourceItem = await Item.implementation.fromDropData(data);
             if(sourceItem && sourceItem.type.startsWith(`${MODULE_ID}.`)) {

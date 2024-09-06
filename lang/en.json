@@ -201,10 +201,10 @@
       }
     },
     "BuffTargetCategories": {
-      "Attributes": "Attributes (Caravan)",
-      "Statistics": "Statistics (Caravan)",
-      "Travelers": "Travelers (Caravan)",
-      "Wagons": "Wagons (Caravan)"
+      "Attributes": "Attributes",
+      "Statistics": "Statistics",
+      "Travelers": "Travelers",
+      "Wagons": "Wagons"
     },
     "ContextNoteTargets": {
       "Rest": "Rest",
@@ -213,7 +213,7 @@
       "Attack": "Attack"
     },
     "ContextNoteTargetCategories": {
-      "Statistics": "Statistics (Caravan)"
+      "Statistics": "Statistics"
     },
     "Statistics": {
       "Offense": "Offense",
