@@ -176,3 +176,10 @@
     flex: 0 3em;
     width: 3em;
 }
+.pf1.sheet.actor.caravan .info-box input:is([type="text"], [type="number"]) {
+    border: unset;
+}
+
+.pf1.sheet.actor.caravan .tab a.rollable {
+    margin-bottom: -1px;
+}

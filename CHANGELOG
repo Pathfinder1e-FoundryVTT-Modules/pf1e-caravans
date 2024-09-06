@@ -1,6 +1,7 @@
 ## v0.9.4
 - Fix convert treasure dialog not taking quantity of items into account for labelling
 - Allow inputting relative changes into all sheet fields
+- Fix styling issues
 
 ## v0.9.3
 - Fix Traveler Names not being editable
