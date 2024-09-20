@@ -1,4 +1,4 @@
-import {CaravanItemModel} from "./caravan-item-model.js";
+import {CaravanItemModel} from "./caravan-item-model.mjs";
 
 export class WagonModel extends CaravanItemModel {
     static defineSchema() {
