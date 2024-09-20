@@ -9,21 +9,16 @@ export class TravelerSheet extends CaravanItemSheet {
     async getData(options = {}) {
         const context = await super.getData(options);
 
-        const travelerRoles = {};
-        pf1.registry.travelerRoles.map(travelerRole => {
-            travelerRoles[travelerRole.id] = travelerRole.name;
-        })
-        context.travelerRoles = travelerRoles;
+        // const travelerRoles = {};
+        // pf1.registry.travelerRoles.map(travelerRole => {
+        //     travelerRoles[travelerRole.id] = travelerRole.name;
+        // })
+        context.travelerRoles = [...pf1.registry.travelerRoles.values()];
 
         const travelerRole = pf1.registry.travelerRoles.get(this.item.system.subType);
-        let tasks = {};
-        if(travelerRole?.tasks?.length) {
-            travelerRole.tasks.map(task => {
-                tasks[task.id] = task.name;
-            })
-        }
+
         context.hasTasks = travelerRole?.tasks?.length || false;
-        context.tasks = tasks;
+        context.tasks = travelerRole.tasks;
 
         context.isActor = !!this.item.representsActor;
         context.customizable = this.item.system.subType === "custom";

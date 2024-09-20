@@ -89,8 +89,8 @@
             <div class="form-group select">
                 <label>{{localize "PF1.Type"}}</label>
                 <div class="form-fields">
-                    <select name="system.subType" value="{{system.subType}}">
-                        {{selectOptions travelerRoles selected=system.subType}}
+                    <select name="system.subType">
+                        {{selectOptions travelerRoles selected=system.subType nameAttr="id" labelAttr="name"}}
                     </select>
                 </div>
             </div>
@@ -100,8 +100,8 @@
                 <div class="form-group select">
                     <label>{{localize "PF1ECaravans.Task"}}</label>
                     <div class="form-fields">
-                        <select name="system.task" value="{{system.task}}">
-                            {{selectOptions tasks selected=system.task}}
+                        <select name="system.task">
+                            {{selectOptions tasks selected=system.task nameAttr="id" labelAttr="name"}}
                         </select>
                     </div>
                 </div>

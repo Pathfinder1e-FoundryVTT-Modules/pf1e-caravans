@@ -72,8 +72,8 @@
             <div class="form-group select">
                 <label>{{localize "PF1.Type"}}</label>
                 <div class="form-fields">
-                    <select name="system.subType" value="{{system.subType}}">
-                        {{selectOptions wagonTypes selected=system.subType}}
+                    <select name="system.subType">
+                        {{selectOptions wagonTypes selected=system.subType nameAttr="id" labelAttr="name"}}
                     </select>
                 </div>
             </div>

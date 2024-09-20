@@ -8,13 +8,7 @@ export class WagonSheet extends CaravanItemSheet {
 
     async getData(options = {}) {
         const context = await super.getData(options);
-
-        const wagonTypes = {};
-        pf1.registry.wagonTypes.map(wagonType => {
-            wagonTypes[wagonType.id] = wagonType.name;
-        })
-
-        context.wagonTypes = wagonTypes;
+        context.wagonTypes = [...pf1.registry.wagonTypes.values()];
         context.customizable = this.item.system.subType === "custom";
         return context;
     }
