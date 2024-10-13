@@ -1,7 +1,7 @@
 {
   "id": "pf1e-caravans",
   "title": "Pathfinder 1e - Caravans",
-  "version": "0.9.4",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": "11",
     "verified": "11",
