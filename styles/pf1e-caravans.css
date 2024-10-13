@@ -1,38 +1,164 @@
-.pf1.sheet.caravan.actor .tab.summary .attributes .unrest-details {
-    flex: 4;
-}
+.pf1.sheet.caravan.actor {
+    .tab {
+        &.summary {
+            .attributes .unrest-details {
+                flex: 4;
+            }
 
-.pf1.actor.caravan.sheet .tab:is(.travelers, .wagons, .cargo, .feats) footer :is(.feat-counts, .wagon-counts, .traveler-counts, .cargo-counts) {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 3px;
-}
+            .condition {
+                border: 1px transparent;
+                border-radius: 10px;
+                font-weight: 600;
+                background-color: rgba(0, 0, 0, 0.1);
+                text-shadow: 0 0 8px red;
+                height: 34px;
 
-.pf1.actor.caravan.sheet .tab:is(.travelers, .wagons, .cargo, .feats) footer :is(.feat-counts, .wagon-counts, .traveler-counts, .cargo-counts) .stats {
-    flex: 4;
-}
+                span {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: 4px;
+                    align-items: center;
+                    color: var(--color-text-dark-primary);
 
-.pf1.actor.caravan.sheet .tab.cargo footer {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 3px;
-}
+                    > img {
+                        border: none;
 
-.pf1.actor.caravan.sheet .tab.cargo footer :is(.cargo-counts, .cargo-capacity) {
-    flex: 1 100%;
-}
+                        &[src*=".svg"] {
+                            background: black;
+                        }
+                    }
 
-.pf1.actor.caravan.sheet .tab.cargo footer .cargo-capacity .encumbrance {
-    margin-right: 1px;
-}
+                    > .details {
+                        display: flex;
+                        flex-flow: row wrap;
+                    }
 
-.pf1.actor.caravan.sheet .tab:is(.travelers, .wagons, .feats, .cargo) .item-notifications {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    gap: 3px;
-    flex: 0;
-    margin: 2px;
+                    .name {
+                        flex: 1 100%;
+                    }
+                }
+            }
+
+            .buffs-conditions {
+                flex: 0;
+            }
+
+            a.rollable {
+                margin-bottom: -1px;
+            }
+        }
+
+        &:is(.travelers, .wagons, .cargo, .feats) footer :is(.feat-counts, .wagon-counts, .traveler-counts, .cargo-counts) {
+            display: flex;
+            flex-flow: row nowrap;
+            gap: 3px;
+
+            .stats {
+                flex: 4;
+            }
+        }
+
+        &.cargo {
+            .encumbrance {
+                &:not(.encumbered) .encumbrance-bar {
+                    &.stores {
+                        background: #E53935;
+                        border-color: #FFCDD2;
+                    }
+
+                    &.treasure {
+                        background: #FFA000;
+                        border-color: #FFECB3;
+                    }
+                }
+
+                &.encumbered .encumbrance-bar:is(.equipment, .stores) {
+                    display: none;
+                }
+            }
+
+            footer {
+                display: flex;
+                flex-flow: row wrap;
+                gap: 3px;
+
+                .provisions {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    flex: 1;
+                    align-self: center;
+
+                    label {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.3em;
+                        flex: 0;
+                        margin-left: 8px;
+                        text-align: right;
+                        line-height: 20px;
+                        color: var(--pf1-tan);
+                        white-space: nowrap;
+                    }
+                }
+
+                .cargo-tags {
+                    justify-content: flex-end;
+                    flex: 3;
+                    align-self: center;
+                }
+
+                :is(.cargo-counts, .cargo-capacity) {
+                    flex: 1 100%;
+                }
+
+                .cargo-capacity .encumbrance {
+                    margin-right: 1px;
+                }
+            }
+        }
+    }
+
+    &:is(.travelers, .wagons, .feats, .cargo) .item-notifications {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        gap: 3px;
+        flex: 0;
+        margin: 2px;
+    }
+
+    .input-proxy {
+        width: calc(100% - 2px);
+        min-width: 20px;
+        height: var(--form-field-height);
+        background: rgba(0, 0, 0, 0.05);
+        padding: 1px 3px;
+        margin: 0;
+        font-family: inherit;
+        font-size: inherit;
+        text-align: inherit;
+        line-height: inherit;
+        border-radius: 3px;
+
+        border: 1px solid var(--pf1-tan);
+        background: var(--pf1-bg-dark-0);
+        color: var(--color-text-dark-primary);
+
+        &.small {
+            flex: 0 3em;
+            width: 3em;
+        }
+    }
+
+    .info-box input:is([type="text"], [type="number"]) {
+        border: unset;
+    }
+
+    .sheet-header h1 .input-proxy {
+        font-size: calc(var(--font-size-28) * 1.2);
+        font-variant-caps: small-caps;
+        margin: 0;
+    }
 }
 
 .pf1[data-action-id="_caravanAttack"] .type-color.type- {
@@ -41,76 +167,35 @@
     --foreground: white;
 }
 
-.pf1 .type-color.type-pf1e-caravans\.traveler {
-    --primary: #283E51;
-    --secondary: #4B79A1;
-    --foreground: white;
-}
+.pf1 .type-color {
+    &.type-pf1e-caravans\.traveler {
+        --primary: #283E51;
+        --secondary: #4B79A1;
+        --foreground: white;
+    }
 
-.pf1 .type-color.type-pf1e-caravans\.wagon {
-    --primary: #cb2d3e;
-    --secondary: #ef473a;
-    --foreground: white;
-}
+    &.type-pf1e-caravans\.wagon {
+        --primary: #cb2d3e;
+        --secondary: #ef473a;
+        --foreground: white;
+    }
 
-.pf1 .type-color.type-pf1e-caravans\.feat {
-    --primary: #5f00a3;
-    --secondary: #8900ea;
-    --foreground: white;
-}
+    &.type-pf1e-caravans\.feat {
+        --primary: #5f00a3;
+        --secondary: #8900ea;
+        --foreground: white;
+    }
 
-.pf1 .type-color.type-pf1e-caravans\.equipment {
-    --primary: #418124;
-    --secondary: #7ba547;
-    --foreground: white;
+    &.type-pf1e-caravans\.equipment {
+        --primary: #418124;
+        --secondary: #7ba547;
+        --foreground: white;
+    }
 }
 
 .icon-pf.icon-wooden-crate {
     mask-image: url(../icons/wooden-crate.svg);
     -webkit-mask-image: url(../icons/wooden-crate.svg);
-}
-
-.pf1.sheet.actor.caravan .tab .encumbrance:not(.encumbered) .encumbrance-bar.stores {
-    background: #E53935;
-    border-color: #FFCDD2;
-}
-.pf1.sheet.actor.caravan .tab .encumbrance:not(.encumbered) .encumbrance-bar.treasure {
-    background: #FFA000;
-    border-color: #FFECB3;
-}
-.pf1.sheet.actor.caravan .tab .encumbrance.encumbered .encumbrance-bar:is(.equipment, .stores) {
-    display: none;
-}
-
-.pf1.sheet form .tab.cargo footer .provisions {
-    display: flex;
-    flex-flow: row nowrap;
-    flex: 1;
-    align-self: center;
-}
-
-.pf1.sheet form .tab.cargo footer .cargo-tags {
-    justify-content: flex-end;
-    flex: 3;
-    align-self: center;
-}
-
-.pf1.sheet form .tab.cargo footer .provisions label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3em;
-    flex: 0;
-    margin-left: 8px;
-    text-align: right;
-    line-height: 20px;
-    color: var(--pf1-tan);
-    white-space: nowrap;
-}
-
-.pf1.sheet .sheet-header h1 .input-proxy {
-    font-size: calc(var(--font-size-28)* 1.2);
-    font-variant-caps: small-caps;
-    margin: 0;
 }
 
 .pf1.sheet.type-pf1e-caravans\.traveler .sheet-header .summary li {
@@ -120,66 +205,4 @@
 .chat-message .pf1e-caravans.resting-result {
     font-size: 12px;
     line-height: 1.2;
-}
-
-.pf1.sheet.actor.caravan .tab.summary .condition {
-    border: 1px transparent;
-    border-radius: 10px;
-    font-weight: 600;
-    background-color: rgba(0, 0, 0, 0.1);
-    text-shadow: 0 0 8px red;
-    height: 34px;
-}
-.pf1.sheet.actor.caravan .tab.summary .condition span {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 4px;
-    align-items: center;
-    color: var(--color-text-dark-primary);
-}
-.pf1.sheet.actor.caravan .tab.summary .condition span > img {
-    border: none;
-}
-.pf1.sheet.actor.caravan .tab.summary .condition span > img[src*=".svg"] {
-    background: black;
-}
-.pf1.sheet.actor.caravan .tab.summary .condition span > .details {
-    display: flex;
-    flex-flow: row wrap;
-}
-.pf1.sheet.actor.caravan .tab.summary .condition span .name {
-    flex: 1 100%;
-}
-.pf1.sheet.actor.caravan .tab .buffs-conditions {
-    flex: 0;
-}
-
-.pf1.sheet.actor.caravan .input-proxy {
-    width: calc(100% - 2px);
-    min-width: 20px;
-    height: var(--form-field-height);
-    background: rgba(0, 0, 0, 0.05);
-    padding: 1px 3px;
-    margin: 0;
-    font-family: inherit;
-    font-size: inherit;
-    text-align: inherit;
-    line-height: inherit;
-    border-radius: 3px;
-
-    border: 1px solid var(--pf1-tan);
-    background: var(--pf1-bg-dark-0);
-    color: var(--color-text-dark-primary);
-}
-
-.pf1.sheet.actor.caravan .input-proxy.small {
-    flex: 0 3em;
-    width: 3em;
-}
-.pf1.sheet.actor.caravan .info-box input:is([type="text"], [type="number"]) {
-    border: unset;
-}
-
-.pf1.sheet.actor.caravan .tab a.rollable {
-    margin-bottom: -1px;
 }
