@@ -276,13 +276,12 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         super.prepareDerivedData();
 
         delete this._rollData;
-        pf1.documents.actor.changes.applyChanges.call(this);
+        pf1.documents.actor.changes.applyChanges(this);
 
         this._initialized = true;
-        this._setSourceDetails();
 
         this.attackItem = {
-            id: "_caravanAttack",
+            id: "caravanAttack",
             actor: this,
             name: this.name,
             img: this.img,
@@ -325,7 +324,7 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
             }
         }))
         this.attackAction = new pf1.components.ItemAction({
-            _id: "_caravanAttack",
+            _id: "caravanAttack",
             name: game.i18n.localize("PF1ECaravans.Attack"),
             actionType: "mwak",
             attackBonus: `${this.system.statistics.attack}[${game.i18n.localize("PF1ECaravans.Attack")}]`,
@@ -341,7 +340,9 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
                 ],
                 nonCritParts: damageChanges
             },
-        }, this.attackItem);
+        }, {
+            item: this.attackItem
+        });
     }
 
     get _skillTargets() {
@@ -406,74 +407,6 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
         return result;
     }
 
-    _setSourceDetails() {
-        const sourceDetails = {};
-        // Get empty source arrays
-        for (const b of Object.keys(buffTargets)) {
-            const buffTargets = pf1.documents.actor.changes.getChangeFlat.call(this, b, null);
-            for (const bt of buffTargets) {
-                if (!sourceDetails[bt]) sourceDetails[bt] = [];
-            }
-        }
-
-        const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
-        sourceDetails["system.statistics.armorClass"].push({
-            name: game.i18n.localize("PF1.Base"),
-            value: game.i18n.format("PF1.SetTo", {value: 10})
-        });
-        sourceDetails["system.wagons.max"].push({
-            name: game.i18n.localize("PF1.Base"),
-            value: game.i18n.format("PF1.SetTo", {value: 5})
-        });
-        for (let attributeId of ["offense", "defense", "mobility", "morale"]) {
-            sourceDetails[`system.statistics.${attributeId}.total`].push({
-                name: game.i18n.localize("PF1.Base"),
-                value: this.system.statistics[attributeId].base
-            });
-        }
-        sourceDetails["system.details.speed.total"].push({
-            name: game.i18n.localize("PF1.Base"),
-            value: game.i18n.format("PF1.SetTo", {value: 32})
-        });
-
-        // Add extra data
-        const rollData = this.getRollData();
-        for (const [path, changeGrp] of Object.entries(this.sourceInfo)) {
-            /** @type {Array<SourceInfo[]>} */
-            const sourceGroups = Object.values(changeGrp);
-            for (const grp of sourceGroups) {
-                sourceDetails[path] ||= [];
-                for (const src of grp) {
-                    src.operator ||= "add";
-                    // TODO: Separate source name from item type label
-                    const label = this.constructor._getSourceLabel(src);
-                    let srcValue =
-                        src.value != null
-                            ? src.value
-                            : RollPF.safeRollAsync(src.formula || "0", rollData, [path, src, this], {
-                                suppressError: !this.isOwner,
-                            }).total;
-                    if (src.operator === "set") {
-                        let displayValue = srcValue;
-                        if (src.change?.isDistance) displayValue = pf1.utils.convertDistance(displayValue)[0];
-                        srcValue = game.i18n.format("PF1.SetTo", {value: displayValue});
-                    }
-
-                    // Add sources only if they actually add something else than zero
-                    if (!(src.operator === "add" && srcValue === 0) || src.ignoreNull === false) {
-                        sourceDetails[path].push({
-                            name: label.replace(/[[\]]/g, ""),
-                            modifier: src.modifier || "",
-                            value: srcValue,
-                        });
-                    }
-                }
-            }
-        }
-
-        this.sourceDetails = sourceDetails;
-    }
-
     /**
      * @internal
      * @param {SourceInfo} src - Source info
@@ -481,6 +414,90 @@ export class CaravanActor extends pf1.documents.actor.ActorBasePF {
     static _getSourceLabel(src) {
         // TODO: Anything needed here?
         return src.name;
+    }
+
+    getSourceDetails(path) {
+        const sources = [];
+
+        const dexDenied = this.changeFlags.loseDexToAC === true;
+
+        // Add extra data
+        const rollData = this.getRollData();
+        const changeGrp = this.sourceInfo[path] ?? {};
+        const sourceGroups = Object.values(changeGrp);
+
+        const typeBonuses = {};
+
+        for (const grp of sourceGroups) {
+            for (const src of grp) {
+                src.operator ||= "add";
+                let srcValue =
+                    src.value != null
+                        ? src.value
+                        : RollPF.safeRollSync(src.formula || "0", rollData, [path, src, this], {
+                            suppressError: !this.isOwner,
+                        }).total;
+                if (src.operator === "set") {
+                    let displayValue = srcValue;
+                    if (src.change?.isDistance) displayValue = pf1.utils.convertDistance(displayValue)[0];
+                    srcValue = game.i18n.format("PF1.SetTo", { value: displayValue });
+                }
+
+                // Add sources only if they actually add something else than zero
+                if (!(src.operator === "add" && srcValue === 0) || src.ignoreNull === false) {
+                    // TODO: Separate source name from item type label
+                    const label = this.constructor._getSourceLabel(src);
+                    const info = { name: label.replace(/[[\]]/g, ""), value: srcValue, modifier: src.modifier || null };
+                    typeBonuses[src.modifier || "untyped"] ??= [];
+                    typeBonuses[src.modifier || "untyped"].push(info);
+                    sources.push(info);
+                }
+            }
+        }
+
+        // Sort and disable entries
+        const stacking = new Set(pf1.config.stackingBonusTypes);
+        for (const [type, entries] of Object.entries(typeBonuses)) {
+            if (stacking.has(type)) continue;
+            entries.sort((a, b) => b.value - a.value);
+            for (const entry of entries) {
+                entry.disabled = entry.value >= 0 || typeof entry.value !== "number";
+            }
+            entries[0].disabled = false;
+        }
+
+        const wagons = this.itemTypes[`${MODULE_ID}.wagon`];
+        if(path === "system.statistics.armorClass") {
+            sources.push({
+                name: game.i18n.localize("PF1.Base"),
+                value: game.i18n.format("PF1.SetTo", {value: 10})
+            });
+        }
+
+        if(path === "system.wagons.max") {
+            sources.push({
+                name: game.i18n.localize("PF1.Base"),
+                value: game.i18n.format("PF1.SetTo", {value: 5})
+            });
+        }
+
+        for (let attributeId of ["offense", "defense", "mobility", "morale"]) {
+            if(path === `system.statistics.${attributeId}.total`) {
+                sources.push({
+                    name: game.i18n.localize("PF1.Base"),
+                    value: this.system.statistics[attributeId].base
+                });
+            }
+        }
+
+        if(path === "system.details.speed.total") {
+            sources.push({
+                name: game.i18n.localize("PF1.Base"),
+                value: game.i18n.format("PF1.SetTo", {value: 32})
+            });
+        }
+
+        return sources;
     }
 
     async rollAttack(

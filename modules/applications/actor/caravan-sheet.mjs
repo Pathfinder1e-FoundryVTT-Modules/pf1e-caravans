@@ -263,8 +263,6 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             },
         };
 
-        const getSource = (path) => this.actor.sourceDetails[path];
-
         const getNotes = (context, all = true) => {
             const noteObjs = actor.getContextNotes(context, all);
             return actor.formatContextNotes(noteObjs, lazy.rollData, {roll: false});
@@ -283,10 +281,10 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
             case "speed": {
                 const mode = detail;
                 sources.push({
-                    sources: getSource("system.details.speed.total"),
+                    sources: this.actor.getSourceDetails("system.details.speed.total"),
                     untyped: true,
                 }, {
-                    sources: getSource("system.details.speed.base"),
+                    sources: this.actor.getSourceDetails("system.details.speed.base"),
                     untyped: true,
                 });
 
@@ -321,7 +319,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 })
 
                 sources.push({
-                    sources: getSource("system.attributes.unrest.limit"),
+                    sources: this.actor.getSourceDetails("system.attributes.unrest.limit"),
                     untyped: true,
                 });
                 break;
@@ -337,7 +335,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 })
 
                 sources.push({
-                    sources: getSource("system.attributes.hp.max"),
+                    sources: this.actor.getSourceDetails("system.attributes.hp.max"),
                     untyped: true,
                 });
                 break;
@@ -354,7 +352,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 });
 
                 sources.push({
-                    sources: getSource("system.attributes.consumption"),
+                    sources: this.actor.getSourceDetails("system.attributes.consumption"),
                     untyped: true,
                 });
                 break;
@@ -374,7 +372,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 });
 
                 sources.push({
-                    sources: getSource(`system.statistics.${id}.total`),
+                    sources: this.actor.getSourceDetails(`system.statistics.${id}.total`),
                     untyped: true,
                 });
                 break;
@@ -392,7 +390,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 });
 
                 sources.push({
-                    sources: getSource(`system.statistics.${proxyId}`),
+                    sources: this.actor.getSourceDetails(`system.statistics.${proxyId}`),
                     untyped: true,
                 });
 
@@ -402,7 +400,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
 
             case "feats":
                 sources.push({
-                    sources: getSource(`system.feats.max`),
+                    sources: this.actor.getSourceDetails(`system.feats.max`),
                     untyped: true,
                 });
                 break;
@@ -420,7 +418,7 @@ export class CaravanSheet extends pf1.applications.actor.ActorSheetPF {
                 });
 
                 sources.push({
-                    sources: getSource(`system.${id}.max`),
+                    sources: this.actor.getSourceDetails(`system.${id}.max`),
                     untyped: true,
                 });
                 break;

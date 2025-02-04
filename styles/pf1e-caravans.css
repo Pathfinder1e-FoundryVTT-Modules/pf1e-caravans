@@ -161,7 +161,7 @@
     }
 }
 
-.pf1[data-action-id="_caravanAttack"] .type-color.type- {
+.pf1[data-action-id="caravanAttack"] .type-color.type- {
     --primary: #93291E;
     --secondary: #ED213A;
     --foreground: white;

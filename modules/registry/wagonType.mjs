@@ -125,7 +125,7 @@ export class WagonTypes extends Registry {
             max: 1,
             consumption: 2,
             _changes: [{
-                formula: "@travelers.counts.entertainer.count > 0 ? 4 : 0",
+                formula: "if(gt(@travelers.counts.entertainer.count, 0), 4)",
                 target: "caravan_resolve",
                 type: "untyped"
             }]

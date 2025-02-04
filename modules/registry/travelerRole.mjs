@@ -40,12 +40,7 @@ export class TravelerRole extends RegistryEntry {
         }
     }
 
-    /**
-     * Prepares the data of the registry entry.
-     */
-    prepareData() {
-        this.reset();
-
+    localize() {
         // Localize fields marked for localization
         const handleLocalization = (obj, objFields) => {
             for (const [name, field] of Object.entries(objFields)) {
@@ -84,7 +79,7 @@ export class TravelerRoles extends Registry {
             monthlyWage: 10,
             max: 5,
             _changes: [{
-                formula: "@attributes.provisions >= 10 ? -2 : 0",
+                formula: "if(gte(@attributes.provisions, 10), -2)",
                 target: "caravan_consumption",
                 type: "circumstance"
             }]
